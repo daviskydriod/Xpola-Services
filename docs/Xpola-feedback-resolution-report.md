@@ -57,10 +57,12 @@ The supplied archive is now included under `/api`. It contains the main auth, pr
 ## Validation performed
 
 ```text
-npm run build  ✅ passed
+npx tsc --noEmit  ✅ passed
+npm run build      ✅ passed
+PHP syntax lint (38 files) ✅ passed
 ```
 
-The build reports only Vite’s existing bundle-size advisory; it does not report TypeScript or compilation errors.
+The build reports only Vite’s existing bundle-size advisory; TypeScript, frontend compilation, and PHP syntax validation passed.
 
 ## Owner decisions still required
 
