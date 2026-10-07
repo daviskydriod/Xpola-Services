@@ -68,7 +68,7 @@ Xpola Services Limited uses one website to present the company, explain its serv
 | Item | Nigeria | Canada |
 |---|---|---|
 | Currency | NGN / naira | CAD / Canadian dollars for future marketplace use |
-| Published service count | 7 sectors | 5 services |
+| Public counters | Pending owner-supplied figures | Pending owner-supplied figures |
 | Phone | +234 708 627 5105 | +1 306 730 0639 |
 | Office hours | Monday–Friday, 8:00 AM–6:00 PM WAT | Monday–Friday, 9:00 AM–5:00 PM ET |
 | Location shown | Lagos, Nigeria | Toronto, Ontario, Canada |
@@ -81,7 +81,7 @@ The country switch changes the information, services, contact details, and shop 
 
 ## 4. Services
 
-### Nigeria — seven published sectors
+### Nigeria — published sectors
 
 1. General Consulting
 2. Oil & Gas Support
@@ -91,7 +91,7 @@ The country switch changes the information, services, contact details, and shop 
 6. E-Commerce Platform
 7. Transportation & Logistics
 
-### Canada — five published services
+### Canada — published services
 
 1. Consulting & Advisory
 2. Business & Operational Support
@@ -148,8 +148,8 @@ Paystack card details are handled by Paystack, not by Xpola. Staff should not ma
 
 ### Operational checks still required
 
-- **Restock alerts:** The frontend stores a customer opt-in. Confirm whether the deployed API sends alerts automatically, creates a staff task, or only records the preference.
-- **Coupons:** The checkout UI converts typed codes to uppercase. Confirm whether the API/database treats codes case-insensitively and document that rule for staff.
+- **Restock alerts:** Customers can opt in from their wishlist. Staff use **Admin → Restock alerts** to see requests, wait until the product is back in stock, and click **Send alert**. The API sends the email, records the action, and clears the opt-in to prevent duplicate alerts. This is staff-managed, not an automatic background alert.
+- **Coupons:** Coupon codes are normalized to uppercase by the frontend and API, so customer entry is case-insensitive at the application layer. Keep stored coupon codes uppercase.
 - **Payment failure:** Failed, declined, cancelled, and abandoned payments must not remain as paid orders.
 
 ---
@@ -237,14 +237,15 @@ This is the owner’s action list. Items below are intentionally visible because
 
 ### Owner decisions and confirmations
 
-- [ ] Confirm the approved Nosyra Digital email address.
-- [ ] Confirm the approved Nosyra Digital phone number.
-- [ ] Insert domain registrar, hosting/FTP provider, renewal dates, and backup location.
-- [ ] Confirm the owner’s Paystack account holder and recovery contact.
+- [x] Approved Nosyra Digital agency email: `info@nosyradigital.com.ng`.
+- [x] Approved Nosyra Digital agency phone/WhatsApp: `+234 705 846 6586`.
+- [x] Hosting is outside Nosyra Digital’s scope; the owner/hosting provider controls hosting, renewals, backups, and hosting access. Nosyra Digital only uploads files through the access provided to it.
+- [ ] Record the domain registrar, hosting-provider renewal dates, and backup location with the owner/hosting provider.
+- [x] Owner controls the Paystack account and credentials.
 - [ ] Confirm who can access the deployed PHP API and database.
-- [ ] Confirm restock alerts are automatic, staff-sent, or not enabled.
-- [ ] Confirm coupon code case sensitivity at the API/database layer.
-- [ ] Approve any real testimonials, client names, logos, counters, and compliance claims.
+- [x] Restock alerts are staff-managed from Admin → Restock alerts; no automatic background worker is promised.
+- [x] Coupon codes are normalized to uppercase by the frontend and API.
+- [ ] Supply and approve real testimonials, client names, logos, and any replacement public counters before publication.
 - [ ] Approve the timing and acceptance criteria for enabling Canada/Moneris.
 
 ### Current ownership and access position
@@ -252,7 +253,7 @@ This is the owner’s action list. Items below are intentionally visible because
 - The owner owns the domain.
 - The owner controls the Paystack account and credentials.
 - Nosyra Digital uses FTP to upload files and does not control the owner’s domain or Paystack credentials.
-- Hosting, registrar, renewal dates, backups, and the deployed PHP API access still need to be recorded by the owner in the final handover record.
+- Hosting is not handled or controlled by Nosyra Digital. The owner/hosting provider must supply hosting, renewal, backup, and deployed API-access details in the final handover record.
 
 ### Features deliberately switched off
 
@@ -260,7 +261,7 @@ This is the owner’s action list. Items below are intentionally visible because
 |---|---|---|
 | Canada marketplace | Off | Owner approves launch and product/API/payment testing passes |
 | Canadian checkout / Moneris | Off | Moneris merchant setup, server-side verification, refunds, and support process are complete |
-| Public client testimonials | Removed/neutralised | Each reference is real, approved, and documented |
+| Public client testimonials and counters | Removed/pending | Client supplies verified references and figures, then owner approves publication |
 
 ---
 
@@ -271,7 +272,7 @@ This is the owner’s action list. Items below are intentionally visible because
 | A Canadian visitor wants to order | Explain that Canada marketplace ordering is unavailable while Moneris setup is pending; offer the Canada services/contact route. |
 | A payment appears paid in the browser but not in Orders | Do not dispatch. Check server-side verification and the Paystack dashboard. |
 | A coupon is rejected | Check spelling, active dates, minimum order, usage limit, and the confirmed case-sensitivity rule. |
-| A customer expects a restock email | Check whether automatic delivery is enabled; otherwise record the request for staff follow-up. |
+| A customer expects a restock email | Staff check Admin → Restock alerts and send it manually after the product is back in stock. |
 | The site shows maintenance | Check the admin Maintenance switch and the published message. |
 | A customer asks about privacy | Point to the Privacy Policy and the NDPA/PIPEDA references; do not give legal advice. |
 
@@ -286,13 +287,15 @@ This is the owner’s action list. Items below are intentionally visible because
 - Canada hours: Monday–Friday, 9:00 AM–5:00 PM **ET**
 - Owner privacy/contact route: `info@xpolaservices.com`
 
-### Nosyra Digital contact
+<div style="page-break-before: always;"></div>
+
+### Nosyra Digital — agency fixes and support contact
 
 > **Email:** `info@nosyradigital.com.ng`<br>
 > **Phone / WhatsApp:** `+234 705 846 6586`<br>
 > **Preferred support channel:** WhatsApp or email
 
-Use these details for website, deployment, and handover questions directed to Nosyra Digital.
+Nosyra Digital is the agency contact for website fixes, maintenance, deployment support, and technical questions. Hosting ownership, hosting renewals, backups, and hosting-provider access remain outside Nosyra Digital’s control.
 
 ### Glossary
 
@@ -301,7 +304,7 @@ Use these details for website, deployment, and handover questions directed to No
 - **ET:** Eastern Time, used for Canadian office hours; it covers seasonal daylight-saving changes better than “EST”.
 - **Moneris:** Planned Canadian payment provider; inactive while the Canada marketplace is off.
 - **Paystack:** Payment provider used for enabled Nigerian orders.
-- **Restock alert:** Customer preference to be notified when a wishlisted product returns to stock; delivery automation must be confirmed.
+- **Restock alert:** Customer preference to be notified when a wishlisted product returns to stock; staff send the email from Admin → Restock alerts after stock is restored.
 - **Status:** Operational order stage such as pending, paid, processing, shipped, delivered, cancelled, or failed.
 - **Payment status:** Payment outcome such as pending, paid, failed, declined, or cancelled.
 

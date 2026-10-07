@@ -8,7 +8,7 @@
 
 The requested website-facing changes have been applied and the frontend builds successfully. The Canada marketplace is now explicitly presented as **switched off** while Moneris setup is pending; Canadian visitors are directed to company information, services, and enquiries rather than checkout. The public site no longer presents unverified client names, client counts, 24/7 support, or “100% compliant” counters as established facts. The admin order screen now includes paid/failed status filters and date-range filtering. Password registration now requires at least eight characters, and the privacy page names Nigeria’s NDPA and Canada’s PIPEDA.
 
-The supplied `api.zip` has now been audited, sanitized, and integrated into the selected GitHub repository under `/api`. Real credentials were removed from code and replaced with environment-variable configuration. The API still requires deployment testing against the production database and hosting environment.
+The supplied `api.zip` has now been audited, sanitized, and integrated into the selected GitHub repository under `/api`. Real credentials were removed from code and replaced with environment-variable configuration. A staff-managed restock-alert queue is now available in the admin dashboard. Hosting is outside Nosyra Digital’s scope and remains controlled by the owner/hosting provider.
 
 ## Feedback-to-action matrix
 
@@ -20,10 +20,10 @@ The supplied `api.zip` has now been audited, sanitized, and integrated into the 
 | Canada marketplace, loyalty, thresholds, referral discounts, and Canadian categories should be off | Canada marketplace and checkout routes remain gated by `MARKET_CONFIG.canadaEnabled = false`; Canada-facing copy now says visitors cannot order. Nigerian-only commerce language is separated in the revised guide. | Done for frontend and supplied API; verify production deployment variables |
 | Explain what a Canadian shopper sees while Moneris is off | Updated `CanadaComingSoon` to say no Canadian marketplace order or checkout is possible; added links to Canada services/contact and Nigeria marketplace. | Done |
 | Ownership and handover | Added ownership section: owner holds domain, Paystack access, and renewals; Nosyra uses FTP for uploads and does not control those credentials. | Done in guide; owner should insert registrar/hosting renewal dates and backup location |
-| Unverified “7+ sectors”, counters, testimonials | Changed badges to exact published counts, replaced unsupported counters, removed the public testimonial carousel from the home and About pages, and retained only a generic reference placeholder in source data. | Done; restore testimonials only after written client approval |
+| Unverified “7+ sectors”, counters, testimonials | Removed public animated stats/counters and testimonial display until the client supplies verified figures and approved testimonials; the public hero uses non-numeric service labels. | Done; restore testimonials only after written client approval |
 | Six-character password minimum | Registration UI and supplied PHP API now require at least eight characters. | Done |
-| Restock alerts automatic or manual | The supplied API stores the wishlist opt-in, but no automatic notification worker was found. | Treat as staff follow-up until a notification job/provider is deployed |
-| Coupon case sensitivity | Frontend, order validation, Moneris validation, and admin coupon creation/update now normalize codes to uppercase. | Done; confirm database collation in production |
+| Restock alerts automatic or manual | The API now exposes an Admin → Restock alerts queue. Staff can send an email once stock is restored; the request is logged and cleared after sending. | Done; staff-managed, not automatic |
+| Coupon case sensitivity | Frontend, order validation, Moneris validation, and admin coupon creation/update normalize codes to uppercase. | Done at application layer |
 | Privacy compliance | Added NDPA and PIPEDA references, and clarified Moneris is planned/inactive while Canada commerce is off. | Done; obtain legal review before publishing a compliance guarantee |
 | Tables/lists splitting across pages | Revised guide uses page-break-friendly sections and avoids forcing long table rows across pages. | Done in revised PDF |
 
@@ -59,7 +59,7 @@ The supplied archive is now included under `/api`. It contains the main auth, pr
 ```text
 npx tsc --noEmit  ✅ passed
 npm run build      ✅ passed
-PHP syntax lint (38 files) ✅ passed
+PHP syntax lint (39 files) ✅ passed
 ```
 
 The build reports only Vite’s existing bundle-size advisory; TypeScript, frontend compilation, and PHP syntax validation passed.
@@ -68,7 +68,7 @@ The build reports only Vite’s existing bundle-size advisory; TypeScript, front
 
 - Approved Nosyra Digital email address and phone number for the guide.
 - Domain registrar, hosting/FTP renewal dates, and backup location/retention policy.
-- Confirmation of the production PHP API path, database access, and deployment variables.
+- Confirmation of the production PHP API path, database access, deployment variables, and SMTP configuration for staff-managed restock emails.
 - Written approval for any real client testimonials, names, logos, sector/client counters, or compliance claims.
 - Confirmation of whether restock alerts are automatic, manual, or not yet enabled.
 - Confirmation of coupon case sensitivity at the PHP API/database layer.

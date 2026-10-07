@@ -474,6 +474,26 @@ export const adminProductsApi = {
     adminFetch<{ success: boolean }>(`/admin/products.php?action=del_variation&var_id=${varId}`, { method: 'DELETE' }),
 };
 
+
+export interface RestockRequest {
+  wishlistId: number;
+  uid: string;
+  productId: number;
+  productName: string;
+  stockStatus: 'in_stock' | 'out_of_stock';
+  email: string;
+  customerName: string;
+  optedInAt: string;
+  lastSentAt: string | null;
+}
+export const restockApi = {
+  getQueue: () => adminFetch<{ success: boolean; data: RestockRequest[] }>('/admin/restock.php'),
+  handle: (wishlistId: number, action: 'send' | 'dismiss') =>
+    adminFetch<{ success: boolean; action: string }>(`/admin/restock.php?action=${action}`, {
+      method: 'POST', body: JSON.stringify({ wishlistId }),
+    }),
+};
+
 export const ordersApi = {
   getUserOrders: () =>
     authFetch<{ success: boolean; data: Order[] }>('/orders.php').then(r => r.data),

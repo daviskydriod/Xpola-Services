@@ -75,7 +75,7 @@ export const countryData: Record<string, CountryData> = {
       cta3: "Request a Quote",
       trustBadges: [
         { icon: "FileCheck", label: "CAC Registered" },
-        { icon: "Network", label: "7 Sectors" }
+        { icon: "Network", label: "Sector solutions" }
       ]
     },
     about: {
@@ -89,36 +89,7 @@ export const countryData: Record<string, CountryData> = {
         "Individuals and households"
       ]
     },
-    stats: [
-      {
-        number: "7",
-        label: "CORE SECTORS",
-        description: "Published service areas",
-        isNumeric: true,
-        value: 7
-      },
-      {
-        number: "NG",
-        label: "MARKET",
-        description: "Nigeria information and shop",
-        isNumeric: false,
-        value: 0
-      },
-      {
-        number: "Mon–Fri",
-        label: "OFFICE HOURS",
-        description: "8:00 AM–6:00 PM WAT",
-        isNumeric: false,
-        value: 0
-      },
-      {
-        number: "Free",
-        label: "INITIAL CONSULTATION",
-        description: "For new enquiries",
-        isNumeric: false,
-        value: 0
-      }
-    ],
+    stats: [],
     sectors: [
       {
         icon: "Briefcase",
@@ -189,29 +160,7 @@ export const countryData: Record<string, CountryData> = {
         }
       ]
     },
-    testimonials: [
-      {
-        quote: "Client references are available on request. Contact Xpola to discuss relevant experience for your needs.",
-        name: "Client reference",
-        title: "Available on request",
-        company: "Verified reference required",
-        rating: 5
-      },
-      {
-        quote: "The logistics coordination provided by Xpola was seamless. They handled our cross-country shipments with remarkable efficiency and kept us informed every step of the way.",
-        name: "Client reference",
-        title: "Available on request",
-        company: "Verified reference required",
-        rating: 5
-      },
-      {
-        quote: "As a partner in our construction material supply, Xpola has been reliable and responsive. Their quality standards and delivery timelines have been consistently impressive.",
-        name: "Client reference",
-        title: "Available on request",
-        company: "Verified reference required",
-        rating: 5
-      }
-    ],
+    testimonials: [],
     contact: {
       email: ["info@xpolaservices.com", "xpolaservices@gmail.com"],
       phone: ["+234 708 627 5105", "Mon - Fri, 8AM - 6PM"],
@@ -235,7 +184,7 @@ export const countryData: Record<string, CountryData> = {
       cta3: "Get Started",
       trustBadges: [
         { icon: "Shield", label: "Federally Registered" },
-        { icon: "Network", label: "5 Services" }
+        { icon: "Network", label: "Professional services" }
       ]
     },
     about: {
@@ -249,37 +198,7 @@ export const countryData: Record<string, CountryData> = {
         "Community and personal services"
       ]
     },
-stats: [
-  {
-    number: "5",
-    label: "CORE SERVICES",
-    description: "Published service areas",
-    isNumeric: true,
-    value: 5
-  },
-  {
-    number: "CA",
-    label: "MARKET",
-    description: "Information and enquiries",
-    isNumeric: false,
-    value: 0
-  },
-  {
-    number: "Mon–Fri",
-    label: "OFFICE HOURS",
-    description: "9:00 AM–5:00 PM ET",
-    isNumeric: false,
-    value: 0
-  },
-  {
-    number: "Off",
-    label: "MARKETPLACE",
-    description: "Moneris setup pending",
-    isNumeric: false,
-    value: 0
-  }
-],
-
+    stats: [],
     sectors: [
       {
         icon: "Briefcase",
@@ -338,29 +257,7 @@ stats: [
         }
       ]
     },
-    testimonials: [
-      {
-        quote: "Xpola Canada's approach to business consulting is refreshingly practical. They understand our needs and deliver actionable strategies.",
-        name: "Client reference",
-        title: "Available on request",
-        company: "Verified reference required",
-        rating: 5
-      },
-      {
-        quote: "Their logistics coordination has streamlined our distribution network. Professional, reliable, and efficient service.",
-        name: "Client reference",
-        title: "Available on request",
-        company: "Verified reference required",
-        rating: 5
-      },
-      {
-        quote: "Working with Xpola has been a game-changer for our procurement processes. They deliver quality and value consistently.",
-        name: "Client reference",
-        title: "Available on request",
-        company: "Verified reference required",
-        rating: 5
-      }
-    ],
+    testimonials: [],
     contact: {
       email: ["info@xpolaservices.com", "xpolaservices@gmail.com"],
       phone: ["+1 306 730 0639", "Mon - Fri, 9AM - 5PM"],

@@ -13,3 +13,9 @@ This API is deployed separately from the React frontend. Configure the variables
 3. Point the frontend API base URL to this `/api` directory.
 4. Configure Paystack webhook signing and server-side verification.
 5. Test order idempotency, payment verification, failed payments, date filters, coupon normalization, and the Canada-off guard before launch.
+
+## Staff-managed restock alerts
+
+Customers can opt into a restock request from their wishlist. Admins use `GET /admin/restock.php` to review opted-in customers. After the product is marked `in_stock`, an admin can `POST /admin/restock.php?action=send` with `{ "wishlistId": 123 }`. The endpoint sends the email using the configured SMTP environment variables, records the alert in `restock_alerts`, writes an audit entry, and clears the opt-in to prevent duplicate sends. `action=dismiss` clears a request without sending mail.
+
+This is deliberately a staff-managed workflow; no automatic background worker is promised.

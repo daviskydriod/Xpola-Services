@@ -14,7 +14,7 @@
 - Disabled the Canada marketplace and checkout while Moneris setup is pending.
 - Added a clear Canadian visitor journey for company information, services, and enquiries.
 - Kept Canadian hours as **ET**, not EST.
-- Removed unsupported public counters, project figures, and testimonial carousel content.
+- Removed public animated counters and testimonial display until the client supplies approved figures and testimonials.
 - Updated Canadian and Nigerian market copy so commerce and payment instructions are not mixed.
 - Added NDPA and PIPEDA references to the privacy page.
 - Increased the UI password minimum to eight characters.
@@ -34,14 +34,14 @@
 - Normalized coupon codes to uppercase in validation and admin management paths.
 - Preserved server-side Paystack verification and idempotent payment state transitions.
 - Preserved server-side activity/audit logging hooks.
-- Documented restock alerts as staff follow-up until an automatic notification worker is deployed.
+- Added Admin → Restock alerts: staff can see opted-in customers, send an email after stock is restored, and dismiss requests; each send is audited and duplicate sends are prevented.
 
 ## Documentation and layout fixes
 
 - Added the approved Nosyra Digital agency support contact:
   - `info@nosyradigital.com.ng`
   - `+234 705 846 6586` — phone and WhatsApp
-- Clarified that Nosyra Digital handles website fixes, maintenance, deployment support, and technical questions.
+- Clarified that Nosyra Digital handles website fixes, maintenance, deployment support, and technical questions; hosting ownership and hosting operations are outside Nosyra Digital’s scope.
 - Added the ownership and handover checklist.
 - Added the order-status table.
 - Kept the full five-step client process together on one page.
@@ -54,8 +54,9 @@
 2. Install PHP dependencies with `composer install --no-dev --optimize-autoloader`.
 3. Test the API against the production database and verify all required migrations/schema fields.
 4. Keep `CANADA_MARKET_ENABLED=0` until the owner approves Moneris launch testing.
-5. Confirm backup, renewal, webhook, refund, and restock-notification procedures.
-6. Rotate any real credentials that were present in the original API archive before production deployment.
+5. Client must supply verified public figures and approved testimonials before they are added back.
+6. Confirm backup, renewal, webhook, refund, and restock-notification procedures.
+7. Rotate any real credentials that were present in the original API archive before production deployment.
 
 ## Validation
 

@@ -5,9 +5,10 @@ import { useAdmin } from '../../contexts/AdminContext';
 import { adminApi, maintenanceApi, ordersApi, customersApi, deliveryApi, categoriesApi, couponsApi, commsApi, supportApi, AdminStats, Order, Customer, AdminUser, DeliveryZone, Category, Coupon, SiteSettings, AnnouncementBanner, AuditLog, SupportTicket } from '@/lib/api';
 import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
+import AdminRestock from './AdminRestock';
 import { toast } from '@/hooks/use-toast';
 
-export type AdminView = 'overview' | 'products' | 'orders' | 'customers' | 'comms' | 'settings' | 'maintenance';
+export type AdminView = 'overview' | 'products' | 'orders' | 'restock' | 'customers' | 'comms' | 'settings' | 'maintenance';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -38,6 +39,7 @@ const Icon = ({ path, className = 'w-5 h-5' }: { path: string | string[]; classN
 const ICONS = {
   overview: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   products: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
+  restock: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
   orders: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
   customers: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
   comms: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
@@ -50,6 +52,7 @@ const NAV_ITEMS: { id: AdminView; label: string; icon: string }[] = [
   { id: 'overview',    label: 'Overview',    icon: ICONS.overview },
   { id: 'products',    label: 'Products',    icon: ICONS.products },
   { id: 'orders',      label: 'Orders',      icon: ICONS.orders },
+  { id: 'restock',     label: 'Restock alerts', icon: ICONS.restock },
   { id: 'customers',   label: 'Customers',   icon: ICONS.customers },
   { id: 'comms',       label: 'Comms',       icon: ICONS.comms },
   { id: 'settings',    label: 'Settings',    icon: ICONS.settings },
@@ -1536,6 +1539,7 @@ const AdminDashboard = () => {
     overview:    'Overview',
     products:    'Products',
     orders:      'Orders',
+    restock:     'Restock alerts',
     customers:   'Customers',
     comms:       'Communications',
     settings:    'Settings',
@@ -1575,6 +1579,7 @@ const AdminDashboard = () => {
           {view === 'overview'    && <Overview setView={setView} />}
           {view === 'products'    && <AdminProducts />}
           {view === 'orders'      && <AdminOrders />}
+          {view === 'restock'     && <AdminRestock />}
           {view === 'customers'   && <CustomersPanel />}
           {view === 'comms'       && <CommsPanel />}
           {view === 'settings'    && <SettingsPanel />}

@@ -4,7 +4,6 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AboutSection from "../components/AboutSection";
-import StatsSection from "../components/StatsSection";
 import WhyChooseSection from "../components/WhyChooseSection";
 import CTASection from "../components/CTASection";
 import { useCountry } from "../contexts/CountryContext";
@@ -38,7 +37,6 @@ const About = () => {
       </section>
 
       <AboutSection />
-      <StatsSection />
       <WhyChooseSection />
       <CTASection />
       <Footer />
