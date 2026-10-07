@@ -13,13 +13,13 @@ const milestones = [
   {
     year: "2017",
     title: "First Major Project",
-    description: "Completed our first major oil & gas infrastructure project valued at $20M",
+    description: "Project history available on request; value to be verified",
     icon: Award,
   },
   {
     year: "2019",
     title: "Team Expansion",
-    description: "Grew to 500+ employees and expanded into construction and mining sectors",
+    description: "Team and sector history to be confirmed by the owner",
     icon: Users,
   },
   {
@@ -37,7 +37,7 @@ const milestones = [
   {
     year: "2024",
     title: "Sustainable Future",
-    description: "Achieved $2B+ in total project value with focus on sustainable solutions",
+    description: "Sustainability and project-value figures to be verified before publication",
     icon: TrendingUp,
   },
 ];

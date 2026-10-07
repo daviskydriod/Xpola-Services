@@ -1,11 +1,11 @@
 // FILE PATH: src/components/shop/ProductCard.tsx
 // Place this file at: src/components/shop/ProductCard.tsx
 import { useState } from 'react';
-import { Product, formatPrice } from '@/data/shopData';
+import { formatPrice, ApiProduct } from '@/lib/api';
 import { useCart } from '@/contexts/CartContext';
 
 interface ProductCardProps {
-  product: Product;
+  product: ApiProduct;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
@@ -13,7 +13,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const [adding, setAdding] = useState(false);
 
   const handleAdd = () => {
-    if (!product.inStock) return;
+    if (product.stock_status !== 'in_stock') return;
     setAdding(true);
     addToCart(product);
     setTimeout(() => setAdding(false), 900);
@@ -24,7 +24,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       {/* ── Image ── */}
       <div className="relative overflow-hidden bg-gray-50" style={{ paddingBottom: '62%' }}>
         <img
-          src={product.image}
+          src={product.image_path || ''}
           alt={product.name}
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           onError={e => {
@@ -34,14 +34,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
         />
 
         {/* Featured ribbon */}
-        {product.featured && (
+        {product.featured === 1 && (
           <span className="absolute top-2 left-0 bg-[#E02020] text-white text-[9px] sm:text-[10px] font-bold px-2 py-1 uppercase tracking-wider font-montserrat">
             Featured
           </span>
         )}
 
         {/* Out of stock overlay */}
-        {!product.inStock && (
+        {product.stock_status !== 'in_stock' && (
           <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
             <span className="bg-gray-900 text-white text-[9px] sm:text-xs font-bold px-3 py-1.5 uppercase tracking-widest font-montserrat">
               Out of Stock
@@ -56,7 +56,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="flex items-center gap-1 mb-1.5">
           <span className="w-2.5 h-0.5 bg-[#E02020]" />
           <span className="text-[9px] sm:text-[10px] font-semibold text-[#E02020] uppercase tracking-wider font-poppins truncate">
-            {product.category}
+            {product.category_name || ''}
           </span>
         </div>
 
@@ -97,18 +97,18 @@ const ProductCard = ({ product }: ProductCardProps) => {
             </p>
             <p
               className={`text-[9px] sm:text-[10px] font-poppins font-semibold mt-0.5 ${
-                product.inStock ? 'text-green-600' : 'text-gray-400'
+                product.stock_status === 'in_stock' ? 'text-green-600' : 'text-gray-400'
               }`}
             >
-              {product.inStock ? '● In Stock' : '○ Out of Stock'}
+              {product.stock_status === 'in_stock' ? '● In Stock' : '○ Out of Stock'}
             </p>
           </div>
 
           <button
             onClick={handleAdd}
-            disabled={!product.inStock || adding}
+            disabled={product.stock_status !== 'in_stock' || adding}
             className={`w-full sm:w-auto font-montserrat font-bold text-[9px] sm:text-[10px] px-2.5 sm:px-3.5 py-2 uppercase tracking-wide transition-all duration-200 flex-shrink-0 whitespace-nowrap ${
-              !product.inStock
+              product.stock_status !== 'in_stock'
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 : adding
                 ? 'bg-green-500 text-white'

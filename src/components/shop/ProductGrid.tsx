@@ -1,10 +1,10 @@
 // FILE PATH: src/components/shop/ProductGrid.tsx
 // Place this file at: src/components/shop/ProductGrid.tsx
-import { Product } from '@/data/shopData';
+import { ApiProduct } from '@/lib/api';
 import ProductCard from './ProductCard';
 
 interface ProductGridProps {
-  products: Product[];
+  products: ApiProduct[];
   onClearFilters: () => void;
   hasActiveFilters: boolean;
   totalCount: number;

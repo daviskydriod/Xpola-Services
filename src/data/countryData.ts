@@ -75,7 +75,7 @@ export const countryData: Record<string, CountryData> = {
       cta3: "Request a Quote",
       trustBadges: [
         { icon: "FileCheck", label: "CAC Registered" },
-        { icon: "Network", label: "7+ Sectors" }
+        { icon: "Network", label: "7 Sectors" }
       ]
     },
     about: {
@@ -91,30 +91,30 @@ export const countryData: Record<string, CountryData> = {
     },
     stats: [
       {
-        number: "500+",
-        label: "PROJECTS SUPPORTED",
-        description: "Across multiple sectors",
-        isNumeric: true,
-        value: 500
-      },
-      {
-        number: "150+",
-        label: "ACTIVE CLIENTS",
-        description: "Nationwide partnerships",
-        isNumeric: true,
-        value: 150
-      },
-      {
         number: "7",
         label: "CORE SECTORS",
-        description: "Integrated services",
+        description: "Published service areas",
         isNumeric: true,
         value: 7
       },
       {
-        number: "24/7",
-        label: "CLIENT SUPPORT",
-        description: "Always available",
+        number: "NG",
+        label: "MARKET",
+        description: "Nigeria information and shop",
+        isNumeric: false,
+        value: 0
+      },
+      {
+        number: "Mon–Fri",
+        label: "OFFICE HOURS",
+        description: "8:00 AM–6:00 PM WAT",
+        isNumeric: false,
+        value: 0
+      },
+      {
+        number: "Free",
+        label: "INITIAL CONSULTATION",
+        description: "For new enquiries",
         isNumeric: false,
         value: 0
       }
@@ -191,24 +191,24 @@ export const countryData: Record<string, CountryData> = {
     },
     testimonials: [
       {
-        quote: "Xpola Services delivered exceptional consulting support for our expansion project. Their understanding of Nigerian business environments and professional approach exceeded our expectations.",
-        name: "Adebayo Okonkwo",
-        title: "Operations Director",
-        company: "Lagos Manufacturing Ltd",
+        quote: "Client references are available on request. Contact Xpola to discuss relevant experience for your needs.",
+        name: "Client reference",
+        title: "Available on request",
+        company: "Verified reference required",
         rating: 5
       },
       {
         quote: "The logistics coordination provided by Xpola was seamless. They handled our cross-country shipments with remarkable efficiency and kept us informed every step of the way.",
-        name: "Chioma Nwankwo",
-        title: "Supply Chain Manager",
-        company: "Delta Oil Services",
+        name: "Client reference",
+        title: "Available on request",
+        company: "Verified reference required",
         rating: 5
       },
       {
         quote: "As a partner in our construction material supply, Xpola has been reliable and responsive. Their quality standards and delivery timelines have been consistently impressive.",
-        name: "Ibrahim Musa",
-        title: "Project Manager",
-        company: "Abuja Developments",
+        name: "Client reference",
+        title: "Available on request",
+        company: "Verified reference required",
         rating: 5
       }
     ],
@@ -235,7 +235,7 @@ export const countryData: Record<string, CountryData> = {
       cta3: "Get Started",
       trustBadges: [
         { icon: "Shield", label: "Federally Registered" },
-        { icon: "Network", label: "5+ Services" }
+        { icon: "Network", label: "5 Services" }
       ]
     },
     about: {
@@ -251,32 +251,32 @@ export const countryData: Record<string, CountryData> = {
     },
 stats: [
   {
-    number: "5+",
+    number: "5",
     label: "CORE SERVICES",
-    description: "Comprehensive solutions",
+    description: "Published service areas",
     isNumeric: true,
     value: 5
   },
   {
-    number: "100%",
-    label: "COMPLIANT",
-    description: "Canadian regulations",
+    number: "CA",
+    label: "MARKET",
+    description: "Information and enquiries",
     isNumeric: false,
     value: 0
   },
   {
-    number: "24/7",
-    label: "SUPPORT",
-    description: "Always available",
+    number: "Mon–Fri",
+    label: "OFFICE HOURS",
+    description: "9:00 AM–5:00 PM ET",
     isNumeric: false,
     value: 0
   },
   {
-    number: "50+",
-    label: "CLIENTS",
-    description: "Trusted partners",
-    isNumeric: true,
-    value: 50
+    number: "Off",
+    label: "MARKETPLACE",
+    description: "Moneris setup pending",
+    isNumeric: false,
+    value: 0
   }
 ],
 
@@ -341,30 +341,30 @@ stats: [
     testimonials: [
       {
         quote: "Xpola Canada's approach to business consulting is refreshingly practical. They understand our needs and deliver actionable strategies.",
-        name: "Jennifer Chen",
-        title: "VP Operations",
-        company: "Toronto Enterprises Inc.",
+        name: "Client reference",
+        title: "Available on request",
+        company: "Verified reference required",
         rating: 5
       },
       {
         quote: "Their logistics coordination has streamlined our distribution network. Professional, reliable, and efficient service.",
-        name: "Michael Thompson",
-        title: "Supply Chain Director",
-        company: "Vancouver Distribution Co.",
+        name: "Client reference",
+        title: "Available on request",
+        company: "Verified reference required",
         rating: 5
       },
       {
         quote: "Working with Xpola has been a game-changer for our procurement processes. They deliver quality and value consistently.",
-        name: "Sarah Martinez",
-        title: "Procurement Manager",
-        company: "Calgary Solutions Group",
+        name: "Client reference",
+        title: "Available on request",
+        company: "Verified reference required",
         rating: 5
       }
     ],
     contact: {
       email: ["info@xpolaservices.com", "xpolaservices@gmail.com"],
       phone: ["+1 306 730 0639", "Mon - Fri, 9AM - 5PM"],
-      hours: ["Monday - Friday", "9:00 AM - 5:00 PM EST"],
+      hours: ["Monday - Friday", "9:00 AM - 5:00 PM ET"],
       address: "Toronto, Ontario, Canada"
     },
     footer: {

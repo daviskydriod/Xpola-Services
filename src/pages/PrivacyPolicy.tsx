@@ -58,7 +58,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="font-montserrat font-bold text-lg text-gray-900 mb-3">4. Legal Basis for Processing (GDPR)</h2>
-            <p>For customers in the European Economic Area or where GDPR applies, we process your data under the following legal bases:</p>
+            <p>We aim to handle personal information in line with Nigeria's <strong>National Data Protection Act (NDPA)</strong> and Canada's <strong>Personal Information Protection and Electronic Documents Act (PIPEDA)</strong>, as applicable to the relevant customer and activity. For customers in the European Economic Area or where GDPR applies, we process your data under the following legal bases:</p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li><strong>Contract performance:</strong> Processing necessary to fulfil your orders</li>
               <li><strong>Legitimate interests:</strong> Fraud prevention, platform security, analytics</li>
@@ -71,7 +71,7 @@ export default function PrivacyPolicy() {
             <h2 className="font-montserrat font-bold text-lg text-gray-900 mb-3">5. Sharing Your Information</h2>
             <p>We do not sell your personal data. We may share your information with:</p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
-              <li><strong>Payment processors:</strong> Paystack (Nigeria) and Moneris (Canada) to process transactions securely</li>
+              <li><strong>Payment processors:</strong> Paystack for enabled Nigerian transactions. Moneris is named as a planned Canadian processor and is not active while the Canadian marketplace is switched off.</li>
               <li><strong>Logistics partners:</strong> To arrange delivery of your orders</li>
               <li><strong>Service providers:</strong> Email delivery, cloud hosting, and analytics tools that process data on our behalf</li>
               <li><strong>Legal authorities:</strong> Where required by Nigerian or Canadian law</li>

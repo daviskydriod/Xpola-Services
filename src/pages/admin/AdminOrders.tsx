@@ -130,7 +130,7 @@ const OrderModal = ({ order, onClose, onUpdate, onDelete }: OrderModalProps) => 
           <div className="bg-gray-50 rounded-xl p-4 space-y-3">
             <p className="font-montserrat font-bold text-xs text-gray-600 uppercase tracking-wider">Update Status</p>
             <div className="grid grid-cols-2 gap-2">
-            {(['pending','processing','shipped','delivered','cancelled'] as Status[]).map((s: Status) => {
+            {(['pending','paid','processing','shipped','delivered','cancelled','failed'] as Status[]).map((s: Status) => {
   const ORDER_RANK: Record<Status, number> = {
     pending: 0, paid: 1, processing: 2, shipped: 3, delivered: 4, cancelled: 5, failed: 0,
   };
@@ -276,11 +276,13 @@ export default function AdminOrders() {
   const [filterStatus,  setFilterStatus]  = useState<'all' | Status>('all');
   const [filterCountry, setFilterCountry] = useState<'all' | 'NG' | 'CA'>('all');
   const [page,          setPage]          = useState(1);
+  const [dateFrom,      setDateFrom]      = useState('');
+  const [dateTo,        setDateTo]        = useState('');
 
   useEffect(() => { fetchOrders(); }, []);
 
   // Reset to page 1 when filters change
-  useEffect(() => { setPage(1); }, [search, filterStatus, filterCountry]);
+  useEffect(() => { setPage(1); }, [search, filterStatus, filterCountry, dateFrom, dateTo]);
 
   const allFiltered = orders.filter((o: AdminOrder) => {
     const q = search.toLowerCase();
@@ -290,7 +292,11 @@ export default function AdminOrders() {
       || o.customer_email.toLowerCase().includes(q);
     const s = filterStatus  === 'all' || o.status  === filterStatus;
     const c = filterCountry === 'all' || o.country === filterCountry;
-    return m && s && c;
+    const created = o.created_at ? new Date(o.created_at).getTime() : NaN;
+    const from = dateFrom ? new Date(`${dateFrom}T00:00:00`).getTime() : -Infinity;
+    const to = dateTo ? new Date(`${dateTo}T23:59:59.999`).getTime() : Infinity;
+    const d = Number.isNaN(created) || (created >= from && created <= to);
+    return m && s && c && d;
   });
 
   const paginated = allFiltered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
@@ -352,7 +358,7 @@ export default function AdminOrders() {
        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value as typeof filterStatus)}
   className="px-3 py-2.5 border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:border-[#E02020] bg-white">
           <option value="all">All Statuses</option>
-          {(['pending','processing','shipped','delivered','cancelled'] as Status[]).map(s => (
+          {(['pending','paid','processing','shipped','delivered','cancelled','failed'] as Status[]).map(s => (
             <option key={s} value={s}>{STATUS_LABELS[s]}</option>
           ))}
         </select>
@@ -362,6 +368,14 @@ export default function AdminOrders() {
           <option value="NG">🇳🇬 Nigeria</option>
           <option value="CA">🇨🇦 Canada</option>
         </select>
+        <label className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl text-xs text-gray-500 bg-white">
+          From
+          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="text-sm text-gray-900 focus:outline-none" aria-label="Filter orders from date" />
+        </label>
+        <label className="flex items-center gap-2 px-3 py-2.5 border border-gray-200 rounded-xl text-xs text-gray-500 bg-white">
+          To
+          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="text-sm text-gray-900 focus:outline-none" aria-label="Filter orders to date" />
+        </label>
       </div>
 
       {/* Content */}

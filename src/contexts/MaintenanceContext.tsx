@@ -24,7 +24,7 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
   const refresh = async () => {
     try {
       const data = await maintenanceApi.getStatus();
-      setState({ maintenance: data.maintenance, message: data.message ?? state.message, estimatedBack: data.estimated_back ?? null, loading: false });
+      setState({ maintenance: data.maintenance, message: data.message ?? state.message, estimatedBack: data.estimatedBack ?? null, loading: false });
     } catch { setState(s => ({ ...s, loading: false })); }
   };
   useEffect(() => { refresh(); }, []);

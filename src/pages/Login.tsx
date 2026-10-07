@@ -65,7 +65,7 @@ export default function Login() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault(); setError('');
     if (regPassword !== regConfirm) return setError('Passwords do not match.');
-    if (regPassword.length < 6)    return setError('Password must be at least 6 characters.');
+    if (regPassword.length < 8)    return setError('Password must be at least 8 characters.');
     setLoading(true);
     try {
       // Pass referral code from URL ?ref= param
@@ -228,7 +228,7 @@ export default function Login() {
                 </div>
                 <div>
                   <label className={labelClass}>Password <span className="text-[#E02020]">*</span></label>
-                  <input type="password" value={regPassword} onChange={e => setRegPassword(e.target.value)} placeholder="At least 6 characters" required className={inputClass} />
+                  <input type="password" value={regPassword} onChange={e => setRegPassword(e.target.value)} placeholder="At least 8 characters" required className={inputClass} />
                 </div>
                 <div>
                   <label className={labelClass}>Confirm Password <span className="text-[#E02020]">*</span></label>

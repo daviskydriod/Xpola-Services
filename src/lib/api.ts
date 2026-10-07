@@ -76,6 +76,12 @@ export interface ApiCategory {
   name: string;
   slug: string;
 }
+export interface Pagination {
+  total: number;
+  page: number;
+  per_page: number;
+  last_page: number;
+}
 
 // ── User types ────────────────────────────────────────────────────────────────
 export interface SavedAddress {

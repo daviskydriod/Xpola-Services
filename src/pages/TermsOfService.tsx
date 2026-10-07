@@ -55,7 +55,7 @@ export default function TermsOfService() {
             <ul className="list-disc pl-5 space-y-2">
               <li>All prices are inclusive of applicable VAT or taxes where stated.</li>
               <li>Nigerian orders are processed via <strong>Paystack</strong> in NGN.</li>
-              <li>Canadian orders are processed via <strong>Moneris</strong> in CAD.</li>
+              <li>Canadian marketplace orders and checkout are currently unavailable while Moneris setup is pending.</li>
               <li>We do not store your full card details. Payment data is handled by our PCI-compliant payment processors.</li>
               <li>Prices are subject to change without notice, but changes will not affect confirmed orders.</li>
             </ul>
@@ -63,7 +63,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="font-montserrat font-bold text-lg text-gray-900 mb-3">6. Delivery</h2>
-            <p className="mb-3">Delivery is available within Nigeria and Canada respectively. Delivery fees and estimated timelines are shown at checkout.</p>
+            <p className="mb-3">Delivery is currently available for enabled Nigerian orders. Canadian marketplace delivery will be documented when the Canada marketplace and Moneris checkout are enabled.</p>
             <ul className="list-disc pl-5 space-y-2">
               <li>Xpola Services is not responsible for delays caused by third-party logistics providers, customs, or circumstances beyond our control.</li>
               <li>Risk of loss and title for products passes to you upon delivery.</li>
@@ -74,7 +74,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="font-montserrat font-bold text-lg text-gray-900 mb-3">7. Returns and Refunds</h2>
             <ul className="list-disc pl-5 space-y-2">
-              <li>Return requests must be submitted within 7 days of delivery for Nigeria orders and 14 days for Canada orders.</li>
+              <li>Return requests for enabled Nigerian orders must be submitted within 7 days of delivery. Canadian marketplace return terms will be published before launch.</li>
               <li>Items must be unused, in original packaging, and in the same condition as received.</li>
               <li>Certain product categories (e.g. industrial equipment, custom orders) may not be eligible for return.</li>
               <li>Approved refunds will be processed to the original payment method within 5–10 business days.</li>

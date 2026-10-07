@@ -9,9 +9,11 @@
 //
 // Mount <Toaster /> once in App.tsx.
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, ReactNode } from 'react';
 
 type ToastType = 'success' | 'error' | 'info' | 'warning';
+export type ToastProps = { open?: boolean; onOpenChange?: (open: boolean) => void; className?: string; children?: ReactNode };
+export type ToastActionElement = React.ReactElement;
 
 interface ToastItem {
   id:       string;

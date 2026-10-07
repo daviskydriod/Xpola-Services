@@ -8,7 +8,7 @@ interface PaystackOptions {
   currency?: string;
   ref?: string;
   metadata?: Record<string, unknown>;
-  onSuccess: (reference: { reference: string }) => void;
+  onSuccess?: (reference: { reference: string }) => void;
   onClose: () => void;
 }
 
@@ -42,7 +42,7 @@ export const usePaystack = (options: PaystackOptions) => {
         currency: options.currency || 'NGN',
         ref:      options.ref || `xpola_${Date.now()}`,
         metadata: options.metadata || {},
-        callback: options.onSuccess,
+        callback: options.onSuccess ?? (() => {}),
         onClose:  options.onClose,
       });
       handler.openIframe();

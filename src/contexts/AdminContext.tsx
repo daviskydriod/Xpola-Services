@@ -20,7 +20,7 @@ interface AdminContextType {
   logout:          () => void;
   orders:          AdminOrder[];
   ordersLoading:   boolean;
-  fetchOrders:     () => Promise<void>;
+  fetchOrders:     (params?: string) => Promise<void>;
   updateOrderStatus: (id: number, status: AdminOrder['status']) => Promise<void>;
   deleteOrder:     (id: number) => Promise<void>;
   products:        ApiProduct[];
@@ -81,10 +81,10 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
     setOrders([]); setProducts([]);
   };
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (params?: string) => {
     setOrdersLoading(true);
     try {
-      const res = await ordersApi.getAll();
+      const res = await ordersApi.getAll(params);
       const raw = (res as any).data ?? res;
       setOrders((Array.isArray(raw) ? raw : []).map((o: Order) => ({
         ...o,
