@@ -1,4 +1,12 @@
 # XPOLA SERVICES
+
+<style>
+  table, ol, ul, .keep-together { page-break-inside: avoid; break-inside: avoid; }
+  h2, h3 { page-break-after: avoid; break-after: avoid; }
+  thead { display: table-header-group; }
+  tr { page-break-inside: avoid; break-inside: avoid; }
+</style>
+
 ## Brand & Website Guide — Revised Handover Edition
 
 **Plain-English guide to the brand, website, online shop, and day-to-day operation**  
@@ -158,13 +166,24 @@ New registrations require **at least 8 characters** in the website UI. The PHP A
 
 ---
 
+<div style="page-break-before: always;"></div>
+
 ## 8. Admin guide
 
 The admin panel is the staff control room. Staff should use individual accounts, enable one-time verification where available, log out on shared devices, and never share credentials.
 
 ### Orders
 
-Orders should show both `status` and `payment_status`. The normal progression is pending → paid → processing → shipped → delivered. Failed payments must be visible as failed. Admin orders can be searched and filtered by status, country, and date range.
+Orders should show both `status` and `payment_status`. Admin orders can be searched and filtered by status, country, and date range.
+
+| Order status | Staff meaning and next action |
+|---|---|
+| Pending | Awaiting payment; do not dispatch or mark as paid manually. |
+| Paid / Processing | Server-side payment confirmed; prepare the order for fulfilment. |
+| Shipped | Order dispatched; add tracking information where available. |
+| Delivered | Customer receipt confirmed; close the fulfilment task. |
+| Cancelled | Order cancelled; do not fulfil. |
+| Failed | Payment failed or was declined; do not fulfil. |
 
 ### Other areas
 
