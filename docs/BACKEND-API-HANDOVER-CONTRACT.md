@@ -1,6 +1,6 @@
 # Xpola PHP API — Required Handover Contract
 
-The selected GitHub repository contains the React/Vite frontend, not the separately deployed PHP API. Use this contract when reconciling the 33 required PHP files against the final frontend.
+The selected GitHub repository now contains the supplied, sanitized PHP API under `/api` alongside the React/Vite frontend. Use this contract when deploying and reconciling the API against the final frontend.
 
 ## Order and payment contract
 
@@ -22,8 +22,8 @@ Canadian information, services, projects, and enquiries remain live. Canadian ma
 
 ## Open deployment checks
 
-- Confirm actual deployed API path and source repository.
+- Confirm actual deployed API path, database, and environment variables.
 - Confirm schema/migration for `orders.payment_status`, all required order statuses, and activity log fields/indexes.
-- Confirm automatic versus manual restock notification behavior.
+- Restock alerts are currently recorded for staff follow-up; deploy and verify an automatic worker before promising email alerts.
 - Confirm coupon normalization and case sensitivity.
 - Confirm backup, logging, webhook, and refund handling.

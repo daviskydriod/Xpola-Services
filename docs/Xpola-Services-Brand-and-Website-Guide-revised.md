@@ -267,13 +267,13 @@ This is the owner’s action list. Items below are intentionally visible because
 - Canada hours: Monday–Friday, 9:00 AM–5:00 PM **ET**
 - Owner privacy/contact route: `info@xpolaservices.com`
 
-### Nosyra Digital contact — owner to confirm
+### Nosyra Digital contact
 
-> **Email:** ____________________  
-> **Phone:** ____________________  
-> **Preferred support channel / hours:** ____________________
+> **Email:** `info@nosyradigital.com.ng`<br>
+> **Phone / WhatsApp:** `+234 705 846 6586`<br>
+> **Preferred support channel:** WhatsApp or email
 
-No agency contact detail has been invented in this guide. Fill this box from the approved contract or handover record.
+Use these details for website, deployment, and handover questions directed to Nosyra Digital.
 
 ### Glossary
 
