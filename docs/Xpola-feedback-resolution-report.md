@@ -8,7 +8,7 @@
 
 The requested website-facing changes have been applied and the frontend builds successfully. The Canada marketplace is now explicitly presented as **switched off** while Moneris setup is pending; Canadian visitors are directed to company information, services, and enquiries rather than checkout. The public site no longer presents unverified client names, client counts, 24/7 support, or “100% compliant” counters as established facts. The admin order screen now includes paid/failed status filters and date-range filtering. Password registration now requires at least eight characters, and the privacy page names Nigeria’s NDPA and Canada’s PIPEDA.
 
-The supplied `api.zip` has now been audited, sanitized, and integrated into the selected GitHub repository under `/api`. Real credentials were removed from code and replaced with environment-variable configuration. A staff-managed restock-alert queue is now available in the admin dashboard. Hosting is outside Nosyra Digital’s scope and remains controlled by the owner/hosting provider.
+The supplied `api.zip` has now been audited, sanitized, and integrated into the selected GitHub repository under `/api`. Real credentials were removed from code and replaced with environment-variable configuration. A staff-managed restock-alert queue and Admin → Notifications stock dashboard are now available. Low-stock/out-of-stock items are dashboard alerts; staff-triggered restock emails reuse the existing PHPMailer SMTP service. Hosting is outside Nosyra Digital’s scope and remains controlled by the owner/hosting provider.
 
 ## Feedback-to-action matrix
 
@@ -22,7 +22,7 @@ The supplied `api.zip` has now been audited, sanitized, and integrated into the 
 | Ownership and handover | Added ownership section: owner holds domain, Paystack access, and renewals; Nosyra uses FTP for uploads and does not control those credentials. | Done in guide; owner should insert registrar/hosting renewal dates and backup location |
 | Unverified “7+ sectors”, counters, testimonials | Removed public animated stats/counters and testimonial display until the client supplies verified figures and approved testimonials; the public hero uses non-numeric service labels. | Done; restore testimonials only after written client approval |
 | Six-character password minimum | Registration UI and supplied PHP API now require at least eight characters. | Done |
-| Restock alerts automatic or manual | The API now exposes an Admin → Restock alerts queue. Staff can send an email once stock is restored; the request is logged and cleared after sending. | Done; staff-managed, not automatic |
+| Restock alerts automatic or manual | The API now exposes Admin → Notifications for stock conditions and Admin → Restock alerts for customer opt-ins. Low/out-of-stock alerts are dashboard-only; staff can send an email once stock is restored through the existing PHPMailer SMTP service. | Done; staff-managed, not automatic |
 | Coupon case sensitivity | Frontend, order validation, Moneris validation, and admin coupon creation/update normalize codes to uppercase. | Done at application layer |
 | Privacy compliance | Added NDPA and PIPEDA references, and clarified Moneris is planned/inactive while Canada commerce is off. | Done; obtain legal review before publishing a compliance guarantee |
 | Tables/lists splitting across pages | Revised guide uses page-break-friendly sections and avoids forcing long table rows across pages. | Done in revised PDF |
@@ -51,8 +51,8 @@ The supplied archive is now included under `/api`. It contains the main auth, pr
 4. The supplied API enforces an eight-character password minimum and defaults `CANADA_MARKET_ENABLED=0`.
 5. User and admin activity is written server-side; browser activity calls are not the authority.
 6. Canada product/category/delivery commerce and Moneris checkout are rejected while the flag is disabled, including direct public API reads.
-7. Restock notification delivery remains a manual/staff-follow-up process until a notification worker is deployed.
-8. Production must provide database, JWT, mail, Paystack, and Moneris environment variables; no real secrets remain in the repository.
+7. Low-stock/out-of-stock notifications are dashboard-only. Customer restock email delivery is manual: Admin → Restock alerts calls `config/mail.php` → `sendMail()` through the existing PHPMailer SMTP configuration; no notification worker is deployed.
+8. Production must provide database, JWT, existing mail, Paystack, and Moneris environment variables; no real secrets remain in the repository and no second restock-specific SMTP setup is required.
 
 ## Validation performed
 
@@ -68,7 +68,7 @@ The build reports only Vite’s existing bundle-size advisory; TypeScript, front
 
 - Approved Nosyra Digital email address and phone number for the guide.
 - Domain registrar, hosting/FTP renewal dates, and backup location/retention policy.
-- Confirmation of the production PHP API path, database access, deployment variables, and SMTP configuration for staff-managed restock emails.
+- Confirmation of the production PHP API path, database access, deployment variables, and successful SMTP test for the existing mail configuration.
 - Written approval for any real client testimonials, names, logos, sector/client counters, or compliance claims.
-- Confirmation of whether restock alerts are automatic, manual, or not yet enabled.
+- Confirmation that low-stock email automation is not enabled; customer restock emails remain staff-triggered.
 - Confirmation of coupon case sensitivity at the PHP API/database layer.

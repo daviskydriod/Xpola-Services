@@ -24,11 +24,11 @@ Canadian information, services, projects, and enquiries remain live. Canadian ma
 
 - Confirm actual deployed API path, database, and environment variables.
 - Confirm schema/migration for `orders.payment_status`, all required order statuses, and activity log fields/indexes.
-- Restock alerts are staff-managed in Admin → Restock alerts; deploy SMTP configuration and test sending before production use.
+- Admin → Notifications is dashboard-only for low/out-of-stock alerts. Customer restock emails are staff-managed in Admin → Restock alerts and reuse the existing SMTP service in `config/mail.php`; test the existing mail configuration before production use.
 - Coupon codes are normalized to uppercase by the frontend and API; keep stored codes uppercase.
 - Confirm backup, logging, webhook, and refund handling.
 
 
 ## Staff-managed restock alerts
 
-The wishlist API stores `notify_on_restock`. The admin dashboard now uses `/admin/restock.php` to list opted-in customers, send an email after stock is restored, dismiss requests, record audit history, and clear the opt-in after handling. Hosting SMTP configuration must be supplied through environment variables.
+The wishlist API stores `notify_on_restock`. The admin dashboard uses `/admin/notifications.php` for low/out-of-stock dashboard alerts and `/admin/restock.php` to list opted-in customers, send an email after stock is restored, dismiss requests, record audit history, and clear the opt-in after handling. The restock endpoint reuses the existing PHPMailer SMTP service in `config/mail.php`; no second restock-specific mail setup is required.

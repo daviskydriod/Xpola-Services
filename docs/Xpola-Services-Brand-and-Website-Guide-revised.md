@@ -148,7 +148,8 @@ Paystack card details are handled by Paystack, not by Xpola. Staff should not ma
 
 ### Operational checks still required
 
-- **Restock alerts:** Customers can opt in from their wishlist. Staff use **Admin → Restock alerts** to see requests, wait until the product is back in stock, and click **Send alert**. The API sends the email, records the action, and clears the opt-in to prevent duplicate alerts. This is staff-managed, not an automatic background alert.
+- **Stock notifications:** Admin → Notifications shows low-stock products, out-of-stock products, and the count of customer restock requests. Low-stock and out-of-stock entries are dashboard alerts; they do not send an automatic email.
+- **Restock alerts:** Customers can opt in from their wishlist. Staff use **Admin → Restock alerts** to see requests, wait until the product is back in stock, and click **Send alert**. The API reuses the existing PHPMailer SMTP service in `api/config/mail.php`, sends the email, records the action, and clears the opt-in to prevent duplicate alerts. This is staff-managed, not an automatic background alert.
 - **Coupons:** Coupon codes are normalized to uppercase by the frontend and API, so customer entry is case-insensitive at the application layer. Keep stored coupon codes uppercase.
 - **Payment failure:** Failed, declined, cancelled, and abandoned payments must not remain as paid orders.
 
@@ -243,7 +244,8 @@ This is the owner’s action list. Items below are intentionally visible because
 - [ ] Record the domain registrar, hosting-provider renewal dates, and backup location with the owner/hosting provider.
 - [x] Owner controls the Paystack account and credentials.
 - [ ] Confirm who can access the deployed PHP API and database.
-- [x] Restock alerts are staff-managed from Admin → Restock alerts; no automatic background worker is promised.
+- [x] Admin → Notifications shows low-stock and out-of-stock dashboard alerts; these do not send automatic email.
+- [x] Restock alerts are staff-managed from Admin → Restock alerts and reuse the existing API SMTP service; no automatic background worker is promised.
 - [x] Coupon codes are normalized to uppercase by the frontend and API.
 - [ ] Supply and approve real testimonials, client names, logos, and any replacement public counters before publication.
 - [ ] Approve the timing and acceptance criteria for enabling Canada/Moneris.
@@ -272,6 +274,7 @@ This is the owner’s action list. Items below are intentionally visible because
 | A Canadian visitor wants to order | Explain that Canada marketplace ordering is unavailable while Moneris setup is pending; offer the Canada services/contact route. |
 | A payment appears paid in the browser but not in Orders | Do not dispatch. Check server-side verification and the Paystack dashboard. |
 | A coupon is rejected | Check spelling, active dates, minimum order, usage limit, and the confirmed case-sensitivity rule. |
+| Staff see a low-stock notification | Review Admin → Notifications and update stock in Admin → Products; no automatic email is sent. |
 | A customer expects a restock email | Staff check Admin → Restock alerts and send it manually after the product is back in stock. |
 | The site shows maintenance | Check the admin Maintenance switch and the published message. |
 | A customer asks about privacy | Point to the Privacy Policy and the NDPA/PIPEDA references; do not give legal advice. |
@@ -304,7 +307,8 @@ Nosyra Digital is the agency contact for website fixes, maintenance, deployment 
 - **ET:** Eastern Time, used for Canadian office hours; it covers seasonal daylight-saving changes better than “EST”.
 - **Moneris:** Planned Canadian payment provider; inactive while the Canada marketplace is off.
 - **Paystack:** Payment provider used for enabled Nigerian orders.
-- **Restock alert:** Customer preference to be notified when a wishlisted product returns to stock; staff send the email from Admin → Restock alerts after stock is restored.
+- **Stock notification:** Dashboard alert for low-stock, out-of-stock, or pending customer restock items; low/out-of-stock alerts do not send automatic email.
+- **Restock alert:** Customer preference to be notified when a wishlisted product returns to stock; staff send the email from Admin → Restock alerts after stock is restored using the existing API SMTP service.
 - **Status:** Operational order stage such as pending, paid, processing, shipped, delivered, cancelled, or failed.
 - **Payment status:** Payment outcome such as pending, paid, failed, declined, or cancelled.
 
