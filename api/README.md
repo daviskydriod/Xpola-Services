@@ -24,3 +24,8 @@ This is deliberately a staff-managed workflow; no automatic background worker is
 ## Admin stock notifications
 
 `GET /admin/notifications.php` requires an admin Bearer token and returns `data.lowStock`, `data.outOfStock`, `data.restockRequests`, and `data.total`. Low stock means a product with one or more variations whose combined `stock_qty` is 1–5. Explicitly `out_of_stock` products are returned separately. This endpoint is read-only and dashboard-only; it does not send email.
+
+
+## Projects
+
+Staff manage drafts and approved records with `GET/POST/PUT/DELETE /admin/projects.php` using an admin Bearer token. The public feed is `GET /projects.php?country=NG|CA` and returns approved records only. Public delivery requires both `PROJECTS_PUBLIC_ENABLED=true` in the API environment and `projectsEnabled: true` in the frontend market configuration; both default to off.

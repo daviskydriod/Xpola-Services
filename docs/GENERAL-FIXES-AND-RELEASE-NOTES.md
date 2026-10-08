@@ -10,6 +10,7 @@
 - `xpola-services-release.zip`: combined frontend and API handover package.
 
 ## Frontend fixes
+- Added an API-backed Projects page and Admin → Projects CRUD for future approved project additions; both public publication switches remain disabled by default.
 
 - Disabled the Canada marketplace and checkout while Moneris setup is pending.
 - Added a clear Canadian visitor journey for company information, services, and enquiries.

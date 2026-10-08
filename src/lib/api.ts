@@ -286,6 +286,23 @@ export interface AdminStats {
   recentOrders?:  Order[];
 }
 
+export interface Project {
+  id: number;
+  title: string;
+  slug: string;
+  summary: string | null;
+  description: string | null;
+  sector: string | null;
+  country: 'NG' | 'CA';
+  image_url: string | null;
+  client_name: string | null;
+  project_year: string | null;
+  sort_order: number;
+  is_published: 0 | 1;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface AuditLog {
   id:              string;
   adminId:         string;
@@ -438,6 +455,20 @@ export const adminApi = {
         actorEmail: log.actorEmail ?? log.actor_email,
       })),
     })),
+};
+
+export const projectsApi = {
+  getPublic: (country?: 'NG' | 'CA') =>
+    apiFetch<{ success: boolean; enabled: boolean; data: Project[] }>(`/projects.php${country ? `?country=${country}` : ''}`),
+};
+
+export const adminProjectsApi = {
+  getAll: () => adminFetch<{ success: boolean; data: Project[] }>('/admin/projects.php'),
+  create: (data: Omit<Project, 'id' | 'slug' | 'created_at' | 'updated_at'>) =>
+    adminFetch<{ success: boolean; id: number }>('/admin/projects.php', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: number, data: Omit<Project, 'id' | 'slug' | 'created_at' | 'updated_at'>) =>
+    adminFetch<{ success: boolean }>(`/admin/projects.php?id=${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: (id: number) => adminFetch<{ success: boolean }>(`/admin/projects.php?id=${id}`, { method: 'DELETE' }),
 };
 
 export const adminProductsApi = {

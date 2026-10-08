@@ -7,9 +7,10 @@ import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
 import AdminRestock from './AdminRestock';
 import AdminNotifications from './AdminNotifications';
+import AdminProjects from './AdminProjects';
 import { toast } from '@/hooks/use-toast';
 
-export type AdminView = 'overview' | 'products' | 'orders' | 'notifications' | 'restock' | 'customers' | 'comms' | 'settings' | 'maintenance';
+export type AdminView = 'overview' | 'products' | 'projects' | 'orders' | 'notifications' | 'restock' | 'customers' | 'comms' | 'settings' | 'maintenance';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -40,6 +41,7 @@ const Icon = ({ path, className = 'w-5 h-5' }: { path: string | string[]; classN
 const ICONS = {
   overview: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   products: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
+  projects: 'M3 7h5l2 2h11v10H3V7zm0 0V5h6l2 2',
   notifications: 'M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-3.5 13a2.5 2.5 0 01-5 0',
   restock: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
   orders: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
@@ -53,6 +55,7 @@ const ICONS = {
 const NAV_ITEMS: { id: AdminView; label: string; icon: string }[] = [
   { id: 'overview',    label: 'Overview',    icon: ICONS.overview },
   { id: 'products',    label: 'Products',    icon: ICONS.products },
+  { id: 'projects',    label: 'Projects',    icon: ICONS.projects },
   { id: 'orders',      label: 'Orders',      icon: ICONS.orders },
   { id: 'notifications', label: 'Notifications', icon: ICONS.notifications },
   { id: 'restock',     label: 'Restock alerts', icon: ICONS.restock },
@@ -1556,6 +1559,7 @@ const AdminDashboard = () => {
   const VIEW_LABELS: Record<AdminView, string> = {
     overview:    'Overview',
     products:    'Products',
+    projects:    'Projects',
     orders:      'Orders',
     notifications: 'Notifications',
     restock:     'Restock alerts',
@@ -1597,6 +1601,7 @@ const AdminDashboard = () => {
 
           {view === 'overview'    && <Overview setView={setView} />}
           {view === 'products'    && <AdminProducts />}
+          {view === 'projects'    && <AdminProjects />}
           {view === 'orders'      && <AdminOrders />}
           {view === 'notifications' && <AdminNotifications onRestock={() => setView('restock')} />}
           {view === 'restock'     && <AdminRestock />}

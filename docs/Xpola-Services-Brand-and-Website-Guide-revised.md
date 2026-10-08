@@ -113,7 +113,7 @@ Use this as a conversational outline, not a promise of a fixed timeline or resul
 
 ## 5. Website tour
 
-The public website includes home, about, services, individual service pages, contact, legal pages, login, customer account, Nigerian shop, product pages, checkout, and order success pages. Project pages and project navigation are hidden until the owner supplies verified projects and approves publication. The admin area is restricted to approved staff.
+The public website includes home, about, services, individual service pages, contact, legal pages, login, customer account, Nigerian shop, product pages, checkout, and order success pages. Project pages and project navigation are hidden until the owner supplies verified projects and approves publication. The admin area is restricted to approved staff. An API-backed Projects module is available to staff for future additions, but public publication is disabled by default.
 
 ### What happens when someone sends an enquiry
 
@@ -176,6 +176,11 @@ The admin panel is the staff control room. Staff should use individual accounts,
 ### Orders
 
 Orders should show both `status` and `payment_status`. Admin orders can be searched and filtered by status, country, and date range.
+
+### Projects API and publication workflow
+The admin dashboard includes **Admin → Projects**, where staff can create project drafts, edit records, add an image URL, set country/sector/year, order records, mark a record approved, or delete a record. The admin API is `GET/POST/PUT/DELETE /api/admin/projects.php` and requires an admin Bearer token. The public feed is `GET /api/projects.php?country=NG|CA` and returns only approved records.
+
+Projects remain off through two deliberate switches: set the frontend `MARKET_CONFIG.projectsEnabled` to `true` and set the API environment variable `PROJECTS_PUBLIC_ENABLED=true` only after the owner approves the supplied project material. Until both switches are enabled, the public project routes are not registered and the API returns an empty feed. Do not publish client names, images, figures, or case studies without written approval and usage permission.
 
 ### Stock notification API
 The admin dashboard reads `GET /api/admin/notifications.php` with the admin Bearer token. The endpoint returns `data.lowStock`, `data.outOfStock`, `data.restockRequests`, and `data.total`. A low-stock item is a product with one or more variations whose combined `stock_qty` is between 1 and 5. Products explicitly marked `out_of_stock` are returned in `outOfStock`; products without variations use their explicit product status. This endpoint is admin-only and read-only. It does not send email. Customer emails are handled separately by the staff-triggered `POST /api/admin/restock.php?action=send` flow, which reuses the existing SMTP service.

@@ -8,7 +8,7 @@
 
 The requested website-facing changes have been applied and the frontend builds successfully. The Canada marketplace is now explicitly presented as **switched off** while Moneris setup is pending; Canadian visitors are directed to company information, services, and enquiries rather than checkout. The public site no longer presents unverified projects, client names, client counts, 24/7 support, testimonials, or “100% compliant” counters as established facts. The admin order screen now includes paid/failed status filters and date-range filtering. Password registration now requires at least eight characters, and the privacy page names Nigeria’s NDPA and Canada’s PIPEDA.
 
-The supplied `api.zip` has now been audited, sanitized, and integrated into the selected GitHub repository under `/api`. Real credentials were removed from code and replaced with environment-variable configuration. A staff-managed restock-alert queue and Admin → Notifications stock dashboard are now available. Low-stock/out-of-stock items are dashboard alerts; staff-triggered restock emails reuse the existing PHPMailer SMTP service. Hosting is outside Nosyra Digital’s scope and remains controlled by the owner/hosting provider.
+The supplied `api.zip` has now been audited, sanitized, and integrated into the selected GitHub repository under `/api`. Real credentials were removed from code and replaced with environment-variable configuration. An API-backed Projects module is now available in the admin dashboard, with public publication disabled by default. A staff-managed restock-alert queue and Admin → Notifications stock dashboard are now available. Low-stock/out-of-stock items are dashboard alerts; staff-triggered restock emails reuse the existing PHPMailer SMTP service. Hosting is outside Nosyra Digital’s scope and remains controlled by the owner/hosting provider.
 
 ## Feedback-to-action matrix
 
@@ -27,6 +27,7 @@ The supplied `api.zip` has now been audited, sanitized, and integrated into the 
 | Privacy compliance | Added NDPA and PIPEDA references, and clarified Moneris is planned/inactive while Canada commerce is off. | Done; obtain legal review before publishing a compliance guarantee |
 | Tables/lists splitting across pages | Revised guide uses page-break-friendly sections and avoids forcing long table rows across pages. | Done in revised PDF |
 | Admin low-stock notification API documentation | Added the exact admin route, Bearer-token requirement, response fields, low-stock calculation, and separation from email delivery to the guide. | Done |
+| Projects held for future client additions | Added public/admin project APIs and Admin → Projects CRUD, while keeping frontend and API publication flags disabled by default. | Done; requires owner approval before enabling |
 
 ## Repository and integration audit
 
@@ -70,6 +71,6 @@ The build reports only Vite’s existing bundle-size advisory; TypeScript, front
 - Approved Nosyra Digital email address and phone number for the guide.
 - Domain registrar, hosting/FTP renewal dates, and backup location/retention policy.
 - Confirmation of the production PHP API path, database access, deployment variables, and successful SMTP test for the existing mail configuration.
-- Written approval and verified source material for any real projects, client testimonials, names, logos, sector/client counters, or compliance claims.
+- Written approval and verified source material for any real projects, client testimonials, names, logos, sector/client counters, or compliance claims. Enable both project publication switches only after approval.
 - Confirmation that low-stock email automation is not enabled; customer restock emails remain staff-triggered.
 - Confirmation of coupon case sensitivity at the PHP API/database layer.
