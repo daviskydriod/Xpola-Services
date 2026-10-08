@@ -486,6 +486,22 @@ export interface RestockRequest {
   optedInAt: string;
   lastSentAt: string | null;
 }
+export interface StockNotification {
+  id: number;
+  name: string;
+  country: 'NG' | 'CA';
+  stockStatus: 'low_stock' | 'out_of_stock';
+  variationStock: number | null;
+}
+export interface StockNotificationsResponse {
+  lowStock: StockNotification[];
+  outOfStock: StockNotification[];
+  restockRequests: number;
+  total: number;
+}
+export const adminNotificationsApi = {
+  get: () => adminFetch<{ success: boolean; data: StockNotificationsResponse }>('/admin/notifications.php'),
+};
 export const restockApi = {
   getQueue: () => adminFetch<{ success: boolean; data: RestockRequest[] }>('/admin/restock.php'),
   handle: (wishlistId: number, action: 'send' | 'dismiss') =>

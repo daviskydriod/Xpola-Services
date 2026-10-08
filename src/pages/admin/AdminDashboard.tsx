@@ -2,13 +2,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdmin } from '../../contexts/AdminContext';
-import { adminApi, maintenanceApi, ordersApi, customersApi, deliveryApi, categoriesApi, couponsApi, commsApi, supportApi, AdminStats, Order, Customer, AdminUser, DeliveryZone, Category, Coupon, SiteSettings, AnnouncementBanner, AuditLog, SupportTicket } from '@/lib/api';
+import { adminApi, maintenanceApi, ordersApi, customersApi, deliveryApi, categoriesApi, couponsApi, commsApi, supportApi, adminNotificationsApi, AdminStats, Order, Customer, StockNotificationsResponse, AdminUser, DeliveryZone, Category, Coupon, SiteSettings, AnnouncementBanner, AuditLog, SupportTicket } from '@/lib/api';
 import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
 import AdminRestock from './AdminRestock';
+import AdminNotifications from './AdminNotifications';
 import { toast } from '@/hooks/use-toast';
 
-export type AdminView = 'overview' | 'products' | 'orders' | 'restock' | 'customers' | 'comms' | 'settings' | 'maintenance';
+export type AdminView = 'overview' | 'products' | 'orders' | 'notifications' | 'restock' | 'customers' | 'comms' | 'settings' | 'maintenance';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -39,6 +40,7 @@ const Icon = ({ path, className = 'w-5 h-5' }: { path: string | string[]; classN
 const ICONS = {
   overview: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   products: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
+  notifications: 'M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-3.5 13a2.5 2.5 0 01-5 0',
   restock: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
   orders: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
   customers: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
@@ -52,6 +54,7 @@ const NAV_ITEMS: { id: AdminView; label: string; icon: string }[] = [
   { id: 'overview',    label: 'Overview',    icon: ICONS.overview },
   { id: 'products',    label: 'Products',    icon: ICONS.products },
   { id: 'orders',      label: 'Orders',      icon: ICONS.orders },
+  { id: 'notifications', label: 'Notifications', icon: ICONS.notifications },
   { id: 'restock',     label: 'Restock alerts', icon: ICONS.restock },
   { id: 'customers',   label: 'Customers',   icon: ICONS.customers },
   { id: 'comms',       label: 'Comms',       icon: ICONS.comms },
@@ -68,9 +71,9 @@ const BOTTOM_TABS: { id: AdminView; label: string; icon: string }[] = [
 ];
 
 // ── Sidebar ───────────────────────────────────────────────────────────────────
-const Sidebar = ({ view, setView, onLogout, isOpen, onClose, pendingOrders }: {
+const Sidebar = ({ view, setView, onLogout, isOpen, onClose, pendingOrders, pendingNotifications }: {
   view: AdminView; setView: (v: AdminView) => void;
-  onLogout: () => void; isOpen: boolean; onClose: () => void; pendingOrders: number;
+  onLogout: () => void; isOpen: boolean; onClose: () => void; pendingOrders: number; pendingNotifications: number;
 }) => {
   const content = (
     <aside className="w-64 bg-gray-900 h-screen flex flex-col overflow-y-auto">
@@ -103,6 +106,9 @@ const Sidebar = ({ view, setView, onLogout, isOpen, onClose, pendingOrders }: {
               <span className="ml-auto bg-orange-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0">
                 {pendingOrders > 9 ? '9+' : pendingOrders}
               </span>
+            )}
+            {item.id === 'notifications' && pendingNotifications > 0 && (
+              <span className="ml-auto bg-yellow-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0">{pendingNotifications > 9 ? '9+' : pendingNotifications}</span>
             )}
           </button>
         ))}
@@ -138,6 +144,7 @@ const Sidebar = ({ view, setView, onLogout, isOpen, onClose, pendingOrders }: {
 const Overview = ({ setView }: { setView: (v: AdminView) => void }) => {
   const [stats,     setStats]     = useState<AdminStats | null>(null);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [notifications, setNotifications] = useState<StockNotificationsResponse | null>(null);
   const [loading,   setLoading]   = useState(true);
 
   useEffect(() => {
@@ -146,6 +153,9 @@ const Overview = ({ setView }: { setView: (v: AdminView) => void }) => {
         .then((data: any) => setStats(data?.stats ?? data ?? null)),
       customersApi.getAll()
         .then(data => setCustomers(toArray<Customer>(data, 'customers', 'data').slice(0, 5)))
+        .catch(() => {}),
+      adminNotificationsApi.get()
+        .then(data => setNotifications(data.data))
         .catch(() => {}),
     ]).finally(() => setLoading(false));
   }, []);
@@ -265,6 +275,12 @@ const Overview = ({ setView }: { setView: (v: AdminView) => void }) => {
           </button>
         </div>
       </div>
+      {notifications && (notifications.total > 0 ? (
+        <div className="bg-white rounded-2xl border border-yellow-100 shadow-sm p-5">
+          <div className="flex items-center justify-between gap-3 mb-4"><div><h2 className="font-montserrat font-bold text-gray-900 text-sm uppercase tracking-wider">Stock notifications</h2><p className="text-xs text-gray-500 mt-1">Items requiring stock or customer-request attention.</p></div><button onClick={() => setView('notifications')} className="text-xs text-[#E02020] font-semibold hover:underline">Open notifications →</button></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3"><div className="bg-yellow-50 rounded-xl p-3"><p className="text-xl font-bold text-yellow-700">{notifications.lowStock.length}</p><p className="text-xs font-semibold text-yellow-800">Low-stock products</p></div><div className="bg-red-50 rounded-xl p-3"><p className="text-xl font-bold text-red-700">{notifications.outOfStock.length}</p><p className="text-xs font-semibold text-red-800">Out-of-stock products</p></div><button onClick={() => setView('restock')} className="text-left bg-blue-50 rounded-xl p-3 hover:bg-blue-100"><p className="text-xl font-bold text-blue-700">{notifications.restockRequests}</p><p className="text-xs font-semibold text-blue-800">Restock requests →</p></button></div>
+        </div>
+      ) : <div className="bg-green-50 border border-green-100 rounded-2xl p-4 text-sm font-semibold text-green-800">No stock notifications at this time.</div>)}
     </div>
   );
 };
@@ -1519,9 +1535,11 @@ const AdminDashboard = () => {
   const [view,          setView]          = useState<AdminView>('overview');
   const [sidebarOpen,   setSidebarOpen]   = useState(false);
   const [pendingOrders, setPendingOrders] = useState(0);
+  const [pendingNotifications, setPendingNotifications] = useState(0);
 
   useEffect(() => {
     if (isAuthenticated) {
+      adminNotificationsApi.get().then(data => setPendingNotifications(data.data.total ?? 0)).catch(() => {});
       adminApi.getStats()
         .then((data: any) => {
           const s = data?.stats ?? data;
@@ -1539,6 +1557,7 @@ const AdminDashboard = () => {
     overview:    'Overview',
     products:    'Products',
     orders:      'Orders',
+    notifications: 'Notifications',
     restock:     'Restock alerts',
     customers:   'Customers',
     comms:       'Communications',
@@ -1549,7 +1568,7 @@ const AdminDashboard = () => {
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       <Sidebar view={view} setView={setView} onLogout={handleLogout}
-        isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} pendingOrders={pendingOrders} />
+        isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} pendingOrders={pendingOrders} pendingNotifications={pendingNotifications} />
 
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile top bar */}
@@ -1579,6 +1598,7 @@ const AdminDashboard = () => {
           {view === 'overview'    && <Overview setView={setView} />}
           {view === 'products'    && <AdminProducts />}
           {view === 'orders'      && <AdminOrders />}
+          {view === 'notifications' && <AdminNotifications onRestock={() => setView('restock')} />}
           {view === 'restock'     && <AdminRestock />}
           {view === 'customers'   && <CustomersPanel />}
           {view === 'comms'       && <CommsPanel />}
@@ -1594,6 +1614,9 @@ const AdminDashboard = () => {
               className={`flex-1 flex flex-col items-center justify-center py-2 gap-0.5 transition-colors relative ${view === tab.id ? 'text-[#E02020]' : 'text-gray-400'}`}>
               {tab.id === 'orders' && pendingOrders > 0 && (
                 <span className="absolute top-1.5 right-1/4 bg-orange-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{pendingOrders}</span>
+              )}
+              {tab.id === 'notifications' && pendingNotifications > 0 && (
+                <span className="absolute top-1.5 right-1/4 bg-yellow-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">{pendingNotifications > 9 ? '9+' : pendingNotifications}</span>
               )}
               <Icon path={tab.icon} className="w-5 h-5" />
               <span className="text-[10px] font-semibold">{tab.label}</span>
