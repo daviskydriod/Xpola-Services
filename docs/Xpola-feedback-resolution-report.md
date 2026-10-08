@@ -26,6 +26,7 @@ The supplied `api.zip` has now been audited, sanitized, and integrated into the 
 | Coupon case sensitivity | Frontend, order validation, Moneris validation, and admin coupon creation/update normalize codes to uppercase. | Done at application layer |
 | Privacy compliance | Added NDPA and PIPEDA references, and clarified Moneris is planned/inactive while Canada commerce is off. | Done; obtain legal review before publishing a compliance guarantee |
 | Tables/lists splitting across pages | Revised guide uses page-break-friendly sections and avoids forcing long table rows across pages. | Done in revised PDF |
+| Admin low-stock notification API documentation | Added the exact admin route, Bearer-token requirement, response fields, low-stock calculation, and separation from email delivery to the guide. | Done |
 
 ## Repository and integration audit
 

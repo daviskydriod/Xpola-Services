@@ -19,3 +19,8 @@ This API is deployed separately from the React frontend. Configure the variables
 Customers can opt into a restock request from their wishlist. Admins use `GET /admin/restock.php` to review opted-in customers. After the product is marked `in_stock`, an admin can `POST /admin/restock.php?action=send` with `{ "wishlistId": 123 }`. The endpoint sends the email using the configured SMTP environment variables, records the alert in `restock_alerts`, writes an audit entry, and clears the opt-in to prevent duplicate sends. `action=dismiss` clears a request without sending mail.
 
 This is deliberately a staff-managed workflow; no automatic background worker is promised.
+
+
+## Admin stock notifications
+
+`GET /admin/notifications.php` requires an admin Bearer token and returns `data.lowStock`, `data.outOfStock`, `data.restockRequests`, and `data.total`. Low stock means a product with one or more variations whose combined `stock_qty` is 1–5. Explicitly `out_of_stock` products are returned separately. This endpoint is read-only and dashboard-only; it does not send email.

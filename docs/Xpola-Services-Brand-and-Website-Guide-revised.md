@@ -177,6 +177,9 @@ The admin panel is the staff control room. Staff should use individual accounts,
 
 Orders should show both `status` and `payment_status`. Admin orders can be searched and filtered by status, country, and date range.
 
+### Stock notification API
+The admin dashboard reads `GET /api/admin/notifications.php` with the admin Bearer token. The endpoint returns `data.lowStock`, `data.outOfStock`, `data.restockRequests`, and `data.total`. A low-stock item is a product with one or more variations whose combined `stock_qty` is between 1 and 5. Products explicitly marked `out_of_stock` are returned in `outOfStock`; products without variations use their explicit product status. This endpoint is admin-only and read-only. It does not send email. Customer emails are handled separately by the staff-triggered `POST /api/admin/restock.php?action=send` flow, which reuses the existing SMTP service.
+
 | Order status | Staff meaning and next action |
 |---|---|
 | Pending | Awaiting payment; do not dispatch or mark as paid manually. |
