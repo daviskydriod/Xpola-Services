@@ -13,7 +13,6 @@ import Index        from '@/pages/Index';
 import VerifyEmail from './pages/VerifyEmail';
 import Services     from '@/pages/Services';
 import About        from '@/pages/About';
-import Projects     from '@/pages/Projects';
 import Contact      from '@/pages/Contact';
 import Login        from '@/pages/Login';
 import Account      from '@/pages/Account';
@@ -70,7 +69,6 @@ const PublicRoutes = () => {
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/services" element={<Services />} />
       <Route path="/about"    element={<About />} />
-      <Route path="/projects" element={<Projects />} />
       <Route path="/contact"  element={<Contact />} />
       <Route path="/login"    element={<Login />} />
       <Route path="/account"  element={<ProtectedRoute><Account /></ProtectedRoute>} />
@@ -89,7 +87,6 @@ const PublicRoutes = () => {
       <Route path="/nigeria"          element={<Index />} />
       <Route path="/nigeria/about"    element={<About />} />
       <Route path="/nigeria/services" element={<Services />} />
-      <Route path="/nigeria/projects" element={<Projects />} />
       <Route path="/nigeria/contact"  element={<Contact />} />
       <Route path="/nigeria/shop"            element={<Shop />} />
       <Route path="/nigeria/shop/categories" element={<ShopCategory />} />
@@ -106,7 +103,6 @@ const PublicRoutes = () => {
       <Route path="/canada"          element={<Index />} />
       <Route path="/canada/about"    element={<About />} />
       <Route path="/canada/services" element={<Services />} />
-      <Route path="/canada/projects" element={<Projects />} />
       <Route path="/canada/contact"  element={<Contact />} />
       {!MARKET_CONFIG.canadaEnabled && <Route path="/canada/shop/*" element={<CanadaComingSoon />} />}
       {!MARKET_CONFIG.canadaEnabled && <Route path="/canada/checkout" element={<CanadaComingSoon />} />}

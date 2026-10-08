@@ -10,7 +10,6 @@ import logoBlack from "@/assets/logo-black.png";
 const quickLinks = [
   { label: "About Us",    href: "/about" },
   { label: "Our Services",href: "/#sectors" },
-  { label: "Projects",    href: "/projects" },
   { label: "Shop",        href: "/shop" },
   { label: "Contact",     href: "/contact" },
 ];

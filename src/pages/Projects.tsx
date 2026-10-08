@@ -1,5 +1,5 @@
 // FILE PATH: src/pages/Projects.tsx
-// Place this file at: src/pages/Projects.tsx
+// Retained for a future owner-approved relaunch; intentionally not routed publicly.
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";

@@ -34,7 +34,6 @@ const Navbar = () => {
     { label: "Services", href: `/${selectedCountry}/services` },
     { label: "Shop",     href: `/${selectedCountry}/shop`     },
     { label: "About",    href: `/${selectedCountry}/about`    },
-    { label: "Projects", href: `/${selectedCountry}/projects` },
     { label: "Contact",  href: `/${selectedCountry}/contact`  },
   ];
 

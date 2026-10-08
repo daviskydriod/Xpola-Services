@@ -14,6 +14,7 @@
 - Disabled the Canada marketplace and checkout while Moneris setup is pending.
 - Added a clear Canadian visitor journey for company information, services, and enquiries.
 - Kept Canadian hours as **ET**, not EST.
+- Hid public project pages and project navigation; retained the source files for a future owner-approved relaunch.
 - Removed public animated counters and testimonial display until the client supplies approved figures and testimonials.
 - Updated Canadian and Nigerian market copy so commerce and payment instructions are not mixed.
 - Added NDPA and PIPEDA references to the privacy page.

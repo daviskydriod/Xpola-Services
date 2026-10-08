@@ -113,7 +113,7 @@ Use this as a conversational outline, not a promise of a fixed timeline or resul
 
 ## 5. Website tour
 
-The public website includes home, about, services, individual service pages, projects, contact, legal pages, login, customer account, Nigerian shop, product pages, checkout, and order success pages. The admin area is restricted to approved staff.
+The public website includes home, about, services, individual service pages, contact, legal pages, login, customer account, Nigerian shop, product pages, checkout, and order success pages. Project pages and project navigation are hidden until the owner supplies verified projects and approves publication. The admin area is restricted to approved staff.
 
 ### What happens when someone sends an enquiry
 
@@ -250,7 +250,7 @@ This is the owner’s action list. Items below are intentionally visible because
 - [x] Admin → Notifications shows low-stock and out-of-stock dashboard alerts; these do not send automatic email.
 - [x] Restock alerts are staff-managed from Admin → Restock alerts and reuse the existing API SMTP service; no automatic background worker is promised.
 - [x] Coupon codes are normalized to uppercase by the frontend and API.
-- [ ] Supply and approve real testimonials, client names, logos, and any replacement public counters before publication.
+- [ ] Supply and approve real projects, project images, client names, logos, testimonials, and any replacement public counters before publication.
 - [ ] Approve the timing and acceptance criteria for enabling Canada/Moneris.
 
 ### Current ownership and access position
@@ -266,7 +266,7 @@ This is the owner’s action list. Items below are intentionally visible because
 |---|---|---|
 | Canada marketplace | Off | Owner approves launch and product/API/payment testing passes |
 | Canadian checkout / Moneris | Off | Moneris merchant setup, server-side verification, refunds, and support process are complete |
-| Public client testimonials and counters | Removed/pending | Client supplies verified references and figures, then owner approves publication |
+| Public projects, testimonials, and counters | Hidden/removed pending approval | Client supplies verified projects, references, figures, and usage permissions; owner approves publication |
 
 ---
 
