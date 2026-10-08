@@ -1,6 +1,6 @@
 // FILE PATH: src/contexts/MaintenanceContext.tsx
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { maintenanceApi } from '@/lib/api';
+import { publicMaintenanceApi } from '@/lib/api';
 
 interface MaintenanceState {
   maintenance: boolean; message: string;
@@ -23,7 +23,7 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
   });
   const refresh = async () => {
     try {
-      const data = await maintenanceApi.getStatus();
+      const data = await publicMaintenanceApi.getStatus();
       setState({ maintenance: data.maintenance, message: data.message ?? state.message, estimatedBack: data.estimatedBack ?? null, loading: false });
     } catch { setState(s => ({ ...s, loading: false })); }
   };

@@ -29,3 +29,8 @@ This is deliberately a staff-managed workflow; no automatic background worker is
 ## Projects
 
 Staff manage drafts and approved records with `GET/POST/PUT/DELETE /admin/projects.php` using an admin Bearer token. The public feed is `GET /projects.php?country=NG|CA` and returns approved records only. Public delivery requires both `PROJECTS_PUBLIC_ENABLED=true` in the API environment and `projectsEnabled: true` in the frontend market configuration; both default to off.
+
+
+## Maintenance
+
+Visitors read `GET /maintenance.php` without authentication. Staff use the authenticated `GET/POST /admin/maintenance.php` endpoint from Admin → Maintenance to read or update the notice.

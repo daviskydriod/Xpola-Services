@@ -121,7 +121,7 @@ The visitor submits their name, contact details, and message. Staff should ackno
 
 ### Canada visitor journey while the marketplace is off
 
-A visitor who opens the Canada marketplace or checkout sees a clear “Canada Market — Coming Soon” page. It says that the marketplace is switched off while Moneris setup is completed, that Canadian visitors cannot place an order or check out, and that the information, services, and enquiry routes remain available. Staff should not accept a manual Canadian marketplace order as a workaround.
+A visitor who opens the Canada marketplace or checkout sees a short “Canada Market — Coming Soon” page. It says that Canadian online ordering is not available yet and directs visitors to services and enquiries. Staff should not accept a manual Canadian marketplace order as a workaround.
 
 ---
 
@@ -226,7 +226,7 @@ Products manage name, description, price, category, image, stock, and featured s
 
 ### Pause the site
 
-Use Maintenance only for planned work, stock takes, or major updates. Check the public notice, then switch maintenance off and verify the public site afterwards.
+Use Maintenance only for planned work, stock takes, or major updates. The public site reads `/api/maintenance.php`; admin changes are made through the authenticated Admin → Maintenance panel. Check the public notice, then switch maintenance off and verify the public site afterwards.
 
 ---
 

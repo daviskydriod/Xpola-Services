@@ -647,6 +647,11 @@ export const maintenanceApi = {
     }),
 };
 
+export const publicMaintenanceApi = {
+  getStatus: () =>
+    apiFetch<{ enabled: boolean; maintenance: boolean; message: string; estimatedBack?: string }>('/maintenance.php'),
+};
+
 export const commsApi = {
   broadcast: (body: { subject: string; body: string; audience: string }) =>
     adminFetch<{ sent: number }>('/admin/comms.php?action=broadcast', { method: 'POST', body: JSON.stringify(body) }),

@@ -14,13 +14,12 @@ export default function CanadaComingSoon() {
           Coming Soon
         </h1>
         <p className="mx-auto mt-6 max-w-xl font-poppins text-base leading-8 text-white/65 sm:text-lg">
-          The Canada marketplace is currently switched off while Moneris setup is completed.
-          Canadian visitors cannot place marketplace orders or check out right now; the Canada site remains available for company information, services, and enquiries.
+          Canadian online ordering is not available yet. You can still learn about our services or send us an enquiry.
         </p>
         <div className="mx-auto mt-10 max-w-md rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-left">
-          <p className="font-montserrat text-sm font-bold text-white">What can Canadian visitors do now?</p>
+          <p className="font-montserrat text-sm font-bold text-white">Need information?</p>
           <p className="mt-2 font-poppins text-sm leading-6 text-white/55">
-            Use the Canada site to learn about Xpola Services or send an enquiry. Staff should explain that ordering is unavailable until Moneris is enabled; no Canadian order should be accepted manually as a workaround.
+            Explore our Canada services or contact us and we will be happy to help.
           </p>
         </div>
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -28,13 +27,13 @@ export default function CanadaComingSoon() {
           to="/canada/contact"
           className="mt-10 inline-flex items-center justify-center rounded-xl bg-[#E02020] px-7 py-3.5 font-montserrat text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-[#c01a1a]"
         >
-          Ask about Canada services →
+          Contact us →
         </Link>
         <Link
           to="/nigeria"
           className="inline-flex items-center justify-center rounded-xl border border-white/20 px-7 py-3.5 font-montserrat text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-white/10"
         >
-          Continue to Nigeria Market →
+          Visit Nigeria Market →
         </Link>
         </div>
       </div>
