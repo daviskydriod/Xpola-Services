@@ -24,9 +24,18 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
   const refresh = async () => {
     try {
       const data = await publicMaintenanceApi.getStatus();
-      setState({ maintenance: data.maintenance, message: data.message ?? state.message, estimatedBack: data.estimatedBack ?? null, loading: false });
+      setState(current => ({
+        maintenance: Boolean(data.maintenance ?? data.enabled),
+        message: data.message ?? current.message,
+        estimatedBack: data.estimatedBack ?? null,
+        loading: false,
+      }));
     } catch { setState(s => ({ ...s, loading: false })); }
   };
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => {
+    void refresh();
+    const interval = window.setInterval(() => { void refresh(); }, 30000);
+    return () => window.clearInterval(interval);
+  }, []);
   return <MaintenanceContext.Provider value={{ ...state, refresh }}>{children}</MaintenanceContext.Provider>;
 };
