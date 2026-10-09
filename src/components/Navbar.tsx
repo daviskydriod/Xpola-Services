@@ -20,6 +20,7 @@ const Navbar = () => {
   const [isMobileMenuOpen,      setIsMobileMenuOpen]      = useState(false);
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+  const [showCanadaNotice, setShowCanadaNotice] = useState(false);
 
   const { selectedCountry, setSelectedCountry } = useCountry();
   const { theme, toggleTheme }                  = useTheme();
@@ -62,8 +63,46 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  // Detect Canadian visitors without automatically changing their route.
+  // If the lookup service is unavailable, the notice simply stays hidden.
+  useEffect(() => {
+    const dismissedUntil = Number(localStorage.getItem("xpola_canada_notice_dismissed_until") || 0);
+    if (location.pathname.startsWith("/canada")) {
+      setShowCanadaNotice(false);
+      return;
+    }
+    if (dismissedUntil > Date.now()) return;
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 3500);
+
+    fetch("https://ipapi.co/json/", { signal: controller.signal })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => {
+        if (data?.country_code === "CA" && !location.pathname.startsWith("/canada")) {
+          setShowCanadaNotice(true);
+        }
+      })
+      .catch(() => undefined)
+      .finally(() => window.clearTimeout(timeout));
+
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [location.pathname]);
+
   const handleLogout = () => { logout(); navigate("/login"); setIsAccountDropdownOpen(false); };
   const isActivePage = (href: string) => location.pathname === href || location.pathname.startsWith(href + "/");
+  const canadaPath = location.pathname.startsWith("/nigeria")
+    ? location.pathname.replace(/^\/nigeria/, "/canada")
+    : location.pathname === "/"
+      ? "/canada"
+      : `/canada${location.pathname.startsWith("/") ? location.pathname : `/${location.pathname}`}`;
+  const dismissCanadaNotice = () => {
+    localStorage.setItem("xpola_canada_notice_dismissed_until", String(Date.now() + 30 * 24 * 60 * 60 * 1000));
+    setShowCanadaNotice(false);
+  };
 
   return (
     <>
@@ -305,6 +344,23 @@ const Navbar = () => {
           </div>
         )}
       </nav>
+
+      {showCanadaNotice && (
+        <div className="fixed top-[72px] left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)] max-w-2xl rounded-xl border border-primary/20 bg-background/95 px-4 py-3 shadow-lg backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <span className="text-lg" aria-hidden="true">🇨🇦</span>
+            <p className="flex-1 font-poppins text-xs sm:text-sm text-foreground">
+              It looks like you’re visiting from Canada. Explore our Canada services and pages.
+            </p>
+            <Link to={canadaPath} onClick={() => setShowCanadaNotice(false)} className="shrink-0 rounded-lg bg-primary px-3 py-2 font-poppins text-xs font-semibold text-white hover:bg-primary/90">
+              Go to Canada
+            </Link>
+            <button type="button" onClick={dismissCanadaNotice} aria-label="Dismiss Canada notice" className="shrink-0 p-1 text-muted-foreground hover:text-foreground">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       <CartDrawer />
     </>
