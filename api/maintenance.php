@@ -3,6 +3,8 @@
 require_once __DIR__ . '/config/cors.php';
 require_once __DIR__ . '/config/db.php';
 header('Content-Type: application/json');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 set_exception_handler(fn(Throwable $e) => json(['error' => 'Maintenance status unavailable'], 500));
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') jsonError('Method not allowed', 405);
 $db = getDB();

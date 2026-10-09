@@ -649,7 +649,9 @@ export const maintenanceApi = {
 
 export const publicMaintenanceApi = {
   getStatus: () =>
-    apiFetch<{ enabled: boolean; maintenance: boolean; message: string; estimatedBack?: string }>('/maintenance.php'),
+    apiFetch<{ enabled: boolean; maintenance: boolean; message: string; estimatedBack?: string }>(`/maintenance.php?ts=${Date.now()}`, {
+      cache: 'no-store',
+    }),
 };
 
 export const commsApi = {
