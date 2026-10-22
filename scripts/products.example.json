@@ -1,0 +1,41 @@
+{
+  "products": [
+    {
+      "name": "Laptop Screen Extender",
+      "summary": "Portable multi-screen productivity accessory for work, study, and presentations.",
+      "description": "Add a second or third screen to a compatible laptop for a more productive mobile workspace.",
+      "specifications": "USB-C compatible; compact travel design; confirm device compatibility before ordering.",
+      "brand": "Xpola Marketplace",
+      "warranty": "Confirm availability and warranty terms with Xpola Nigeria.",
+      "price": 250000,
+      "currency": "NGN",
+      "country": "NG",
+      "category": "electronics",
+      "category_name": "Electronics",
+      "image_path": "/uploads/products/laptop-screen-extender.webp",
+      "images": [
+        "/uploads/products/laptop-screen-extender-3-in-1.webp"
+      ],
+      "stock_qty": 10,
+      "featured": true,
+      "tags": "laptop,display,productivity,electronics"
+    },
+    {
+      "name": "Industrial Warehouse Equipment",
+      "summary": "Practical equipment supply for Canadian workshops and operational teams.",
+      "description": "Use this entry as a template for an approved Canadian product and replace the price, image, and specifications before importing.",
+      "specifications": "Replace with approved product specifications.",
+      "brand": "Approved supplier",
+      "warranty": "Replace with supplier warranty.",
+      "price": 1500,
+      "currency": "CAD",
+      "country": "CA",
+      "category": "industrial-equipment",
+      "category_name": "Industrial Equipment",
+      "image_path": "/uploads/products/industrial-equipment.webp",
+      "stock_qty": 0,
+      "featured": false,
+      "tags": "industrial,workshop,equipment"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 // FILE PATH: src/pages/Shop.tsx
 import { useState, useEffect, useRef } from 'react';
-import { SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronRight, Clock3, Search, ShieldCheck, ShoppingBag, SlidersHorizontal, Sparkles, Tag, Truck } from 'lucide-react';
 import { usePageMeta, pageMeta } from '@/hooks/usePageMeta';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -15,62 +15,48 @@ import ShopElectronicsShowcase from '@/components/shop/ShopElectronicsShowcase';
 import heroContainers from '@/assets/stock-sources/service-commerce.webp';
 import heroWarehouse from '@/assets/stock-sources/service-logistics.webp';
 import heroPort from '@/assets/stock-sources/service-oil-gas.webp';
+import shopElectronicsStore from '@/assets/stock-sources/shop-electronics-store.webp';
+import shopConstructionSupplies from '@/assets/stock-sources/shop-construction-supplies.webp';
+import nigeriaMarketRetail from '@/assets/stock-sources/nigeria-market-retail.webp';
 
-const NIGERIA_SLIDES = [
-  { image: heroContainers, tag: 'Power & Commerce', headline: 'Products\nFor Nigerian Business', sub: 'Browse the products currently available in the Nigeria marketplace.', cta: 'Shop Now', category: '' },
-  { image: heroWarehouse, tag: 'Construction', headline: 'Build With\nConfidence', sub: 'Practical tools and materials available for Nigerian delivery.', cta: 'Shop Now', category: 'construction-materials' },
-  { image: heroPort, tag: 'Fast Fulfilment', headline: 'Order With\nClarity', sub: 'Transparent stock status and delivery details before payment.', cta: 'Shop Now', category: '' },
+type ShopSlide = { image: string; tag: string; headline: string; sub: string; cta: string; category: string };
+const NIGERIA_SLIDES: ShopSlide[] = [
+  { image: shopElectronicsStore, tag: 'Electronics and equipment', headline: 'Business essentials\nfor Nigeria', sub: 'Shop practical products for work, construction, operations, and everyday business needs.', cta: 'Browse products', category: '' },
+  { image: shopConstructionSupplies, tag: 'Tools and supplies', headline: 'Build with\nconfidence', sub: 'Find useful tools and materials with clear stock status before you order.', cta: 'Shop construction', category: 'construction-materials' },
+  { image: nigeriaMarketRetail, tag: 'Local marketplace', headline: 'Shop with\nlocal context', sub: 'See product details, available quantity, and delivery information in one place.', cta: 'See all products', category: '' },
 ];
-
-const CANADA_SLIDES = [
-  { image: heroPort, tag: 'Mining Equipment', headline: 'Precision Tools\nFor Canadian Mining', sub: 'Diamond core bits, hydraulic splitters and GPR systems for demanding operations.', cta: 'Shop Now', category: 'ca-mining-equipment' },
-  { image: heroWarehouse, tag: 'Industrial Supplies', headline: 'Heavy-Duty\nIndustrial Equipment', sub: 'Air compressors, welding machines and industrial supplies for Canadian workshops.', cta: 'Shop Now', category: 'ca-industrial' },
+const CANADA_SLIDES: ShopSlide[] = [
+  { image: heroPort, tag: 'Canada marketplace', headline: 'Industrial products\nfor Canadian teams', sub: 'Explore the Canada catalogue for mining, workshops, operations, and supply enquiries.', cta: 'Browse products', category: '' },
+  { image: heroWarehouse, tag: 'Operational supplies', headline: 'Equipment for\nserious work', sub: 'Find practical equipment and supplies for Canadian business requirements.', cta: 'View catalogue', category: '' },
 ];
-
-// ── Hero Slider ───────────────────────────────────────────────────────────────
-const HeroSlider = ({
-  slides,
-  onCategoryClick,
-}: {
-  slides: typeof NIGERIA_SLIDES;
-  onCategoryClick: (cat: string) => void;
-}) => {
-  const [current, setCurrent] = useState<number>(0);
-  const timer = useRef<ReturnType<typeof setInterval>>();
-
+const HeroSlider = ({ slides, onCategoryClick, search, onSearch }: { slides: ShopSlide[]; onCategoryClick: (cat: string) => void; search: string; onSearch: (value: string) => void }) => {
+  const [current, setCurrent] = useState(0);
+  const timer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
   useEffect(() => {
-    timer.current = setInterval(() => setCurrent(c => (c + 1) % slides.length), 5000);
-    return () => clearInterval(timer.current);
+    timer.current = setInterval(() => setCurrent(c => (c + 1) % slides.length), 5500);
+    return () => { if (timer.current) clearInterval(timer.current); };
   }, [slides.length]);
-
-  const s = slides[current];
-
-  return (
-    <div className="relative h-[250px] sm:h-[320px] md:h-[560px] overflow-hidden bg-gray-900">
-      <img src={s.image} alt={s.tag} width={1400} height={933} loading={current === 0 ? "eager" : "lazy"} fetchPriority={current === 0 ? "high" : "auto"} decoding="async" className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-700"/>
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"/>
-      <div className="relative z-10 h-full flex items-center">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <span className="inline-block bg-[#E02020] text-white text-xs font-bold px-3 py-1 uppercase tracking-widest mb-4 font-montserrat">{s.tag}</span>
-          <h1 className="font-montserrat font-black text-4xl md:text-6xl text-white leading-tight mb-4 whitespace-pre-line">{s.headline}</h1>
-          <p className="font-poppins text-white/80 text-base md:text-lg max-w-xl mb-8">{s.sub}</p>
-          <button
-            onClick={() => onCategoryClick(s.category)}
-            className="bg-[#E02020] text-white font-montserrat font-bold px-8 py-4 text-sm uppercase tracking-widest hover:bg-[#c01a1a] transition-colors">
-            {s.cta} →
-          </button>
-        </div>
-      </div>
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-        {slides.map((_, i: number) => (
-          <button key={i} onClick={() => setCurrent(i)}
-            className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-white w-6' : 'bg-white/40'}`}/>
-        ))}
-      </div>
+  const slide = slides[current];
+  return <section className="relative overflow-hidden bg-[#171717]">
+    <div className="relative h-[390px] sm:h-[440px] lg:h-[500px]">
+      <img src={slide.image} alt={slide.tag} width={1800} height={1200} loading={current === 0 ? 'eager' : 'lazy'} fetchPriority={current === 0 ? 'high' : 'auto'} decoding="async" className="absolute inset-0 h-full w-full object-cover opacity-55 transition-opacity duration-700" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/10" />
+      <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 sm:px-8 lg:px-10"><div className="max-w-2xl text-white">
+        <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#E02020] px-3 py-1.5 font-montserrat text-[10px] font-bold uppercase tracking-[0.18em]"><Sparkles className="h-3.5 w-3.5" />{slide.tag}</p>
+        <h1 className="whitespace-pre-line font-montserrat text-4xl font-black leading-[1.02] sm:text-5xl lg:text-7xl">{slide.headline}</h1>
+        <p className="mt-5 max-w-xl font-poppins text-sm leading-6 text-white/80 sm:text-base">{slide.sub}</p>
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row"><button type="button" onClick={() => onCategoryClick(slide.category)} className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#E02020] px-6 py-3 font-montserrat text-xs font-bold uppercase tracking-wider text-white hover:bg-[#c71b1b]">{slide.cta}<ChevronRight className="h-4 w-4" /></button><a href="#shop-catalogue" className="inline-flex items-center justify-center rounded-lg border border-white/40 px-6 py-3 font-montserrat text-xs font-bold uppercase tracking-wider text-white hover:bg-white/10">Explore catalogue</a></div>
+      </div></div>
+      <div className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 gap-2">{slides.map((item, i) => <button key={item.tag} type="button" aria-label={`Show promotion ${i + 1}`} onClick={() => setCurrent(i)} className={`h-2 rounded-full ${i === current ? 'w-8 bg-white' : 'w-2 bg-white/45'}`} />)}</div>
     </div>
-  );
+    <div className="relative z-20 mx-auto -mt-7 max-w-5xl px-4 sm:px-8"><label className="flex items-center gap-3 rounded-xl bg-white p-2 shadow-2xl ring-1 ring-black/10"><Search className="ml-3 h-5 w-5 shrink-0 text-gray-400" /><input value={search} onChange={e => onSearch(e.target.value)} placeholder="Search for products, tools, equipment…" className="min-w-0 flex-1 bg-transparent px-1 py-3 font-poppins text-sm text-gray-900 outline-none placeholder:text-gray-400" /><button type="button" onClick={() => document.getElementById('shop-catalogue')?.scrollIntoView({ behavior: 'smooth' })} className="hidden rounded-lg bg-[#E02020] px-6 py-3 font-montserrat text-xs font-bold uppercase tracking-wider text-white sm:block">Search</button></label></div>
+  </section>;
 };
-
+const ShopBenefits = ({ isNigeria }: { isNigeria: boolean }) => {
+  const market = isNigeria ? 'Nigeria' : 'Canada';
+  const benefits = [{ icon: Truck, title: 'Delivery support', text: `Delivery guidance for ${market}` }, { icon: ShieldCheck, title: 'Secure checkout', text: 'Protected account and payment flow' }, { icon: Tag, title: 'Clear pricing', text: 'See currency and stock before ordering' }, { icon: Clock3, title: 'Responsive support', text: 'Talk to the Xpola team when needed' }];
+  return <div className="mx-auto grid max-w-7xl grid-cols-2 gap-px overflow-hidden rounded-xl border border-gray-200 bg-gray-200 lg:grid-cols-4">{benefits.map(item => <div key={item.title} className="flex items-center gap-3 bg-white px-4 py-4 sm:px-6"><item.icon className="h-5 w-5 shrink-0 text-[#E02020]" /><div><p className="font-montserrat text-xs font-bold text-gray-900">{item.title}</p><p className="mt-0.5 font-poppins text-xs text-gray-500">{item.text}</p></div></div>)}</div>;
+};
 // ── Product Card ──────────────────────────────────────────────────────────────
 // ── Main Shop Page ────────────────────────────────────────────────────────────
 export default function Shop() {
@@ -101,13 +87,7 @@ export default function Shop() {
       <Navbar/>
 
       <div className="pt-[72px]">
-        <HeroSlider
-          slides={slides}
-          onCategoryClick={(cat: string) => {
-            setSelectedCategory(cat);
-            window.scrollTo({ top: 400, behavior: 'smooth' });
-          }}
-        />
+        <HeroSlider slides={slides} onCategoryClick={(cat: string) => { setSelectedCategory(cat); setPage(1); document.getElementById('shop-catalogue')?.scrollIntoView({ behavior: 'smooth' }); }} search={search} onSearch={value => { setSearch(value); setPage(1); }} />
       </div>
 
       {isNigeria && <NigeriaShopPromoBanner />}
@@ -191,7 +171,7 @@ export default function Shop() {
           {/* Product grid */}
           <div className="flex-1">
             {loading ? (
-              <div className="grid auto-rows-fr grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {Array.from({ length: 8 }).map((_, i: number) => (
                   <div key={i} className="bg-white border border-gray-100 animate-pulse">
                     <div className="bg-gray-100" style={{ paddingBottom: '68%' }}/>
@@ -223,7 +203,7 @@ export default function Shop() {
               </div>
             ) : (
               <>
-                <div className="grid auto-rows-fr grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
                   {products.map((p: ApiProduct) => <SharedProductCard key={p.id} product={p}/>)}
                 </div>
 
