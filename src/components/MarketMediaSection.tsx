@@ -15,8 +15,6 @@ import sideView from "@/assets/New Images and Videos Update/product-front-three-
 import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.jpeg";
 import productVideo from "@/assets/New Images and Videos Update/product-equipment-demo.mp4";
 import productTrimVideo from "@/assets/New Images and Videos Update/product-equipment-demo-trim.mp4";
-import laptopExtender from "@/assets/New Images and Videos Update/laptop-screen-extender.jpeg";
-import laptopExtenderThreeInOne from "@/assets/New Images and Videos Update/laptop-screen-extender-3-in-1.jpeg";
 
 type MarketMedia = {
   title: string;
@@ -54,16 +52,11 @@ const baseGallery = [
   { src: inventoryView, label: "Warehouse inventory view" },
 ];
 
-const nigeriaProductGallery = [
-  { src: laptopExtender, label: "Laptop screen extender" },
-  { src: laptopExtenderThreeInOne, label: "3-in-1 laptop screen extender" },
-];
-
 const MarketMediaSection = () => {
   const { currentData } = useCountry();
   const market = copy[currentData.code === "CA" ? "CA" : "NG"];
   const contactPath = currentData.code === "CA" ? "/canada/contact" : "/nigeria/contact";
-  const gallery = currentData.code === "NG" ? [...baseGallery, ...nigeriaProductGallery] : baseGallery;
+  const gallery = baseGallery;
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const closeLightbox = () => setSelectedIndex(null);
@@ -131,19 +124,6 @@ const MarketMediaSection = () => {
           </div>
         </div>
 
-        {currentData.code === "NG" && (
-          <div className="mt-16 border-t border-border/30 pt-12">
-            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Owner-approved Nigeria products</p>
-                <h3 className="mt-2 font-montserrat text-2xl font-bold text-foreground md:text-3xl">Featured laptop screen extenders</h3>
-              </div>
-              <span className="inline-flex w-fit items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary">Coming soon to the Nigeria shop</span>
-            </div>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground">These products have been approved by the owner and are available for enquiries now. They will be uploaded to the Nigeria online shop in a later catalogue update.</p>
-          </div>
-        )}
-
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-5">
           {baseGallery.map((item, index) => (
             <button key={item.label} type="button" onClick={() => setSelectedIndex(index)} className="group overflow-hidden rounded-2xl border border-border/30 bg-card text-left shadow-sm transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-secondary">
@@ -155,21 +135,6 @@ const MarketMediaSection = () => {
           ))}
         </div>
 
-        {currentData.code === "NG" && (
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-5">
-            {nigeriaProductGallery.map((item, index) => {
-              const selectedGalleryIndex = baseGallery.length + index;
-              return (
-                <button key={item.label} type="button" onClick={() => setSelectedIndex(selectedGalleryIndex)} className="group overflow-hidden rounded-2xl border border-border/30 bg-card text-left shadow-sm transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-secondary">
-                  <div className="aspect-[2/1] overflow-hidden bg-white">
-                    <img src={item.src} alt={`Nigeria catalogue product graphic, ${item.label.toLowerCase()}`} className="h-full w-full object-contain transition duration-500 group-hover:scale-105" loading="lazy" />
-                  </div>
-                  <span className="block px-3 py-3 text-xs font-semibold text-foreground md:px-4">{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
       </div>
 
       {selectedIndex !== null && (
