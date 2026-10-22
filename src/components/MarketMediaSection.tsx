@@ -13,8 +13,8 @@ import accessoryView from "@/assets/New Images and Videos Update/product-top-cab
 import rearView from "@/assets/New Images and Videos Update/product-rear-connections.webp";
 import sideView from "@/assets/New Images and Videos Update/product-front-three-quarter.webp";
 import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.webp";
-import productVideo from "@/assets/New Images and Videos Update/product-equipment-demo.mp4";
-import productTrimVideo from "@/assets/New Images and Videos Update/product-equipment-demo-trim.mp4";
+import productVideo from "@/assets/New Images and Videos Update/product-equipment-demo-optimized.mp4";
+import productTrimVideo from "@/assets/New Images and Videos Update/product-equipment-demo-trim-optimized.mp4";
 
 type MarketMedia = {
   title: string;

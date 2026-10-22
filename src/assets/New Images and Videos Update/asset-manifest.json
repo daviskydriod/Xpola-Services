@@ -236,7 +236,7 @@
       "original_file": "laptop-screen-extender-3-in-1.jpeg"
     },
     {
-      "file": "product-equipment-demo.mp4",
+      "file": "product-equipment-demo-optimized.mp4",
       "type": "video",
       "role": "product-demonstration",
       "markets": [
@@ -245,10 +245,12 @@
       ],
       "poster": "warehouse-floor-stock.webp",
       "alt": "Video demonstration of the power equipment product",
-      "caption": "Equipment demonstration video"
+      "caption": "Equipment demonstration video",
+      "original_file": "product-equipment-demo.mp4",
+      "delivery": "H.264/AAC, 540x960, fast-start MP4"
     },
     {
-      "file": "product-equipment-demo-trim.mp4",
+      "file": "product-equipment-demo-trim-optimized.mp4",
       "type": "video",
       "role": "product-demonstration-short",
       "markets": [
@@ -259,7 +261,9 @@
       "alt": "Short vertical video walkthrough of the power equipment product",
       "caption": "Short equipment walkthrough",
       "dimensions": "540x960",
-      "duration_seconds": 16.77
+      "duration_seconds": 16.77,
+      "original_file": "product-equipment-demo-trim.mp4",
+      "delivery": "H.264/AAC, 540x960, fast-start MP4"
     }
   ]
 }
