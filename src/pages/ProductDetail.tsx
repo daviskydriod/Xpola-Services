@@ -10,6 +10,9 @@ import Footer from '../components/Footer';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { apiFetch, ApiProduct, ProductVariation, productImageUrl, formatPrice } from '@/lib/api';
+import { usePageMeta, pageMeta } from '@/hooks/usePageMeta';
+import { slugifyProductName } from '@/lib/productRoutes';
+import { getRemainingStock, isProductInStock } from '@/lib/inventory';
 
 // ── Wishlist Button — uses AuthContext, NOT raw apiFetch ──────────────────────
 const WishlistButton = ({ productId }: { productId: number }) => {
@@ -81,9 +84,10 @@ function groupVariations(variations: ProductVariation[]): Record<string, Product
 }
 
 export default function ProductDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { id, slug } = useParams<'id' | 'slug'>();
+  const routeToken = id ?? slug;
   const navigate = useNavigate();
-  const { addToCart, setIsCartOpen } = useCart();
+  const { addToCart, setIsCartOpen, cart } = useCart();
 
   const [product,  setProduct]  = useState<ApiProduct | null>(null);
   const [related,  setRelated]  = useState<ApiProduct[]>([]);
@@ -96,23 +100,47 @@ export default function ProductDetail() {
   const [activeTab, setActiveTab] = useState<'description'|'specs'|'shipping'>('description');
   // Selected variations: { type: variationId }
   const [selectedVars, setSelectedVars] = useState<Record<string, number>>({});
+  const productMeta = product ? pageMeta.product(product.name, product.price, product.currency) : undefined;
+  usePageMeta(productMeta?.title, productMeta?.description);
 
   useEffect(() => {
-    if (!id) return;
-    setLoading(true); setError('');
-    apiFetch<{ data: ApiProduct }>(`/products.php?id=${id}`)
-      .then(d => {
-        setProduct(d.data);
-        setActiveImg(0);
-        if (d.data.category_id) {
-          apiFetch<{ data: ApiProduct[] }>(`/products.php?country=${d.data.country}&category=${d.data.category_slug}&per_page=4`)
-            .then(r => setRelated(r.data.filter(p => p.id !== d.data.id).slice(0, 4)))
-            .catch(() => {});
-        }
-      })
-      .catch(e => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [id]);
+    let cancelled = false;
+    setLoading(true);
+    setError('');
+    setProduct(null);
+    setRelated([]);
+
+    const loadProduct = async () => {
+      if (!routeToken) throw new Error('Product not found.');
+
+      let productId = routeToken;
+      if (!/^\d+$/.test(routeToken)) {
+        const catalogue = await apiFetch<{ data: ApiProduct[] }>('/products.php?country=NG&per_page=100');
+        const match = catalogue.data.find(item => slugifyProductName(item.name) === routeToken);
+        if (!match) throw new Error('Product not found.');
+        productId = String(match.id);
+      }
+
+      const result = await apiFetch<{ data: ApiProduct }>(`/products.php?id=${encodeURIComponent(productId)}`);
+      if (cancelled) return;
+      setProduct(result.data);
+      setActiveImg(0);
+
+      if (result.data.category_id) {
+        apiFetch<{ data: ApiProduct[] }>(`/products.php?country=${result.data.country}&category=${result.data.category_slug}&per_page=4`)
+          .then(response => {
+            if (!cancelled) setRelated(response.data.filter(item => item.id !== result.data.id).slice(0, 4));
+          })
+          .catch(() => {});
+      }
+    };
+
+    loadProduct()
+      .catch(error => { if (!cancelled) setError(error instanceof Error ? error.message : 'Unable to load this product.'); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+
+    return () => { cancelled = true; };
+  }, [routeToken]);
 
   // Build all images: primary image_path + product_images[]
   const allImages = (() => {
@@ -134,11 +162,19 @@ export default function ProductDetail() {
   }, 0);
 
   const effectivePrice = (product?.price ?? 0) + priceDelta;
+  const productCartQuantity = product ? (cart.find(item => item.id === product.id)?.quantity ?? 0) : 0;
+  const remainingStock = product ? getRemainingStock(product, productCartQuantity) : null;
+  const productAvailable = !!product && isProductInStock(product);
+  const canAddMore = productAvailable && (remainingStock === null || remainingStock > 0);
+
+  useEffect(() => {
+    if (remainingStock !== null) setQty(current => Math.max(1, Math.min(current, Math.max(1, remainingStock))));
+  }, [remainingStock]);
 
   const handleAddToCart = () => {
-    if (!product || product.stock_status !== 'in_stock') return;
+    if (!product || !canAddMore || (remainingStock !== null && qty > remainingStock)) return;
     setAdding(true);
-    for (let i = 0; i < qty; i++) addToCart(product);
+    if (!addToCart(product, qty)) { setAdding(false); return; }
     setAdded(true);
     setIsCartOpen(true);
     setTimeout(() => { setAdding(false); setAdded(false); }, 1500);
@@ -162,8 +198,11 @@ export default function ProductDetail() {
 
   const variationGroups = groupVariations(product.variations ?? []);
 
+  const productSchema = { '@context': 'https://schema.org', '@type': 'Product', name: product.name, description: product.description, image: allImages, brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined, offers: { '@type': 'Offer', priceCurrency: product.currency, price: effectivePrice, availability: productAvailable ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock', url: window.location.href } };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
       <Navbar />
       <div className="pt-[72px] h-1 bg-[#E02020]" />
 
@@ -181,9 +220,9 @@ export default function ProductDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* ── Image Gallery ── */}
           <div className="space-y-3">
-            <div className="bg-gray-50 border border-gray-100 overflow-hidden" style={{ paddingBottom: '72%', position: 'relative' }}>
+            <div className="relative overflow-hidden border border-gray-100 bg-gray-50" style={{ paddingBottom: '72%' }}>
               <img src={allImages[activeImg] ?? productImageUrl(null)} alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 h-full w-full object-contain p-4 sm:p-6"
                 onError={e => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&q=80'; }} />
               {product.featured === 1 && (
                 <span className="absolute top-4 left-4 bg-[#E02020] text-white text-xs font-bold px-3 py-1 uppercase tracking-widest font-montserrat">Featured</span>
@@ -194,8 +233,8 @@ export default function ProductDetail() {
               <div className="flex gap-2 overflow-x-auto no-scrollbar">
                 {allImages.map((img, i) => (
                   <button key={i} onClick={() => setActiveImg(i)}
-                    className={`flex-shrink-0 w-16 h-16 border-2 overflow-hidden transition-colors ${activeImg === i ? 'border-[#E02020]' : 'border-gray-200 hover:border-gray-400'}`}>
-                    <img src={img} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover"
+                    className={`flex-shrink-0 w-16 h-16 border-2 overflow-hidden bg-gray-50 transition-colors ${activeImg === i ? 'border-[#E02020]' : 'border-gray-200 hover:border-gray-400'}`}>
+                    <img src={img} alt={`${product.name} ${i + 1}`} className="h-full w-full bg-gray-50 p-1 object-contain"
                       onError={e => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&q=60'; }} />
                   </button>
                 ))}
@@ -208,7 +247,7 @@ export default function ProductDetail() {
             <div className="flex items-center gap-2 mb-3">
               <span className="text-xs font-bold text-[#E02020] uppercase tracking-widest font-poppins">{product.category_name}</span>
               <span className="text-gray-200">·</span>
-              <span className="text-xs text-gray-400 font-poppins">{product.country === 'NG' ? '🇳🇬 Nigeria' : '🇨🇦 Canada'}</span>
+              <span className="text-xs text-gray-400 font-poppins inline-flex items-center gap-1"><img src={product.country === 'NG' ? '/flags/ng.svg' : '/flags/ca.svg'} alt="" className="w-4 h-3 object-cover" />{product.country === 'NG' ? 'Nigeria' : 'Canada'}</span>
             </div>
 
             <h1 className="font-montserrat font-black text-3xl text-gray-900 leading-tight mb-4">{product.name}</h1>
@@ -226,9 +265,9 @@ export default function ProductDetail() {
 
             {/* Stock */}
             <div className="flex items-center gap-2 mb-6">
-              <div className={`w-2 h-2 rounded-full ${product.stock_status === 'in_stock' ? 'bg-green-500' : 'bg-red-500'}`} />
-              <span className={`font-poppins text-sm font-semibold ${product.stock_status === 'in_stock' ? 'text-green-600' : 'text-red-500'}`}>
-                {product.stock_status === 'in_stock' ? 'In Stock' : 'Out of Stock'}
+              <div className={`w-2 h-2 rounded-full ${productAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
+              <span className={`font-poppins text-sm font-semibold ${productAvailable ? 'text-green-600' : 'text-red-500'}`}>
+                {productAvailable ? (remainingStock === null ? 'In Stock' : `${remainingStock} available to add`) : 'Out of Stock'}
               </span>
             </div>
 
@@ -272,18 +311,23 @@ export default function ProductDetail() {
             )}
 
             {/* Qty + Add */}
-            {product.stock_status === 'in_stock' && (
+            {productAvailable && remainingStock !== 0 && (
               <div className="flex gap-3 mb-6">
                 <div className="flex items-center border border-gray-200">
-                  <button onClick={() => setQty(q => Math.max(1, q-1))} className="w-10 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors font-bold">−</button>
+                  <button onClick={() => setQty(q => Math.max(1, q-1))} disabled={qty <= 1} className="w-10 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors font-bold disabled:opacity-40">−</button>
                   <span className="w-10 h-12 flex items-center justify-center font-montserrat font-bold text-gray-900">{qty}</span>
-                  <button onClick={() => setQty(q => q+1)} className="w-10 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors font-bold">+</button>
+                  <button onClick={() => setQty(q => remainingStock === null ? q+1 : Math.min(remainingStock, q+1))} disabled={remainingStock !== null && qty >= remainingStock} className="w-10 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors font-bold disabled:opacity-40">+</button>
                 </div>
-                <button onClick={handleAddToCart} disabled={adding}
-                  className={`flex-1 font-montserrat font-bold text-sm uppercase tracking-widest py-3 transition-all ${added ? 'bg-green-500 text-white' : 'bg-[#E02020] text-white hover:bg-[#c01a1a]'}`}>
+                <button onClick={handleAddToCart} disabled={adding || !canAddMore || (remainingStock !== null && qty > remainingStock)}
+                  className={`flex-1 font-montserrat font-bold text-sm uppercase tracking-widest py-3 transition-all disabled:cursor-not-allowed disabled:bg-gray-300 ${added ? 'bg-green-500 text-white' : 'bg-[#E02020] text-white hover:bg-[#c01a1a]'}`}>
                   {added ? '✓ Added to Cart!' : adding ? 'Adding…' : 'Add to Cart'}
                 </button>
               </div>
+            )}
+            {productAvailable && remainingStock === 0 && (
+              <p className="mb-6 rounded border border-amber-200 bg-amber-50 px-4 py-3 font-poppins text-sm text-amber-800">
+                You already have the available stock in your cart.
+              </p>
             )}
 
             <div className="flex gap-3 mb-8">
@@ -305,14 +349,17 @@ export default function ProductDetail() {
                 ))}
               </div>
               <div className="py-5 font-poppins text-sm text-gray-600 leading-relaxed">
-                {activeTab === 'description' && <p>{product.description || 'No description available.'}</p>}
+                {activeTab === 'description' && <div className="space-y-3"><div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: product.description || product.summary || 'No description available.' }} />{product.brand && <p><strong>Brand:</strong> {product.brand}</p>}{product.warranty && <p><strong>Warranty:</strong> {product.warranty}</p>}</div>}
                 {activeTab === 'specs' && (
                   <div className="space-y-2">
                     {[
                       ['Category', product.category_name ?? '—'],
                       ['Country', product.country === 'NG' ? 'Nigeria' : 'Canada'],
                       ['Currency', product.currency],
-                      ['Stock', product.stock_status === 'in_stock' ? 'Available' : 'Out of stock'],
+                      ['Stock', productAvailable ? (remainingStock !== null && remainingStock <= 5 ? `Only ${remainingStock} left` : 'Available') : 'Out of stock'],
+                      ...(product.specifications ? [['Details', product.specifications]] : []),
+                      ...(product.brand ? [['Brand', product.brand]] : []),
+                      ...(product.warranty ? [['Warranty', product.warranty]] : []),
                       ...(product.tags ? [['Tags', product.tags]] : []),
                     ].map(([k, v]) => (
                       <div key={k} className="flex gap-4">
@@ -324,8 +371,10 @@ export default function ProductDetail() {
                 )}
                 {activeTab === 'shipping' && (
                   <div className="space-y-3">
-                    <p>✓ Delivery available across {product.country === 'NG' ? 'Nigeria' : 'Canada'}.</p>
-                    <p>✓ Shipping fee calculated at checkout based on your delivery area.</p>
+                    <p>✓ Lagos: typically 1–2 business days; other Nigerian regions: typically 2–5 business days.</p>
+                    <p>✓ Delivery fee is calculated only after your address/area is entered and shown in final order review.</p>
+                    <p>✓ Paystack cards, bank transfer and USSD are supported. Pay-on-delivery may be arranged for eligible areas.</p>
+                    <p>✓ <a className="text-[#E02020] underline" href="https://wa.me/2347086275105">Order via WhatsApp</a> for bulk or assisted orders.</p>
                     <p>✓ Orders processed within 24 hours of payment confirmation.</p>
                     <p>✓ Contact us for bulk orders or special delivery requirements.</p>
                   </div>

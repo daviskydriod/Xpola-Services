@@ -8,7 +8,8 @@
 //  - Rate-limit (429) awareness with Retry-After header
 //  - Centralised error types
 
-export const API_BASE = import.meta.env.VITE_API_URL ?? '/api';
+// Configure with VITE_API_URL in .env.local or the frontend host.
+export const API_BASE = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '');
 
 // ── Token storage ─────────────────────────────────────────────────────────────
 export const getToken      = ()          => localStorage.getItem('xpola_token');

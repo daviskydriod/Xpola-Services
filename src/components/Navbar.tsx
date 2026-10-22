@@ -11,8 +11,8 @@ import logoWhite from "@/assets/logo-white.png";
 import logoBlack from "@/assets/logo-black.png";
 
 const countries = [
-  { code: "nigeria", name: "Nigeria", flag: "🇳🇬" },
-  { code: "canada", name: "Canada", flag: "🇨🇦" },
+  { code: "nigeria", name: "Nigeria", flag: "/flags/ng.svg" },
+  { code: "canada", name: "Canada", flag: "/flags/ca.svg" },
 ];
 
 const Navbar = () => {
@@ -106,11 +106,11 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      <nav className={`fixed ${showCanadaNotice ? "top-8" : "top-0"} left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? "bg-background/95 backdrop-blur-md shadow-sm border-b border-border" : "bg-background"
       }`}>
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-[72px]">
+              <div className="flex h-16 items-center justify-between lg:h-[72px]">
 
             {/* Logo */}
             <Link to={`/${selectedCountry}`} className="flex-shrink-0">
@@ -130,14 +130,16 @@ const Navbar = () => {
             </div>
 
             {/* Right Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 lg:gap-2">
 
-              {/* Country Selector — Desktop only */}
-              <div className="relative hidden lg:block">
+              {/* Country Selector — compact flag switch stays visible on mobile */}
+              <div className="relative">
                 <button onClick={() => { setIsCountryDropdownOpen(!isCountryDropdownOpen); setIsAccountDropdownOpen(false); }}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-background-secondary border border-border hover:border-primary transition-all duration-200 text-sm font-poppins text-foreground">
-                  {selectedCountry === "nigeria" ? "🇳🇬" : "🇨🇦"}
-                  <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${isCountryDropdownOpen ? "rotate-180" : ""}`} />
+                  aria-label={`Switch market. Current market: ${selectedCountry === "nigeria" ? "Nigeria" : "Canada"}`}
+                  aria-expanded={isCountryDropdownOpen}
+                  className="flex items-center gap-1 rounded-lg border border-border bg-background-secondary p-2 text-sm text-foreground transition-all duration-200 hover:border-primary lg:gap-1.5 lg:px-3 lg:py-2 lg:font-poppins">
+                  {<img src={selectedCountry === "nigeria" ? "/flags/ng.svg" : "/flags/ca.svg"} alt="" className="w-5 h-3.5 object-cover" />}
+                  <ChevronDown className={`h-3 w-3 text-muted-foreground transition-transform lg:h-3.5 lg:w-3.5 ${isCountryDropdownOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isCountryDropdownOpen && (
                   <div className="absolute top-full right-0 mt-2 w-36 bg-background border border-border rounded-lg shadow-xl overflow-hidden z-50">
@@ -146,7 +148,7 @@ const Navbar = () => {
                         className={`w-full flex items-center gap-2 px-4 py-2.5 font-poppins text-sm transition-colors ${
                           selectedCountry === c.code ? "text-primary bg-background-secondary font-semibold" : "text-foreground hover:bg-background-secondary"
                         }`}>
-                        {c.flag} {c.name}
+                        {<img src={c.flag} alt="" className="w-5 h-3.5 object-cover" />} {c.name}
                       </button>
                     ))}
                   </div>
@@ -155,7 +157,7 @@ const Navbar = () => {
 
               {/* Theme Toggle */}
               <button onClick={toggleTheme}
-                className="p-2 rounded-lg bg-background-secondary border border-border hover:border-primary transition-all duration-200"
+                className="hidden rounded-lg border border-border bg-background-secondary p-2 transition-all duration-200 hover:border-primary lg:flex"
                 aria-label="Toggle theme">
                 {theme === "dark" ? <Sun className="w-5 h-5 text-foreground" /> : <Moon className="w-5 h-5 text-foreground" />}
               </button>
@@ -273,23 +275,6 @@ const Navbar = () => {
 
               <div className="pt-4 space-y-2">
 
-                {/* Country Selector — Mobile */}
-                <div className="flex items-center gap-2 py-2.5 border-b border-border/40">
-                  <span className="font-poppins text-sm text-muted-foreground">Market:</span>
-                  <div className="flex gap-2 ml-auto">
-                    {countries.map(c => (
-                      <button key={c.code} onClick={() => setSelectedCountry(c.code)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-poppins transition-colors ${
-                          selectedCountry === c.code
-                            ? 'border-primary text-primary bg-background-secondary font-semibold'
-                            : 'border-border text-foreground hover:border-primary'
-                        }`}>
-                        {c.flag} {c.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 {/* Cart */}
                 <button onClick={() => { setIsCartOpen(true); setIsMobileMenuOpen(false); }}
                   className="w-full flex items-center gap-3 font-poppins text-sm text-foreground hover:text-primary py-2.5 transition-colors border-b border-border/40">
@@ -346,19 +331,11 @@ const Navbar = () => {
       </nav>
 
       {showCanadaNotice && (
-        <div className="fixed top-[72px] left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)] max-w-2xl rounded-xl border border-primary/20 bg-background/95 px-4 py-3 shadow-lg backdrop-blur-md">
-          <div className="flex items-center gap-3">
-            <span className="text-lg" aria-hidden="true">🇨🇦</span>
-            <p className="flex-1 font-poppins text-xs sm:text-sm text-foreground">
-              It looks like you’re visiting from Canada. Explore our Canada services and pages.
-            </p>
-            <Link to={canadaPath} onClick={() => setShowCanadaNotice(false)} className="shrink-0 rounded-lg bg-primary px-3 py-2 font-poppins text-xs font-semibold text-white hover:bg-primary/90">
-              Go to Canada
-            </Link>
-            <button type="button" onClick={dismissCanadaNotice} aria-label="Dismiss Canada notice" className="shrink-0 p-1 text-muted-foreground hover:text-foreground">
-              <X className="h-4 w-4" />
-            </button>
-          </div>
+        <div className="fixed top-0 left-0 right-0 z-[60] h-8 bg-gray-950 text-white px-3 flex items-center justify-center gap-3 text-[11px] font-poppins">
+          <img src="/flags/ca.svg" alt="Canada flag" className="w-5 h-3.5 object-cover flex-shrink-0" />
+          <span className="truncate">Visiting from Canada? Explore our local services.</span>
+          <Link to={canadaPath} onClick={() => setShowCanadaNotice(false)} className="font-semibold underline whitespace-nowrap">Go to Canada</Link>
+          <button type="button" onClick={dismissCanadaNotice} aria-label="Close" className="font-semibold text-gray-300 hover:text-white whitespace-nowrap">Close</button>
         </div>
       )}
 

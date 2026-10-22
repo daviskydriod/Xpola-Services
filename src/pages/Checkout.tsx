@@ -8,7 +8,7 @@ import { useCart } from '../contexts/CartContext';
 import { useCountry } from '../contexts/CountryContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatPrice } from '@/lib/api';
-import { apiGet, apiPost, generateIdempotencyKey, RateLimitError } from '@/api';
+import { apiGet, apiPost, generateIdempotencyKey, RateLimitError, API_BASE } from '@/api';
 import { usePageMeta, pageMeta } from '@/hooks/usePageMeta';
 import { toast } from '@/hooks/use-toast';
 
@@ -99,6 +99,9 @@ const Checkout = () => {
   const { cart, cartTotal, clearCart } = useCart();
   const { currentData }                = useCountry();
   const { user }                       = useAuth();
+  const isGuest = !user;
+  const guestToken = useRef(localStorage.getItem('xpola_guest_checkout_token') || crypto.randomUUID());
+  useEffect(() => { if (isGuest) localStorage.setItem('xpola_guest_checkout_token', guestToken.current); }, [isGuest]);
 
   const idemKey = useRef(generateIdempotencyKey());
 
@@ -219,6 +222,7 @@ const Checkout = () => {
         discount_code:    couponResult?.code ?? '',
         subtotal:         cartTotal,
         idempotency_key:  idemKey.current,
+        guest_token:      isGuest ? guestToken.current : undefined,
         order_items: cart.map(i => ({
           id: String(i.id), name: i.name, price: i.price,
           quantity: i.quantity, currency: i.currency, image: i.image_path ?? '', category: i.category_name ?? '',
@@ -282,11 +286,13 @@ const Checkout = () => {
             action:             'confirm_payment',
             order_id:           orderId,
             paystack_reference: response.reference,
+            guest_token: guestToken.current,
           }, true);
         } catch (e: unknown) {
           console.error('Payment confirm error — webhook will handle:', e);
         }
         clearCart();
+        if (isGuest) localStorage.setItem('xpola_offer_account_after_order', '1');
         navigate(`/order-success?ref=${orderRef}&id=${orderId}`);
       };
       finish();
@@ -334,7 +340,7 @@ const Checkout = () => {
                   <button type="button" onClick={async () => {
                     try {
                       const token = localStorage.getItem('xpola_token');
-                      const res = await fetch('https://xpolaservices.com/api/auth.php?action=resend_verification', {
+                      const res = await fetch(`${API_BASE}/auth.php?action=resend_verification`, {
                         method: 'POST',
                         headers: { 'Authorization': `Bearer ${token}` },
                       });
@@ -354,13 +360,14 @@ const Checkout = () => {
           {/* ── Step 1: Info ── */}
           {step === 'info' && (
             <form onSubmit={handleInfoNext} className="space-y-5">
-              <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-6">Your Details</h2>
+              <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-2">{isGuest ? "Checkout as Guest" : "Your Details"}</h2>
+              {isGuest && <p className="text-sm text-gray-500 mb-6">No account is required. You can optionally create one after payment.</p>}
               {error && <div className="bg-red-50 border border-red-200 text-red-600 text-sm p-3">{error}</div>}
               <div className="flex gap-3">
                 <Field label="First Name" name="firstName" value={info.firstName} onChange={(n,v)=>setInfo(p=>({...p,[n]:v}))} half />
                 <Field label="Last Name"  name="lastName"  value={info.lastName}  onChange={(n,v)=>setInfo(p=>({...p,[n]:v}))} half />
               </div>
-              <Field label="Email"   name="email" type="email" value={info.email} onChange={(n,v)=>setInfo(p=>({...p,[n]:v}))} placeholder="you@email.com" required={false} />
+              <Field label="Email"   name="email" type="email" value={info.email} onChange={(n,v)=>setInfo(p=>({...p,[n]:v}))} placeholder="you@email.com" required />
               <Field label="Phone"   name="phone" type="tel"   value={info.phone} onChange={(n,v)=>setInfo(p=>({...p,[n]:v}))} placeholder="+234 …" />
               <Field label="Delivery Address" name="address" value={info.address} onChange={(n,v)=>setInfo(p=>({...p,[n]:v}))} />
               <div className="flex gap-3">

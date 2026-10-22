@@ -1,0 +1,16 @@
+# cPanel/Apache SPA fallback for the React frontend.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Leave real files and directories, including /api/*.php, untouched.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Never serve frontend environment files publicly.
+<FilesMatch "^\.env">
+  Require all denied
+</FilesMatch>

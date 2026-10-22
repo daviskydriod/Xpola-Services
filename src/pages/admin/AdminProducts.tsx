@@ -2,7 +2,7 @@
 // MVP Update: Multi-image gallery + Variations (size, color, weight, type) support
 import { useState, useRef, useEffect } from 'react';
 import { useAdmin } from '@/contexts/AdminContext';
-import { ApiCategory, ApiProduct, ProductVariation, adminProductsApi, apiFetch } from '@/lib/api';
+import { ApiCategory, ApiProduct, ProductVariation, adminProductsApi, apiFetch, categoriesApi } from '@/lib/api';
 
 const API_BASE = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '');
 const TOKEN_KEY = 'xpola_admin_token';
@@ -22,6 +22,66 @@ const Icon = ({ path, className = 'w-5 h-5' }: { path: string | string[]; classN
     ))}
   </svg>
 );
+
+// ── Simple rich-text editor ──────────────────────────────────────────────────
+const RichTextEditor = ({ value, onChange, label = 'Full Description *' }: {
+  value: string;
+  onChange: (html: string) => void;
+  label?: string;
+}) => {
+  const editorRef = useRef<HTMLDivElement>(null);
+  const [linkUrl, setLinkUrl] = useState('');
+
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== value) editorRef.current.innerHTML = value || '';
+  }, [value]);
+
+  const run = (command: string, commandValue?: string) => {
+    editorRef.current?.focus();
+    document.execCommand(command, false, commandValue);
+    onChange(editorRef.current?.innerHTML ?? '');
+  };
+
+  const addLink = () => {
+    const url = linkUrl.trim() || window.prompt('Enter the link URL (https://...)');
+    if (!url) return;
+    run('createLink', url);
+    setLinkUrl('');
+  };
+
+  const addImage = () => {
+    const url = window.prompt('Enter an image URL (https://...)');
+    if (url?.trim()) run('insertImage', url.trim());
+  };
+
+  const button = 'px-2.5 py-1.5 border border-gray-200 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 hover:text-[#E02020]';
+  return (
+    <div>
+      <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">{label}</label>
+      <div className="border border-gray-200 rounded-xl overflow-hidden bg-white focus-within:border-[#E02020]">
+        <div className="flex flex-wrap items-center gap-1.5 p-2 bg-gray-50 border-b border-gray-200">
+          <button type="button" title="Bold" onMouseDown={e => e.preventDefault()} onClick={() => run('bold')} className={button}>B</button>
+          <button type="button" title="Italic" onMouseDown={e => e.preventDefault()} onClick={() => run('italic')} className={`${button} italic`}>I</button>
+          <select aria-label="Text style" defaultValue="p" onChange={e => run('formatBlock', e.target.value)} className={button + ' bg-white'}>
+            <option value="p">Paragraph</option><option value="h2">Heading</option><option value="h3">Small heading</option>
+          </select>
+          <button type="button" title="Bulleted list" onMouseDown={e => e.preventDefault()} onClick={() => run('insertUnorderedList')} className={button}>• List</button>
+          <button type="button" title="Numbered list" onMouseDown={e => e.preventDefault()} onClick={() => run('insertOrderedList')} className={button}>1. List</button>
+          <div className="flex items-center gap-1 ml-auto">
+            <input value={linkUrl} onChange={e => setLinkUrl(e.target.value)} placeholder="Link URL" className="w-28 px-2 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-900" />
+            <button type="button" onMouseDown={e => e.preventDefault()} onClick={addLink} className={button}>Link</button>
+            <button type="button" onClick={addImage} className={button}>Image</button>
+          </div>
+        </div>
+        <div ref={editorRef} contentEditable suppressContentEditableWarning role="textbox" aria-multiline="true"
+          onInput={() => onChange(editorRef.current?.innerHTML ?? '')}
+          className="min-h-36 max-h-64 overflow-y-auto px-4 py-3 text-sm text-gray-900 outline-none prose prose-sm max-w-none"
+          data-placeholder="Write a clear product description…" />
+      </div>
+      <p className="text-[10px] text-gray-400 mt-1">Use headings, bold, italic, lists, links, and image URLs to format the product description.</p>
+    </div>
+  );
+};
 
 // ── Single image uploader ─────────────────────────────────────────────────────
 const ImageUploader = ({ current, onUpload, label = 'Primary Image' }: {
@@ -190,15 +250,15 @@ const VariationsEditor = ({ variations, onChange }: {
 // ── Form state ────────────────────────────────────────────────────────────────
 interface FormState {
   id?: number;
-  name: string; description: string; price: string;
+  name: string; summary: string; description: string; specifications: string; brand: string; warranty: string; price: string;
   currency: string; country: 'NG' | 'CA'; category_id: string;
-  image_path: string; stock_status: string; featured: boolean; tags: string;
+  image_path: string; stock_status: string; stock_qty: string; featured: boolean; tags: string;
   variations: VarRow[];
 }
 const EMPTY: FormState = {
-  name: '', description: '', price: '', currency: 'NGN',
+  name: '', summary: '', description: '', specifications: '', brand: '', warranty: '', price: '', currency: 'NGN',
   country: 'NG', category_id: '', image_path: '',
-  stock_status: 'in_stock', featured: false, tags: '', variations: [],
+  stock_status: 'in_stock', stock_qty: '', featured: false, tags: '', variations: [],
 };
 
 const STEPS = ['Basics', 'Pricing', 'Images & Variations'] as const;
@@ -225,7 +285,7 @@ const ProductModal = ({
 
   const canNext0 = !!form.name && !!form.country;
   const canNext1 = !!form.price;
-  const canSave  = canNext0 && canNext1;
+  const canSave  = canNext0 && canNext1 && form.stock_qty.trim() !== '';
 
   const handleAddExtraImage = async (file: File) => {
     if (!existingProduct?.id) return;
@@ -245,8 +305,8 @@ const ProductModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={onCancel}>
-      <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+    <div className="min-h-full bg-gray-50">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm w-full max-w-5xl mx-auto overflow-hidden">
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
@@ -256,8 +316,9 @@ const ProductModal = ({
             </p>
             <p className="text-xs text-gray-400 mt-0.5">Step {step + 1} of {STEPS.length} — {STEPS[step]}</p>
           </div>
-          <button onClick={onCancel} className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors">
-            <Icon path="M6 18L18 6M6 6l12 12" className="w-4 h-4 text-gray-600" />
+          <button onClick={onCancel} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-semibold text-gray-700">
+            <Icon path="M15 19l-7-7 7-7" className="w-4 h-4" />
+            Back to Products
           </button>
         </div>
 
@@ -272,7 +333,7 @@ const ProductModal = ({
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5 space-y-4 max-h-[65vh] overflow-y-auto">
+        <div className="px-6 py-5 space-y-4 max-h-[calc(100vh-230px)] overflow-y-auto">
 
           {/* Step 0: Basics */}
           {step === 0 && (
@@ -282,6 +343,16 @@ const ProductModal = ({
                 <input type="text" value={form.name} onChange={e => set('name', e.target.value)}
                   placeholder="Enter product name" className={inp} autoFocus />
               </div>
+              <div>
+                <label className={lbl}>Short Summary (for cards)</label>
+                <input value={form.summary} onChange={e => set('summary', e.target.value)} className={inp} placeholder="One-sentence product summary" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div><label className={lbl}>Brand</label><input value={form.brand} onChange={e => set('brand', e.target.value)} className={inp} placeholder="Brand" /></div>
+                <div><label className={lbl}>Warranty</label><input value={form.warranty} onChange={e => set('warranty', e.target.value)} className={inp} placeholder="e.g. 12 months" /></div>
+              </div>
+              <RichTextEditor value={form.description} onChange={html => set('description', html)} />
+              <div><label className={lbl}>Specifications</label><textarea value={form.specifications} onChange={e => set('specifications', e.target.value)} className={inp + ' min-h-24'} placeholder="Key: value, one per line" /></div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className={lbl}>Market *</label>
@@ -306,11 +377,6 @@ const ProductModal = ({
                 <input type="text" value={form.tags} onChange={e => set('tags', e.target.value)}
                   placeholder="e.g. electronics, new arrival" className={inp} />
                 <p className="text-[10px] text-gray-400 mt-1">Separate tags with commas</p>
-              </div>
-              <div>
-                <label className={lbl}>Description</label>
-                <textarea value={form.description} onChange={e => set('description', e.target.value)}
-                  rows={3} placeholder="Describe this product…" className={inp + ' resize-none'} />
               </div>
             </>
           )}
@@ -347,6 +413,18 @@ const ProductModal = ({
                     </button>
                   ))}
                 </div>
+              </div>
+              <div>
+                <label className={lbl}>Available Quantity *</label>
+                <input type="number" min="0" step="1" value={form.stock_qty}
+                  onChange={e => {
+                    const value = e.target.value;
+                    set('stock_qty', value);
+                    if (form.stock_qty === '0' && value !== '' && Number(value) > 0) set('stock_status', 'in_stock');
+                  }} placeholder="Enter total units available" className={inp} required />
+                <p className="mt-1 text-[11px] leading-relaxed text-gray-400">
+                  Enter the total units available. Customers cannot add more than this number, and checkout reserves the quantity. Use 0 to keep the product unavailable.
+                </p>
               </div>
               <button type="button" onClick={() => set('featured', !form.featured)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all text-sm font-semibold ${
@@ -472,8 +550,8 @@ export default function AdminProducts() {
 
   useEffect(() => {
     fetchProducts();
-    apiFetch<{ data: ApiCategory[] }>('/categories.php')
-      .then(d => setCategories(Array.isArray(d) ? d : (d?.data ?? [])))
+    categoriesApi.adminGetAll()
+      .then(d => setCategories(d.data ?? []))
       .catch(() => {});
   }, []);
 
@@ -490,12 +568,17 @@ export default function AdminProducts() {
       const fd = new FormData();
       if (form.id) fd.append('id', String(form.id));
       fd.append('name',         form.name);
-      fd.append('description',  form.description);
+      fd.append('summary', form.summary);
+      fd.append('description', form.description);
+      fd.append('specifications', form.specifications);
+      fd.append('brand', form.brand);
+      fd.append('warranty', form.warranty);
       fd.append('price',        form.price);
       fd.append('currency',     form.currency);
       fd.append('country',      form.country);
       fd.append('category_id',  form.category_id);
       fd.append('stock_status', form.stock_status);
+      fd.append('stock_qty',    form.stock_qty);
       fd.append('featured',     form.featured ? '1' : '0');
       fd.append('tags',         form.tags);
       if (form.image_path?.startsWith('http'))     fd.append('image_url',  form.image_path);
@@ -519,10 +602,11 @@ export default function AdminProducts() {
   const openEdit = (p: ApiProduct) => {
     setEditProduct(p);
     setEditing({
-      id: p.id, name: p.name, description: p.description ?? '', price: String(p.price),
+      id: p.id, name: p.name, summary: p.summary ?? '', description: p.description ?? '', specifications: p.specifications ?? '', brand: p.brand ?? '', warranty: p.warranty ?? '', price: String(p.price),
       currency: p.currency, country: p.country,
       category_id: p.category_id ? String(p.category_id) : '',
-      image_path: p.image_path ?? '', stock_status: p.stock_status,
+      image_path: p.image_path ?? '', stock_status: p.stock_qty != null && Number(p.stock_qty) <= 0 ? 'out_of_stock' : p.stock_status,
+      stock_qty: p.stock_qty == null ? '' : String(p.stock_qty),
       featured: p.featured === 1, tags: p.tags ?? '',
       variations: (p.variations ?? []).map(v => ({
         type:        v.type,
@@ -535,12 +619,28 @@ export default function AdminProducts() {
     });
   };
 
+  if (editing) {
+    return (
+      <ProductModal
+        initial={editing}
+        categories={categories}
+        onSave={handleSave}
+        onCancel={() => { setEditing(null); setEditProduct(undefined); }}
+        saving={saving}
+        existingProduct={editProduct}
+      />
+    );
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="font-montserrat font-bold text-xl text-gray-900">Products</h1>
           <p className="text-gray-500 text-sm">{products.length} total · {filtered.length} shown</p>
+          <p className="text-amber-700 bg-amber-50 border border-amber-100 rounded-lg px-3 py-2 mt-2 text-xs max-w-xl">
+            These are sample products. Staff manage the catalogue here: add products, edit details, assign categories, set stock and use the filters below. No owner-supplied catalogue is required for this demo data.
+          </p>
         </div>
         <button onClick={() => { setEditing({ ...EMPTY }); setEditProduct(undefined); }}
           className="flex items-center gap-2 bg-[#E02020] text-white font-semibold px-4 py-2.5 rounded-xl text-sm hover:bg-red-700 transition-colors">
@@ -598,8 +698,8 @@ export default function AdminProducts() {
                     </div>
                   )}
                   <div className="absolute top-2 left-2 flex gap-1.5 flex-wrap">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${p.stock_status === 'in_stock' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
-                      {p.stock_status === 'in_stock' ? 'In Stock' : 'Out of Stock'}
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${p.stock_status === 'in_stock' && (p.stock_qty == null || Number(p.stock_qty) > 0) ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
+                      {p.stock_status === 'in_stock' && (p.stock_qty == null || Number(p.stock_qty) > 0) ? (p.stock_qty == null ? 'In Stock' : `${p.stock_qty} left`) : 'Out of Stock'}
                     </span>
                     {p.featured === 1 && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700">⭐</span>}
                     {varCount > 0 && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">{varCount} var</span>}
@@ -637,17 +737,6 @@ export default function AdminProducts() {
             );
           })}
         </div>
-      )}
-
-      {editing && (
-        <ProductModal
-          initial={editing}
-          categories={categories}
-          onSave={handleSave}
-          onCancel={() => { setEditing(null); setEditProduct(undefined); }}
-          saving={saving}
-          existingProduct={editProduct}
-        />
       )}
 
       {deleteId && (

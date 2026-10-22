@@ -1,12 +1,14 @@
 <?php
+require_once __DIR__ . '/env.php';
 /**
  * config/cors.php — CORS headers
  */
-$allowed = [
-   
+$configuredOrigins = getenv('CORS_ALLOWED_ORIGINS') ?: getenv('FRONTEND_URL') ?: '';
+$allowed = array_values(array_filter(array_map('trim', explode(',', $configuredOrigins))));
+$allowed = array_values(array_unique(array_merge($allowed, [
     'https://xpolaservices.com',
     'https://www.xpolaservices.com',
-];
+])));
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowed, true)) {

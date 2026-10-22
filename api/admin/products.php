@@ -43,6 +43,7 @@ $db->exec("CREATE TABLE IF NOT EXISTS products (
     category_id  INT,
     image_path   VARCHAR(500),
     stock_status ENUM('in_stock','out_of_stock') DEFAULT 'in_stock',
+    stock_qty    INT NULL DEFAULT NULL,
     featured     TINYINT(1)    DEFAULT 0,
     rating       DECIMAL(3,2)  DEFAULT 0.00,
     reviews      INT           DEFAULT 0,
@@ -75,8 +76,15 @@ $db->exec("CREATE TABLE IF NOT EXISTS `product_variations` (
     INDEX `idx_pid` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
+foreach (['summary VARCHAR(500) DEFAULT NULL','specifications TEXT DEFAULT NULL','brand VARCHAR(120) DEFAULT NULL','warranty VARCHAR(255) DEFAULT NULL','stock_qty INT NULL DEFAULT NULL'] as $column) { try { $db->exec("ALTER TABLE products ADD COLUMN $column"); } catch (Throwable $ignored) {} }
+try { $db->exec('UPDATE products SET stock_qty=0 WHERE stock_qty IS NULL'); } catch (Throwable $ignored) {}
 // ── Helper: attach images & variations to a product row ───────────────────────
 function attachExtras(PDO $db, array $product): array {
+    if (($product['stock_status'] ?? '') !== 'in_stock' || $product['stock_qty'] === null || (int)$product['stock_qty'] <= 0) {
+        $product['stock_status'] = 'out_of_stock';
+    } else {
+        $product['stock_status'] = 'in_stock';
+    }
     $imgs = $db->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER BY sort_order, id");
     $imgs->execute([$product['id']]);
     $product['images'] = $imgs->fetchAll();
@@ -86,6 +94,15 @@ function attachExtras(PDO $db, array $product): array {
     $product['variations'] = $vars->fetchAll();
 
     return $product;
+}
+
+function validateProductCategory(PDO $db, ?int $categoryId, string $country): void {
+    if (!$categoryId) return;
+    $stmt = $db->prepare('SELECT country FROM categories WHERE id=? LIMIT 1');
+    $stmt->execute([$categoryId]);
+    $categoryCountry = $stmt->fetchColumn();
+    if (!$categoryCountry) { http_response_code(400); echo json_encode(['error' => 'Selected category does not exist']); exit; }
+    if ($categoryCountry !== $country) { http_response_code(400); echo json_encode(['error' => 'Selected category belongs to a different market']); exit; }
 }
 
 // ── GET ───────────────────────────────────────────────────────────────────────
@@ -119,14 +136,20 @@ if ($method === 'GET') {
 // ── POST: create ──────────────────────────────────────────────────────────────
 if ($method === 'POST' && $action === 'create') {
     $name        = htmlspecialchars(trim($_POST['name']        ?? ''));
-    $description = htmlspecialchars(trim($_POST['description'] ?? ''));
+    $description = strip_tags(trim($_POST['description'] ?? ''), '<p><br><strong><em><h2><h3><ul><ol><li><img><a>');
+    $summary = htmlspecialchars(trim($_POST['summary'] ?? ''));
+    $specifications = htmlspecialchars(trim($_POST['specifications'] ?? ''));
+    $brand = htmlspecialchars(trim($_POST['brand'] ?? ''));
+    $warranty = htmlspecialchars(trim($_POST['warranty'] ?? ''));
     $price       = (float)($_POST['price'] ?? 0);
     $categoryId  = !empty($_POST['category_id']) ? (int)$_POST['category_id'] : null;
     $country     = in_array($_POST['country'] ?? '', ['NG','CA']) ? $_POST['country'] : 'NG';
     $currency    = in_array($_POST['currency'] ?? '', ['NGN','CAD','USD']) ? $_POST['currency'] : ($country === 'CA' ? 'CAD' : 'NGN');
     $stock       = in_array($_POST['stock_status'] ?? '', ['in_stock','out_of_stock']) ? $_POST['stock_status'] : 'in_stock';
+    $stockQty    = trim((string)($_POST['stock_qty'] ?? '')) === '' ? 0 : max(0, (int)$_POST['stock_qty']);
     $featured    = (int)(bool)($_POST['featured'] ?? 0);
     $tags        = htmlspecialchars(trim($_POST['tags'] ?? ''));
+    validateProductCategory($db, $categoryId, $country);
 
     if (!$name || $price <= 0) { http_response_code(400); echo json_encode(['error' => 'Name and valid price required']); exit; }
 
@@ -140,9 +163,9 @@ if ($method === 'POST' && $action === 'create') {
         $imgPath = trim($_POST['image_path']);
     }
 
-    $db->prepare("INSERT INTO products (name,description,price,currency,country,category_id,image_path,stock_status,featured,tags)
-                  VALUES (?,?,?,?,?,?,?,?,?,?)")
-       ->execute([$name,$description,$price,$currency,$country,$categoryId,$imgPath,$stock,$featured,$tags]);
+    $db->prepare("INSERT INTO products (name,summary,description,specifications,brand,warranty,price,currency,country,category_id,image_path,stock_status,stock_qty,featured,tags)
+                  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+       ->execute([$name,$summary,$description,$specifications,$brand,$warranty,$price,$currency,$country,$categoryId,$imgPath,$stock,$stockQty,$featured,$tags]);
     $newId = (int)$db->lastInsertId();
 
     // Insert primary image into product_images too
@@ -186,14 +209,20 @@ if ($method === 'POST' && $action === 'update') {
     if (!$upId) { http_response_code(400); echo json_encode(['error' => 'ID required']); exit; }
 
     $name        = htmlspecialchars(trim($_POST['name']        ?? ''));
-    $description = htmlspecialchars(trim($_POST['description'] ?? ''));
+    $description = strip_tags(trim($_POST['description'] ?? ''), '<p><br><strong><em><h2><h3><ul><ol><li><img><a>');
+    $summary = htmlspecialchars(trim($_POST['summary'] ?? ''));
+    $specifications = htmlspecialchars(trim($_POST['specifications'] ?? ''));
+    $brand = htmlspecialchars(trim($_POST['brand'] ?? ''));
+    $warranty = htmlspecialchars(trim($_POST['warranty'] ?? ''));
     $price       = (float)($_POST['price'] ?? 0);
     $categoryId  = !empty($_POST['category_id']) ? (int)$_POST['category_id'] : null;
     $country     = in_array($_POST['country'] ?? '', ['NG','CA']) ? $_POST['country'] : 'NG';
     $currency    = in_array($_POST['currency'] ?? '', ['NGN','CAD','USD']) ? $_POST['currency'] : ($country === 'CA' ? 'CAD' : 'NGN');
     $stock       = in_array($_POST['stock_status'] ?? '', ['in_stock','out_of_stock']) ? $_POST['stock_status'] : 'in_stock';
+    $stockQty    = trim((string)($_POST['stock_qty'] ?? '')) === '' ? 0 : max(0, (int)$_POST['stock_qty']);
     $featured    = (int)(bool)($_POST['featured'] ?? 0);
     $tags        = htmlspecialchars(trim($_POST['tags'] ?? ''));
+    validateProductCategory($db, $categoryId, $country);
 
     if (!$name || $price <= 0) { http_response_code(400); echo json_encode(['error' => 'Name and valid price required']); exit; }
 
@@ -202,15 +231,15 @@ if ($method === 'POST' && $action === 'update') {
         if ($ex) deleteImage($ex['image_path']);
         try { $imgPath = uploadImage($_FILES['image']); }
         catch (RuntimeException $e) { http_response_code(400); echo json_encode(['error' => $e->getMessage()]); exit; }
-        $db->prepare("UPDATE products SET name=?,description=?,price=?,currency=?,country=?,category_id=?,image_path=?,stock_status=?,featured=?,tags=?,updated_at=NOW() WHERE id=?")
-           ->execute([$name,$description,$price,$currency,$country,$categoryId,$imgPath,$stock,$featured,$tags,$upId]);
+        $db->prepare("UPDATE products SET name=?,summary=?,description=?,specifications=?,brand=?,warranty=?,price=?,currency=?,country=?,category_id=?,image_path=?,stock_status=?,stock_qty=?,featured=?,tags=?,updated_at=NOW() WHERE id=?")
+           ->execute([$name,$summary,$description,$specifications,$brand,$warranty,$price,$currency,$country,$categoryId,$imgPath,$stock,$stockQty,$featured,$tags,$upId]);
     } elseif (!empty($_POST['image_url']) || !empty($_POST['image_path'])) {
         $imgPath = trim($_POST['image_url'] ?? $_POST['image_path'] ?? '');
-        $db->prepare("UPDATE products SET name=?,description=?,price=?,currency=?,country=?,category_id=?,image_path=?,stock_status=?,featured=?,tags=?,updated_at=NOW() WHERE id=?")
-           ->execute([$name,$description,$price,$currency,$country,$categoryId,$imgPath,$stock,$featured,$tags,$upId]);
+        $db->prepare("UPDATE products SET name=?,summary=?,description=?,specifications=?,brand=?,warranty=?,price=?,currency=?,country=?,category_id=?,image_path=?,stock_status=?,stock_qty=?,featured=?,tags=?,updated_at=NOW() WHERE id=?")
+           ->execute([$name,$summary,$description,$specifications,$brand,$warranty,$price,$currency,$country,$categoryId,$imgPath,$stock,$stockQty,$featured,$tags,$upId]);
     } else {
-        $db->prepare("UPDATE products SET name=?,description=?,price=?,currency=?,country=?,category_id=?,stock_status=?,featured=?,tags=?,updated_at=NOW() WHERE id=?")
-           ->execute([$name,$description,$price,$currency,$country,$categoryId,$stock,$featured,$tags,$upId]);
+        $db->prepare("UPDATE products SET name=?,summary=?,description=?,specifications=?,brand=?,warranty=?,price=?,currency=?,country=?,category_id=?,stock_status=?,stock_qty=?,featured=?,tags=?,updated_at=NOW() WHERE id=?")
+           ->execute([$name,$summary,$description,$specifications,$brand,$warranty,$price,$currency,$country,$categoryId,$stock,$stockQty,$featured,$tags,$upId]);
     }
 
     // Replace variations if sent

@@ -86,6 +86,9 @@ function ctaButton(string $url, string $label, string $color = '#E02020'): strin
 }
 
 $db     = getDB();
+try { $db->exec("ALTER TABLE products ADD COLUMN stock_qty INT NULL DEFAULT NULL"); } catch (Throwable $ignored) {}
+try { $db->exec('UPDATE products SET stock_qty=0 WHERE stock_qty IS NULL'); } catch (Throwable $ignored) {}
+try { $db->exec("ALTER TABLE orders ADD COLUMN guest_token VARCHAR(128) DEFAULT NULL"); } catch (Throwable $ignored) {}
 $method = $_SERVER['REQUEST_METHOD'];
 
 $db->exec("CREATE TABLE IF NOT EXISTS orders (
@@ -109,9 +112,11 @@ $db->exec("CREATE TABLE IF NOT EXISTS orders (
     payment_gateway  VARCHAR(20)   NOT NULL DEFAULT 'paystack',
     status           ENUM('pending','paid','processing','shipped','delivered','cancelled','failed') NOT NULL DEFAULT 'pending',
     items_json       LONGTEXT,
+    inventory_reserved TINYINT(1) NOT NULL DEFAULT 0,
     discount_code    VARCHAR(50)   DEFAULT NULL,
     discount_amount  DECIMAL(12,2) NOT NULL DEFAULT 0,
     idempotency_key  VARCHAR(100)  DEFAULT NULL,
+    guest_token      VARCHAR(128)  DEFAULT NULL,
     tracking_number  VARCHAR(100)  DEFAULT NULL,
     notes            TEXT,
     created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -119,6 +124,7 @@ $db->exec("CREATE TABLE IF NOT EXISTS orders (
     INDEX idx_uid (uid), INDEX idx_ref (order_ref), INDEX idx_idem (idempotency_key)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 try { $db->exec("ALTER TABLE orders MODIFY status ENUM('pending','paid','processing','shipped','delivered','cancelled','failed') NOT NULL DEFAULT 'pending'"); } catch (Throwable $e) { error_log('[Xpola Orders] status migration: ' . $e->getMessage()); }
+try { $db->exec("ALTER TABLE orders ADD COLUMN inventory_reserved TINYINT(1) NOT NULL DEFAULT 0"); } catch (Throwable $ignored) {}
 
 // Optional server-only Paystack config. This file must never be committed or
 // served to the browser; it may define PAYSTACK_SECRET_KEY or PAYSTACK_SECRET.
@@ -151,8 +157,12 @@ function verifyPaystackPayment(string $reference): ?array {
 
 // ── GET ───────────────────────────────────────────────────────────────────────
 if ($method === 'GET') {
-    $jwt = requireAuth();
-    $uid = $jwt['uid'];
+    $bearer = getBearerToken();
+    $guestToken = trim((string)($_GET['guest_token'] ?? ''));
+    $jwt = $bearer ? requireAuth() : null;
+    if ($jwt) { $uid = $jwt['uid']; }
+    elseif ($guestToken && preg_match('/^[a-f0-9-]{16,128}$/i', $guestToken)) { $uid = 'guest_' . substr(hash('sha256', $guestToken), 0, 58); }
+    else { jsonError('Unauthorized — sign in or provide a guest order token', 401); }
 
     // Validate discount
     if (!empty($_GET['action']) && $_GET['action'] === 'validate_discount') {
@@ -202,9 +212,13 @@ if ($method === 'GET') {
 
 // ── POST ──────────────────────────────────────────────────────────────────────
 if ($method === 'POST') {
-    $jwt = requireAuth();
-    $uid = $jwt['uid'];
     $b   = getBody();
+    $bearer = getBearerToken();
+    $guestToken = trim((string)($b['guest_token'] ?? ''));
+    $jwt = $bearer ? requireAuth() : null;
+    if ($jwt) { $uid = $jwt['uid']; }
+    elseif ($guestToken && preg_match('/^[a-f0-9-]{16,128}$/i', $guestToken)) { $uid = 'guest_' . substr(hash('sha256', $guestToken), 0, 58); }
+    else { jsonError('Guest checkout token required', 401); }
 
     $userStmt = $db->prepare("SELECT email_verified, email, first_name FROM users WHERE uid=? LIMIT 1");
     $userStmt->execute([$uid]);
@@ -238,19 +252,42 @@ if ($method === 'POST') {
 
     // ── CANCEL UNPAID ORDER ────────────────────────────────────────────────────
     // Cancellation is distinct from a failed payment: keep payment_status
-    // pending for reporting, but remove the order from Awaiting Payment.
+    // pending for reporting, but release stock reserved for this unpaid order.
     if ($action === 'cancel_payment') {
         $orderId = (int)($b['order_id'] ?? 0);
         if (!$orderId) jsonError('order_id required');
 
-        $stmt = $db->prepare("UPDATE orders SET status='cancelled', updated_at=NOW() WHERE id=? AND uid=? AND status='pending' AND payment_status='pending'");
-        $stmt->execute([$orderId, $uid]);
-        if ($stmt->rowCount() === 0) jsonError('Order was not found or is no longer awaiting payment', 409);
+        $db->beginTransaction();
+        try {
+            $lock = $db->prepare("SELECT order_ref, items_json, inventory_reserved FROM orders WHERE id=? AND uid=? AND status='pending' AND payment_status='pending' FOR UPDATE");
+            $lock->execute([$orderId, $uid]);
+            $orderToCancel = $lock->fetch();
+            if (!$orderToCancel) {
+                $db->rollBack();
+                jsonError('Order was not found or is no longer awaiting payment', 409);
+            }
 
-        $refStmt = $db->prepare('SELECT order_ref FROM orders WHERE id=? AND uid=? LIMIT 1');
-        $refStmt->execute([$orderId, $uid]);
-        $ref = $refStmt->fetchColumn() ?: (string)$orderId;
-        logActivity($db, 'user', (string)$uid, $userRow['first_name'] ?? null, $userRow['email'] ?? null, 'ORDER_CANCELLED', (string)$ref, 'Customer cancelled unpaid order');
+            if ((int)$orderToCancel['inventory_reserved'] === 1) {
+                foreach (json_decode($orderToCancel['items_json'] ?? '[]', true) ?: [] as $item) {
+                    if (empty($item['stock_reserved'])) continue;
+                    $productId = (int)($item['id'] ?? 0);
+                    $quantity = max(0, (int)($item['quantity'] ?? 0));
+                    if ($productId > 0 && $quantity > 0) {
+                        $db->prepare("UPDATE products SET stock_qty=stock_qty+? WHERE id=? AND stock_qty IS NOT NULL")
+                           ->execute([$quantity, $productId]);
+                    }
+                }
+            }
+            $db->prepare("UPDATE orders SET status='cancelled', inventory_reserved=0, updated_at=NOW() WHERE id=? AND uid=?")
+               ->execute([$orderId, $uid]);
+            $ref = $orderToCancel['order_ref'];
+            $db->commit();
+        } catch (Throwable $e) {
+            if ($db->inTransaction()) $db->rollBack();
+            throw $e;
+        }
+
+        logActivity($db, 'user', (string)$uid, $userRow['first_name'] ?? null, $userRow['email'] ?? null, 'ORDER_CANCELLED', (string)$ref, 'Customer cancelled unpaid order; reserved stock was released');
         json(['success' => true, 'status' => 'cancelled', 'payment_status' => 'pending']);
     }
 
@@ -291,14 +328,14 @@ if ($method === 'POST') {
 
         // Mark paid only after successful server-side verification. This is the
         // only transition from Awaiting Payment to Processing (Paid).
-        $upd = $db->prepare("UPDATE orders SET payment_status='paid', payment_ref=?, status='processing', updated_at=NOW() WHERE id=? AND uid=? AND payment_status='pending'");
+        $upd = $db->prepare("UPDATE orders SET payment_status='paid', payment_ref=?, status='processing', inventory_reserved=0, updated_at=NOW() WHERE id=? AND uid=? AND payment_status='pending'");
         $upd->execute([$paystackRef, $orderId, $uid]);
         if ($upd->rowCount() === 0) jsonError('Order already processed', 409);
         logActivity($db, 'user', (string)$uid, $userRow['first_name'] ?? null, $userRow['email'] ?? null, 'PAYMENT_CONFIRMED', (string)$order['order_ref'], 'Payment verified by Paystack');
 
         // Loyalty points (1 pt per ₦100)
         $points = (int)($paidNaira / 100);
-        if ($points > 0) {
+        if ($points > 0 && $userRow) {
             $db->prepare("INSERT INTO loyalty_transactions (uid, points, type, description) VALUES (?, ?, 'earn', ?)")
                ->execute([$uid, $points, "Order {$order['order_ref']}"]);
         }
@@ -311,8 +348,10 @@ if ($method === 'POST') {
 
         // Notification
         $notifMsg = "Your order {$order['order_ref']} is confirmed and processing." . ($points > 0 ? " You earned {$points} pts!" : '');
-        $db->prepare("INSERT INTO notifications (uid, title, body) VALUES (?, ?, ?)")
-           ->execute([$uid, '✅ Order Confirmed!', $notifMsg]);
+        if ($userRow) {
+            $db->prepare("INSERT INTO notifications (uid, title, body) VALUES (?, ?, ?)")
+               ->execute([$uid, '✅ Order Confirmed!', $notifMsg]);
+        }
 
         // ── Order confirmation email (Xpola branded) ──────────────────────────
         try {
@@ -433,6 +472,16 @@ if ($method === 'POST') {
     $notes        = trim($b['notes'] ?? '');
 
     if (!$customerName) jsonError('customer_name required');
+    if (!is_array($items) || count($items) === 0) jsonError('Your cart is empty. Please add a product before checkout.');
+
+    // Validate product identifiers and aggregate duplicate lines before locking stock.
+    $quantityByProduct = [];
+    foreach ($items as $item) {
+        $productId = (int)($item['id'] ?? 0);
+        $quantity = (int)($item['quantity'] ?? 0);
+        if ($productId <= 0 || $quantity <= 0) jsonError('A cart item has an invalid product or quantity. Please review your cart.');
+        $quantityByProduct[$productId] = ($quantityByProduct[$productId] ?? 0) + $quantity;
+    }
 
     // Idempotency check
     if ($idemKey) {
@@ -471,24 +520,67 @@ if ($method === 'POST') {
     $serverTotal = max(0, round($subtotal + $serverFee - $discountAmt, 2));
     $orderRef    = 'XPL-' . strtoupper(bin2hex(random_bytes(5)));
 
+    // Reserve finite stock atomically before an unpaid order is created. The reservation
+    // remains during payment retries and is released only if the customer cancels.
+    $db->beginTransaction();
+    $trackedProducts = [];
+    foreach ($quantityByProduct as $productId => $quantity) {
+        $productLock = $db->prepare('SELECT name, stock_status, stock_qty FROM products WHERE id=? FOR UPDATE');
+        $productLock->execute([$productId]);
+        $stockRow = $productLock->fetch();
+        if (!$stockRow) {
+            $db->rollBack();
+            jsonError('A product in your cart is no longer available. Please refresh your cart.', 409);
+        }
+        if ($stockRow['stock_qty'] === null) {
+            $db->rollBack();
+            jsonError(($stockRow['name'] ?: 'A product') . ' has no available stock configured. Please refresh the product or contact the shop.', 409);
+        }
+        if ($stockRow['stock_status'] !== 'in_stock') {
+            $db->rollBack();
+            jsonError(($stockRow['name'] ?: 'A product') . ' is out of stock. Please remove it from your cart.', 409);
+        }
+        $available = max(0, (int)$stockRow['stock_qty']);
+        if ($quantity > $available) {
+            $db->rollBack();
+            jsonError(($stockRow['name'] ?: 'A product') . ' has only ' . $available . ' unit' . ($available === 1 ? '' : 's') . ' left. Update your cart quantity and try again.', 409);
+        }
+        $updated = $db->prepare('UPDATE products SET stock_qty=stock_qty-? WHERE id=? AND stock_qty>=?');
+        $updated->execute([$quantity, $productId, $quantity]);
+        if ($updated->rowCount() !== 1) {
+            $db->rollBack();
+            jsonError(($stockRow['name'] ?: 'A product') . ' stock changed. Please refresh your cart and try again.', 409);
+        }
+        $trackedProducts[(int)$productId] = true;
+    }
+
+    $itemsForOrder = $items;
+    foreach ($itemsForOrder as &$itemForOrder) {
+        $itemForOrder['stock_reserved'] = isset($trackedProducts[(int)($itemForOrder['id'] ?? 0)]);
+    }
+    unset($itemForOrder);
+    $inventoryReserved = $trackedProducts ? 1 : 0;
+
     $db->prepare("INSERT INTO orders
         (order_ref, uid, customer_name, customer_email, customer_phone,
          delivery_address, delivery_city, delivery_state, delivery_area,
          delivery_fee, subtotal, total_amount, currency, country,
          payment_status, payment_gateway, status,
-         items_json, discount_code, discount_amount, idempotency_key, notes)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'NGN','NG','pending','paystack','pending',?,?,?,?,?)")
+         items_json, inventory_reserved, discount_code, discount_amount, idempotency_key, guest_token, notes)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'NGN','NG','pending','paystack','pending',?,?,?,?,?,?,?)")
       ->execute([
           $orderRef, $uid, $customerName, $email, $phone,
           $address, $city, $state, $areaName,
           $serverFee, $subtotal, $serverTotal,
-          json_encode($items), $discountCode ?: null, $discountAmt,
-          $idemKey ?: null, $notes ?: null,
+          json_encode($itemsForOrder), $inventoryReserved, $discountCode ?: null, $discountAmt,
+          $idemKey ?: null, $guestToken ?: null, $notes ?: null,
       ]);
+    $createdOrderId = (int)$db->lastInsertId();
+    $db->commit();
 
-    logActivity($db, 'user', (string)$uid, $userRow['first_name'] ?? null, $email, 'ORDER_CREATED', $orderRef, 'Pending order created');
+    logActivity($db, 'user', (string)$uid, $userRow['first_name'] ?? null, $email, 'ORDER_CREATED', $orderRef, 'Pending order created; available stock reserved');
 
-    json(['success' => true, 'id' => (int)$db->lastInsertId(), 'order_ref' => $orderRef, 'server_total' => $serverTotal]);
+    json(['success' => true, 'id' => $createdOrderId, 'order_ref' => $orderRef, 'server_total' => $serverTotal, 'guest_token' => $guestToken ?: null]);
 }
 
 jsonError('Method not allowed', 405);

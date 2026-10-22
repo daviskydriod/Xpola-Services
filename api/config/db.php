@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/env.php';
 /**
  * config/db.php — PDO connection + JSON helpers
  * Set these as environment variables in cPanel or .htaccess:

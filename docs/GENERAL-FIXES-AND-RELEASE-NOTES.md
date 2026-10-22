@@ -6,7 +6,7 @@
 ## Fresh release files
 
 - `xpola-frontend-dist.zip`: production Vite frontend only; upload the contents of `frontend/` to the website document root.
-- `xpola-api-sanitized.zip`: sanitized PHP API; configure the hosting environment from `api/.env.example`.
+- `xpola-api-sanitized.zip`: sanitized PHP API; create the private `public_html/api/.env` from `api/.env.example` or configure the same values in cPanel server environment settings.
 - `xpola-services-release.zip`: combined frontend and API handover package.
 
 ## Frontend fixes
@@ -29,6 +29,9 @@
 - Added the supplied PHP API under `/api` and documented deployment requirements.
 - Removed embedded database, JWT, mail, and Paystack credential fallbacks.
 - Added `.env.example`; secrets must be supplied by hosting environment variables.
+- Added `api/config/env.php` so PHP loads a private `api/.env` file at runtime while server-provided environment variables take precedence.
+- Added environment-based frontend API configuration through `VITE_API_URL`; removed hardcoded frontend API calls for verification and payment confirmation.
+- Added cPanel Apache rules for React SPA fallback and blocking public access to `.env`, `composer.json`, and `composer.lock`.
 - Added `CANADA_MARKET_ENABLED=0` as the safe default.
 - Blocked direct Canadian product, category, delivery, and Moneris commerce access while the flag is disabled.
 - Added server-side `dateFrom`, `dateTo`, and `payment_status` filtering to admin orders.
@@ -44,6 +47,8 @@
   - `info@nosyradigital.com.ng`
   - `+234 705 846 6586` — phone and WhatsApp
 - Clarified that Nosyra Digital handles website fixes, maintenance, deployment support, and technical questions; hosting ownership and hosting operations are outside Nosyra Digital’s scope.
+- Recorded the agency support contacts (`info@nosyradigital.com.ng`, `+234 705 846 6586`) and confirmed that the client retains domain, hosting, database, payment, SMTP, backup, renewal, and final-approval responsibility.
+- Recorded the source-release condition: the client has the deployed `dist` files on the client-controlled server, while the complete raw frontend source and public source files are supplied after the outstanding balance is paid in full.
 - Added the ownership and handover checklist.
 - Added the order-status table.
 - Kept the full five-step client process together on one page.
@@ -52,13 +57,15 @@
 
 ## Deployment checks still required
 
-1. Set database, JWT, mail, Paystack, and Moneris environment variables.
-2. Install PHP dependencies with `composer install --no-dev --optimize-autoloader`.
-3. Test the API against the production database and verify all required migrations/schema fields.
-4. Keep `CANADA_MARKET_ENABLED=0` until the owner approves Moneris launch testing.
-5. Client must supply verified public figures and approved testimonials before they are added back.
-6. Confirm backup, renewal, webhook, refund, and restock-notification procedures.
-7. Rotate any real credentials that were present in the original API archive before production deployment.
+1. Build the frontend with `VITE_API_URL` and the public payment key, then upload the contents of `dist/` to `public_html/`.
+2. Upload the API to `public_html/api/` and create the real private `public_html/api/.env`.
+3. Set database, JWT, mail, Paystack, Moneris, `FRONTEND_URL`, and `CORS_ALLOWED_ORIGINS` values in the backend environment.
+4. Install PHP dependencies with `composer install --no-dev --optimize-autoloader` or upload the generated `vendor/` directory.
+5. Test the API against the production database and verify all required migrations/schema fields.
+6. Keep `CANADA_MARKET_ENABLED=0` until the owner approves Moneris launch testing.
+7. Client must supply verified public figures and approved testimonials before they are added back.
+8. Confirm backup, renewal, webhook, refund, and restock-notification procedures.
+9. Rotate any real credentials that were present in the original API archive before production deployment.
 
 ## Validation
 

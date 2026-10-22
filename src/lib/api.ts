@@ -1,6 +1,8 @@
 // FILE PATH: src/lib/api.ts
 
-export const API_BASE = 'https://xpolaservices.com/api';
+// Configure this with VITE_API_URL in .env.local or the frontend host.
+// The fallback keeps same-domain deployments working through /api.
+export const API_BASE = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '');
 
 const getToken      = () => localStorage.getItem('xpola_token');
 const getAdminToken = () => localStorage.getItem('xpola_admin_token');
@@ -54,6 +56,10 @@ export interface ApiProduct {
   id:            number;
   name:          string;
   description:   string;
+  summary?:      string | null;
+  specifications?: string | null;
+  brand?:        string | null;
+  warranty?:     string | null;
   price:         number;
   currency:      'NGN' | 'CAD';
   country:       'NG' | 'CA';
@@ -62,6 +68,8 @@ export interface ApiProduct {
   category_slug: string | null;
   image_path:    string | null;
   stock_status:  'in_stock' | 'out_of_stock';
+  /** Explicit remaining quantity; null means inventory is not quantity-tracked. */
+  stock_qty?:    number | null;
   featured:      0 | 1;
   rating:        number;
   reviews:       number;
@@ -72,9 +80,14 @@ export interface ApiProduct {
 }
 
 export interface ApiCategory {
-  id:   number;
-  name: string;
-  slug: string;
+  id:            number;
+  name:          string;
+  slug:          string;
+  country?:      'NG' | 'CA';
+  sort_order?:   number;
+  description?:  string | null;
+  image_url?:    string | null;
+  product_count?: number;
 }
 export interface Pagination {
   total: number;
@@ -243,9 +256,14 @@ export interface DeliveryZone {
 }
 
 export interface Category {
-  id:   number;
-  name: string;
-  slug: string;
+  id:           number;
+  name:         string;
+  slug:         string;
+  country:      'NG' | 'CA';
+  sort_order?:  number;
+  description?: string | null;
+  image_url?:   string | null;
+  product_count?: number;
 }
 
 export interface Coupon {
@@ -264,6 +282,7 @@ export interface SiteSettings {
   siteName:       string;
   supportEmail:   string;
   supportPhone:   string;
+  catalogueMode?: 'sample' | 'live';
   facebookUrl:    string;
   twitterUrl:     string;
   instagramUrl:   string;
@@ -603,13 +622,13 @@ export const deliveryApi = {
 
 export const categoriesApi = {
   adminGetAll: () =>
-    adminFetch<Category[]>('/admin/categories.php'),
+    adminFetch<{ success: boolean; data: Category[] }>('/admin/categories.php'),
 
   create: (cat: Omit<Category, 'id'>) =>
-    adminFetch<{ id: number }>('/admin/categories.php', { method: 'POST', body: JSON.stringify(cat) }),
+    adminFetch<{ success: boolean; data: Category }>('/admin/categories.php', { method: 'POST', body: JSON.stringify(cat) }),
 
   update: (id: number, cat: Partial<Category>) =>
-    adminFetch<{ success: boolean }>(`/admin/categories.php?id=${id}`, { method: 'PUT', body: JSON.stringify(cat) }),
+    adminFetch<{ success: boolean; data: Category }>(`/admin/categories.php?id=${id}`, { method: 'PUT', body: JSON.stringify(cat) }),
 
   delete: (id: number) =>
     adminFetch<{ success: boolean }>(`/admin/categories.php?id=${id}`, { method: 'DELETE' }),
@@ -635,6 +654,10 @@ export const settingsApi = {
 
   update: (settings: Partial<SiteSettings>) =>
     adminFetch<{ success: boolean }>('/admin/settings.php', { method: 'PUT', body: JSON.stringify(settings) }),
+};
+
+export const catalogueApi = {
+  getStatus: () => apiFetch<{ mode: 'sample' | 'live'; isLive: boolean }>(`/catalogue-status.php?ts=${Date.now()}`),
 };
 
 export const maintenanceApi = {

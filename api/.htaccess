@@ -1,0 +1,8 @@
+# Never expose backend environment files or local configuration.
+<FilesMatch "^\.env">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "^(composer\.json|composer\.lock)$">
+  Require all denied
+</FilesMatch>

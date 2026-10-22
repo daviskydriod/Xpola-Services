@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight, CheckCircle, LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export interface ServiceDetailCard {
   icon: LucideIcon;
@@ -47,7 +48,9 @@ const ServiceDetailLayout = ({
   ctaDescription,
   ctaLabel,
   ctaHref,
-}: ServiceDetailLayoutProps) => (
+}: ServiceDetailLayoutProps) => {
+  usePageMeta(`${title} | Xpola Services ${countryLabel}`, description);
+  return (
   <div className="min-h-screen bg-background">
     <Navbar />
 
@@ -133,6 +136,7 @@ const ServiceDetailLayout = ({
 
     <Footer />
   </div>
-);
+  );
+};
 
 export default ServiceDetailLayout;

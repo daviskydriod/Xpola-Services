@@ -2,15 +2,16 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdmin } from '../../contexts/AdminContext';
-import { adminApi, maintenanceApi, ordersApi, customersApi, deliveryApi, categoriesApi, couponsApi, commsApi, supportApi, adminNotificationsApi, AdminStats, Order, Customer, StockNotificationsResponse, AdminUser, DeliveryZone, Category, Coupon, SiteSettings, AnnouncementBanner, AuditLog, SupportTicket } from '@/lib/api';
+import { adminApi, maintenanceApi, settingsApi, ordersApi, customersApi, deliveryApi, categoriesApi, couponsApi, commsApi, supportApi, adminNotificationsApi, AdminStats, Order, Customer, StockNotificationsResponse, AdminUser, DeliveryZone, Category, Coupon, SiteSettings, AnnouncementBanner, AuditLog, SupportTicket } from '@/lib/api';
 import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
 import AdminRestock from './AdminRestock';
 import AdminNotifications from './AdminNotifications';
 import AdminProjects from './AdminProjects';
+import AdminNewsletter from './AdminNewsletter';
 import { toast } from '@/hooks/use-toast';
 
-export type AdminView = 'overview' | 'products' | 'projects' | 'orders' | 'notifications' | 'restock' | 'customers' | 'comms' | 'settings' | 'maintenance';
+export type AdminView = 'overview' | 'products' | 'projects' | 'orders' | 'notifications' | 'restock' | 'customers' | 'comms' | 'newsletter' | 'settings' | 'maintenance';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -47,6 +48,7 @@ const ICONS = {
   orders: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
   customers: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z',
   comms: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+  newsletter: 'M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
   settings: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z',
   maintenance: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
   logout: 'M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1',
@@ -61,6 +63,7 @@ const NAV_ITEMS: { id: AdminView; label: string; icon: string }[] = [
   { id: 'restock',     label: 'Restock alerts', icon: ICONS.restock },
   { id: 'customers',   label: 'Customers',   icon: ICONS.customers },
   { id: 'comms',       label: 'Comms',       icon: ICONS.comms },
+  { id: 'newsletter',  label: 'Newsletter',  icon: ICONS.newsletter },
   { id: 'settings',    label: 'Settings',    icon: ICONS.settings },
   { id: 'maintenance', label: 'Maintenance', icon: ICONS.maintenance },
 ];
@@ -86,7 +89,7 @@ const Sidebar = ({ view, setView, onLogout, isOpen, onClose, pendingOrders, pend
             <Icon path="M13 10V3L4 14h7v7l9-11h-7z" className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-montserrat font-bold text-white text-sm">Xpola Admin</p>
+            <p className="font-montserrat font-bold text-white text-sm">Xpola Staff</p>
             <p className="text-gray-500 text-xs">Management Portal</p>
           </div>
         </div>
@@ -197,7 +200,7 @@ const Overview = ({ setView }: { setView: (v: AdminView) => void }) => {
     <div className="space-y-6">
       <div>
         <h1 className="font-montserrat font-bold text-xl md:text-2xl text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-500 text-sm mt-1">Welcome back, Admin.</p>
+        <p className="text-gray-500 text-sm mt-1">Welcome back, Staff.</p>
       </div>
 
       {/* 6 stat cards */}
@@ -751,16 +754,45 @@ const CommsPanel = () => {
   );
 };
 
+const CatalogueStatusPanel = () => {
+  const [mode, setMode] = useState<'sample' | 'live'>('sample');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  useEffect(() => {
+    settingsApi.get().then(s => setMode(s.catalogueMode ?? 'sample')).catch(console.error).finally(() => setLoading(false));
+  }, []);
+  const save = async (next: 'sample' | 'live') => {
+    setSaving(true);
+    try { await settingsApi.update({ catalogueMode: next }); setMode(next); }
+    catch (e) { console.error(e); }
+    finally { setSaving(false); }
+  };
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5 max-w-2xl">
+      <div><h2 className="font-montserrat font-bold text-gray-900">Catalogue Status</h2><p className="text-sm text-gray-500 mt-1">Only the owner / Super Admin should switch this after approving the final products.</p></div>
+      <div className="grid sm:grid-cols-2 gap-3">
+        {([['sample', 'Sample Catalogue', 'Keep the public sample notice visible while products are for demonstration.'], ['live', 'Live Catalogue', 'Hide the sample notice after the approved catalogue is published.']] as const).map(([value, title, description]) => (
+          <button key={value} type="button" disabled={loading || saving} onClick={() => save(value)} className={`text-left p-4 rounded-xl border-2 transition-colors ${mode === value ? 'border-[#E02020] bg-red-50' : 'border-gray-200 hover:border-gray-300'}`}>
+            <span className="font-bold text-sm text-gray-900">{title}</span><span className="block text-xs text-gray-500 mt-1">{description}</span>
+          </button>
+        ))}
+      </div>
+      <p className="text-xs text-gray-500">Current status: <strong className="text-gray-900">{mode === 'live' ? 'Live Catalogue' : 'Sample Catalogue'}</strong></p>
+    </div>
+  );
+};
+
 // ── Settings Panel ────────────────────────────────────────────────────────────
 const SettingsPanel = () => {
   const { isSuperAdmin, username } = useAdmin();
-  const [tab, setTab] = useState<'delivery' | 'categories' | 'coupons' | 'security' | 'audit' | 'admins'>('delivery');
+  const [tab, setTab] = useState<'delivery' | 'categories' | 'coupons' | 'security' | 'catalogue' | 'audit' | 'admins'>('delivery');
 
   const TABS = [
     { id: 'delivery',   label: 'Delivery Zones' },
     { id: 'categories', label: 'Categories' },
     { id: 'coupons',    label: 'Coupons' },
     { id: 'security',   label: 'Security' },
+    ...(isSuperAdmin ? [{ id: 'catalogue', label: 'Catalogue Status' }] : []),
     // Only super admins see Audit Log and Admin Users
     ...(isSuperAdmin ? [
       { id: 'audit',  label: '🔍 Audit Log' },
@@ -786,6 +818,7 @@ const SettingsPanel = () => {
       {tab === 'categories' && <CategoriesManager />}
       {tab === 'coupons'    && <CouponsManager />}
       {tab === 'security'   && <SecurityPanel />}
+      {tab === 'catalogue'  && isSuperAdmin && <CatalogueStatusPanel />}
       {tab === 'audit'      && isSuperAdmin && <AuditLogPanel />}
       {tab === 'admins'     && isSuperAdmin && <AdminUsersPanel />}
     </div>
@@ -948,21 +981,21 @@ const CategoriesManager = () => {
 
   useEffect(() => {
     categoriesApi.adminGetAll()
-      .then(data => setCategories(toArray<Category>(data, 'categories', 'data')))
+      .then(data => setCategories(data.data ?? []))
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
   const handleSave = async () => {
-    if (!editing?.name || !editing?.slug) return;
+    if (!editing?.name) return;
     setSaving(true);
     try {
       if (editing.id) {
-        await categoriesApi.update(editing.id, editing);
-        setCategories(prev => prev.map(c => c.id === editing.id ? { ...c, ...editing } as Category : c));
+        const response = await categoriesApi.update(editing.id, editing);
+        setCategories(prev => prev.map(c => c.id === editing.id ? (response.data ?? { ...c, ...editing } as Category) : c));
       } else {
-        const { id } = await categoriesApi.create(editing as Omit<Category, 'id'>);
-        setCategories(prev => [...prev, { ...editing, id } as Category]);
+        const response = await categoriesApi.create(editing as Omit<Category, 'id'>);
+        if (response.data) setCategories(prev => [...prev, response.data]);
       }
       setEditing(null);
     } finally { setSaving(false); }
@@ -987,7 +1020,7 @@ const CategoriesManager = () => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">{categories.length} categories</p>
-        <button onClick={() => setEditing({ name: '', slug: '' })}
+        <button onClick={() => setEditing({ name: '', slug: '', country: 'NG' })}
           className="flex items-center gap-2 bg-[#E02020] text-white font-bold px-4 py-2 rounded-xl text-sm hover:bg-red-700 transition-colors">
           <Icon path="M12 4v16m8-8H4" className="w-4 h-4" /> Add Category
         </button>
@@ -1004,12 +1037,6 @@ const CategoriesManager = () => {
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-[#E02020]" />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Slug</label>
-              <input type="text" value={editing.slug ?? ''} onChange={e => setEditing(prev => ({ ...prev, slug: e.target.value }))}
-                placeholder="oil-gas-supplies"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-[#E02020]" />
-            </div>
-            <div className="col-span-2">
               <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Country</label>
               <select value={(editing as any).country ?? 'NG'} onChange={e => setEditing(prev => ({ ...prev, country: e.target.value as 'NG' | 'CA' }))}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 bg-white focus:outline-none focus:border-[#E02020]">
@@ -1017,9 +1044,14 @@ const CategoriesManager = () => {
                 <option value="CA">🇨🇦 Canada</option>
               </select>
             </div>
+            <div>
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Sort order</label>
+              <input type="number" value={editing.sort_order ?? 0} onChange={e => setEditing(prev => ({ ...prev, sort_order: Number(e.target.value) || 0 }))}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-[#E02020]" />
+            </div>
           </div>
           <div className="flex gap-3">
-            <button onClick={handleSave} disabled={saving || !editing.name || !editing.slug}
+            <button onClick={handleSave} disabled={saving || !editing.name}
               className="flex-1 bg-[#E02020] text-white font-bold py-2.5 rounded-xl text-sm hover:bg-red-700 transition-colors disabled:opacity-50">
               {saving ? 'Saving…' : 'Save'}
             </button>
@@ -1565,6 +1597,7 @@ const AdminDashboard = () => {
     restock:     'Restock alerts',
     customers:   'Customers',
     comms:       'Communications',
+    newsletter:  'Newsletter',
     settings:    'Settings',
     maintenance: 'Maintenance',
   };
@@ -1584,7 +1617,7 @@ const AdminDashboard = () => {
             <div className="w-6 h-6 bg-[#E02020] rounded flex items-center justify-center">
               <Icon path="M13 10V3L4 14h7v7l9-11h-7z" className="w-4 h-4 text-white" />
             </div>
-            <span className="font-montserrat font-bold text-gray-900 text-sm">Xpola Admin</span>
+            <span className="font-montserrat font-bold text-gray-900 text-sm">Xpola Staff</span>
           </div>
           <div className="flex items-center gap-2">
             {pendingOrders > 0 && (
@@ -1607,6 +1640,7 @@ const AdminDashboard = () => {
           {view === 'restock'     && <AdminRestock />}
           {view === 'customers'   && <CustomersPanel />}
           {view === 'comms'       && <CommsPanel />}
+          {view === 'newsletter'  && <AdminNewsletter />}
           {view === 'settings'    && <SettingsPanel />}
           {view === 'maintenance' && <MaintenancePanel />}
         </main>
