@@ -4,15 +4,14 @@ import laptopExtender from "@/assets/New Images and Videos Update/laptop-screen-
 import laptopExtenderThreeInOne from "@/assets/New Images and Videos Update/laptop-screen-extender-3-in-1.webp";
 
 const NigeriaShopPromoBanner = () => (
-  <section className="border-y border-gray-200 bg-white py-8 md:py-10" aria-labelledby="approved-products-title">
+  <section className="border-y border-gray-200 bg-white py-8 md:py-10" aria-labelledby="featured-products-title">
     <div className="mx-auto max-w-7xl px-4 md:px-8">
       <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="font-montserrat text-[11px] font-bold uppercase tracking-[0.2em] text-[#E02020]">Featured Nigeria products</p>
-          <h2 id="approved-products-title" className="mt-2 font-montserrat text-2xl font-black tracking-tight text-gray-900 md:text-3xl">Upgrade your workspace</h2>
-          <p className="mt-2 max-w-2xl font-poppins text-sm leading-6 text-gray-500">Laptop screen extenders selected for the Nigeria marketplace. Enquire now; online shop listing is coming soon.</p>
+          <h2 id="featured-products-title" className="mt-2 font-montserrat text-2xl font-black tracking-tight text-gray-900 md:text-3xl">Upgrade your workspace</h2>
+          <p className="mt-2 max-w-2xl font-poppins text-sm leading-6 text-gray-500">Laptop screen extenders selected for the Nigeria marketplace. Enquire now for availability and supply details.</p>
         </div>
-        <span className="inline-flex w-fit items-center rounded-full bg-red-50 px-3 py-1.5 font-poppins text-xs font-bold text-[#E02020]">Coming soon to the shop</span>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">

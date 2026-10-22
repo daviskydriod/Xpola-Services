@@ -1,6 +1,6 @@
 import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import heroBackground from "@/assets/hero-bg.webp";
+import heroBackground from "@/assets/stock-sources/service-consulting.webp";
 
 const AboutSection = () => {
   const { currentData } = useCountry();

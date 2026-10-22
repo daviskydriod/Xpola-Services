@@ -1,9 +1,9 @@
-import oilGasImg from "@/assets/oil-gas.webp";
-import constructionImg from "@/assets/construction.webp";
-import ecommerceImg from "@/assets/ecommerce.webp";
-import miningImg from "@/assets/mining.webp";
-import logisticsImg from "@/assets/logistics.webp";
-import consultingImg from "@/assets/consulting.webp";
+import oilGasImg from "@/assets/stock-sources/service-oil-gas.webp";
+import constructionImg from "@/assets/stock-sources/service-construction.webp";
+import ecommerceImg from "@/assets/stock-sources/service-ecommerce.webp";
+import miningImg from "@/assets/stock-sources/service-mining.webp";
+import logisticsImg from "@/assets/stock-sources/service-logistics.webp";
+import consultingImg from "@/assets/stock-sources/service-consulting.webp";
 
 interface Project {
   category: string;
