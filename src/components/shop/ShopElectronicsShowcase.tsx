@@ -8,8 +8,11 @@ import frontThreeQuarter from "@/assets/New Images and Videos Update/product-fro
 import sideClean from "@/assets/New Images and Videos Update/product-side-clean.webp";
 import controlPanel from "@/assets/New Images and Videos Update/product-control-panel.webp";
 import rearConnections from "@/assets/New Images and Videos Update/product-rear-connections.webp";
+import canadaPort from "@/assets/stock-sources/canada-port.webp";
+import canadaHarbor from "@/assets/stock-sources/canada-harbor.webp";
+import canadaCoalProcessing from "@/assets/stock-sources/canada-coal-processing.webp";
 
-const showcaseItems = [
+const nigeriaShowcaseItems = [
   { image: frontClean, title: "Professional equipment range", description: "Clean front profile for a quick product overview." },
   { image: frontDisplay, title: "Front display detail", description: "A closer look at the equipment face and working layout." },
   { image: frontThreeQuarter, title: "Three-quarter profile", description: "See the build, proportions, and overall form." },
@@ -18,10 +21,18 @@ const showcaseItems = [
   { image: rearConnections, title: "Rear connections", description: "Review the rear interface and connection points." },
 ];
 
+const canadaShowcaseItems = [
+  { image: canadaPort, title: "Goderich industrial port", description: "Canadian harbour and cargo context for trade and supply enquiries." },
+  { image: canadaHarbor, title: "Canadian industrial harbour", description: "A real Canada-based setting for logistics and operational support." },
+  { image: canadaCoalProcessing, title: "Elkford processing facility", description: "Canadian mining and bulk-materials context for industrial requirements." },
+];
+
 const ShopElectronicsShowcase = () => {
   const { currentData } = useCountry();
-  const market = currentData.code === "CA" ? "Canada" : "Nigeria";
-  const contactPath = currentData.code === "CA" ? "/canada/contact" : "/nigeria/contact";
+  const isCanada = currentData.code === "CA";
+  const market = isCanada ? "Canada" : "Nigeria";
+  const contactPath = isCanada ? "/canada/contact" : "/nigeria/contact";
+  const showcaseItems = isCanada ? canadaShowcaseItems : nigeriaShowcaseItems;
 
   return (
     <section className="border-y border-gray-200 bg-[#f7f7f7] py-10 md:py-14" aria-labelledby="electronics-showcase-title">
@@ -33,10 +44,12 @@ const ShopElectronicsShowcase = () => {
               <p className="font-montserrat text-[11px] font-bold uppercase tracking-[0.2em]">Equipment showcase</p>
             </div>
             <h2 id="electronics-showcase-title" className="font-montserrat text-2xl font-black tracking-tight text-gray-900 md:text-3xl">
-              Explore the electronics range
+              {isCanada ? "Canada operations and equipment" : "Explore the Nigeria electronics range"}
             </h2>
             <p className="mt-2 max-w-2xl font-poppins text-sm leading-6 text-gray-500">
-              Review product views and connection details before requesting availability for your {market} requirement.
+              {isCanada
+                ? "Explore authentic Canada-based industrial settings before requesting equipment, trade, or logistics support."
+                : "Review the supplied electronics and equipment views before requesting availability for your Nigeria requirement."}
             </p>
           </div>
           <Link to={contactPath} className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#E02020] px-4 py-2.5 font-montserrat text-xs font-bold uppercase tracking-wider text-white transition hover:bg-[#c01a1a]">
@@ -45,14 +58,14 @@ const ShopElectronicsShowcase = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-5 lg:grid-cols-6">
+        <div className={`grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-5 ${isCanada ? "lg:grid-cols-3" : "lg:grid-cols-6"}`}>
           {showcaseItems.map((item) => (
             <article key={item.title} className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
               <div className="flex aspect-square items-center justify-center overflow-hidden bg-white p-3 md:p-4">
-                <img src={item.image} alt={item.title} className="h-full w-full object-contain transition duration-500 hover:scale-105" loading="lazy" />
+                <img src={item.image} alt={item.title} width={1400} height={933} className="h-full w-full object-contain transition duration-500 hover:scale-105" loading="lazy" decoding="async" />
               </div>
               <div className="border-t border-gray-100 p-3 md:p-4">
-                <div className="mb-2 flex items-center gap-1.5 text-[#E02020]"><Images className="h-3.5 w-3.5" /><span className="font-montserrat text-[10px] font-bold uppercase tracking-wider">Product view</span></div>
+                <div className="mb-2 flex items-center gap-1.5 text-[#E02020]"><Images className="h-3.5 w-3.5" /><span className="font-montserrat text-[10px] font-bold uppercase tracking-wider">{isCanada ? "Canada context" : "Product view"}</span></div>
                 <h3 className="font-montserrat text-sm font-extrabold leading-5 text-gray-900">{item.title}</h3>
                 <p className="mt-1.5 font-poppins text-xs leading-5 text-gray-500">{item.description}</p>
               </div>

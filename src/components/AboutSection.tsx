@@ -13,6 +13,9 @@ const AboutSection = () => {
         <img
           src={heroBackground}
           alt="Background"
+          width={667}
+          height={1000}
+          decoding="async"
           className="h-full w-full object-cover"
           style={{
             opacity: theme === 'light' ? 0.08 : 0.15,
@@ -80,6 +83,10 @@ const AboutSection = () => {
               <img
                 src={heroBackground}
                 alt="Business operations"
+                width={667}
+                height={1000}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
                 style={{
                   minHeight: "400px",

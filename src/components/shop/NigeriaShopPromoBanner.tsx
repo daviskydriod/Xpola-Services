@@ -17,7 +17,7 @@ const NigeriaShopPromoBanner = () => (
       <div className="grid gap-4 md:grid-cols-2">
         <article className="group grid overflow-hidden rounded-2xl border border-gray-200 bg-[#f8f8f8] shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg md:grid-cols-[1.35fr_0.65fr]">
           <div className="flex min-h-[155px] items-center justify-center overflow-hidden bg-white">
-            <img src={laptopExtender} alt="Laptop screen extender promotional product graphic" className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.02]" loading="lazy" />
+            <img src={laptopExtender} alt="Laptop screen extender promotional product graphic" width={1080} height={540} className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.02]" loading="lazy" decoding="async" />
           </div>
           <div className="flex flex-col justify-between p-5">
             <div>
@@ -31,7 +31,7 @@ const NigeriaShopPromoBanner = () => (
 
         <article className="group grid overflow-hidden rounded-2xl border border-gray-200 bg-[#f8f8f8] shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg md:grid-cols-[1.35fr_0.65fr]">
           <div className="flex min-h-[155px] items-center justify-center overflow-hidden bg-white">
-            <img src={laptopExtenderThreeInOne} alt="Three-in-one laptop screen extender promotional product graphic" className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.02]" loading="lazy" />
+            <img src={laptopExtenderThreeInOne} alt="Three-in-one laptop screen extender promotional product graphic" width={1080} height={540} className="h-full w-full object-contain transition duration-500 group-hover:scale-[1.02]" loading="lazy" decoding="async" />
           </div>
           <div className="flex flex-col justify-between p-5">
             <div>
