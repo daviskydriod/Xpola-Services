@@ -8,7 +8,8 @@ import ContactSection from "../components/ContactSection";
 import { useCountry } from "../contexts/CountryContext";
 import { contactApi } from "../lib/api";
 import { MapPin, Mail, Phone, Clock } from "lucide-react";
-import heroImage from "@/assets/stock-sources/service-logistics.webp";
+import nigeriaHeroImage from "@/assets/stock-sources/service-logistics.webp";
+import canadaHeroImage from "@/assets/stock-sources/canada-truro-warehouse-trucks.webp";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface ContactFormState {
@@ -31,6 +32,7 @@ const initialForm: ContactFormState = {
 
 const Contact = () => {
   const { currentData } = useCountry();
+  const heroImage = currentData.code === "CA" ? canadaHeroImage : nigeriaHeroImage;
   usePageMeta(`Contact Xpola Services ${currentData.name}`, `Contact Xpola Services in ${currentData.name} for consulting, logistics, commerce, and business support enquiries.`);
   const [form, setForm] = useState<ContactFormState>(initialForm);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");

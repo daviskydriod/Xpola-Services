@@ -8,11 +8,13 @@ import WhyChooseSection from "../components/WhyChooseSection";
 import CTASection from "../components/CTASection";
 import MarketMediaSection from "../components/MarketMediaSection";
 import { useCountry } from "../contexts/CountryContext";
-import heroImage from "@/assets/stock-sources/service-construction.webp";
+import nigeriaHeroImage from "@/assets/stock-sources/service-construction.webp";
+import canadaHeroImage from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Services = () => {
   const { currentData } = useCountry();
+  const heroImage = currentData.code === "CA" ? canadaHeroImage : nigeriaHeroImage;
     usePageMeta(`Services in ${currentData.name} | Xpola Services`, `Explore Xpola Services consulting, logistics, commerce, and operational support services in ${currentData.name}.`);
 
   return (

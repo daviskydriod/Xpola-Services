@@ -15,6 +15,8 @@ import sideView from "@/assets/New Images and Videos Update/product-front-three-
 import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.webp";
 import productVideo from "@/assets/New Images and Videos Update/product-equipment-demo-optimized.mp4";
 import productTrimVideo from "@/assets/New Images and Videos Update/product-equipment-demo-trim-optimized.mp4";
+import canadaIndustrialPort from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
+import canadaWarehouseTrucks from "@/assets/stock-sources/canada-truro-warehouse-trucks.webp";
 
 type MarketMedia = {
   title: string;
@@ -56,6 +58,9 @@ const MarketMediaSection = () => {
   const { currentData } = useCountry();
   const market = copy[currentData.code === "CA" ? "CA" : "NG"];
   const contactPath = currentData.code === "CA" ? "/canada/contact" : "/nigeria/contact";
+  const isCanada = currentData.code === "CA";
+  const marketFactoryImage = isCanada ? canadaIndustrialPort : factoryWide;
+  const marketWarehouseImage = isCanada ? canadaWarehouseTrucks : warehouseWide;
   const gallery = baseGallery;
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -87,7 +92,7 @@ const MarketMediaSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-stretch">
           <div className="relative overflow-hidden rounded-3xl min-h-[320px] md:min-h-[430px] border border-border/30 shadow-2xl">
-            <img src={factoryWide} alt={`${market.imageAltPrefix}, factory and warehouse overview`} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+            <img src={marketFactoryImage} alt={`${market.imageAltPrefix}, industrial and warehouse overview`} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/10" />
             <div className="relative z-10 flex h-full min-h-[320px] md:min-h-[430px] flex-col justify-end p-6 md:p-10 text-white">
               <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-red-300">{market.bannerLabel}</p>
@@ -102,7 +107,7 @@ const MarketMediaSection = () => {
 
           <div className="overflow-hidden rounded-3xl border border-border/30 bg-card shadow-xl">
             <div className="aspect-video bg-black">
-              <video className="h-full w-full object-cover" controls muted loop playsInline preload="metadata" poster={warehouseWide}>
+              <video className="h-full w-full object-cover" controls muted loop playsInline preload="metadata" poster={marketWarehouseImage}>
                 <source src={productVideo} type="video/mp4" />
                 Your browser does not support the equipment video. Please contact us for more information.
               </video>
