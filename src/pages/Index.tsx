@@ -9,7 +9,6 @@ import WhyChooseSection from "../components/WhyChooseSection";
 import CTASection from "../components/CTASection";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
-import MarketMediaSection from "../components/MarketMediaSection";
 import { useCountry } from "../contexts/CountryContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
@@ -21,7 +20,6 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <AboutSection />
-      <MarketMediaSection />
       <SectorsSection />
       <WhyChooseSection />  
       <CTASection />
