@@ -1,5 +1,6 @@
 // FILE PATH: src/App.tsx
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider }       from '@/contexts/ThemeContext';
 import { CountryProvider }     from '@/contexts/CountryContext';
 import { CartProvider }        from '@/contexts/CartContext';
@@ -48,6 +49,23 @@ import CookieConsent   from '@/components/CookieConsent';
 import { MARKET_CONFIG } from '@/config/markets';
 
 import './styles/globals.css';
+
+const ScrollToTop = () => {
+  const { pathname, search, hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      requestAnimationFrame(() => {
+        document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      return;
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname, search, hash]);
+
+  return null;
+};
 
 // Maintenance guard wraps all public routes
 const PublicRoutes = () => {
@@ -121,6 +139,7 @@ const PublicRoutes = () => {
 const App = () => (
   <ThemeProvider>
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <ScrollToTop />
       <MaintenanceProvider>
         <CountryProvider>
           <CartProvider>
