@@ -61,7 +61,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
           <div className="lg:col-span-1">
-            <img src={currentLogo} alt="Xpola Services" width={1920} height={625} decoding="async" className="h-10 md:h-12 mb-5" />
+            <img src={currentLogo} alt="Xpola Services" width={1920} height={625} decoding="async" className="h-auto w-[130px] object-contain object-left mb-5 md:w-[150px]" />
             <p className="font-poppins text-sm text-muted-foreground mb-6 max-w-xs">
               {currentData.footer.tagline}
             </p>
