@@ -20,6 +20,8 @@ Use one reusable `MarketMediaSection` component driven by market data rather tha
 
 Add the feature banner below the Nigeria hero or above the sector cards with messaging such as **Power and equipment solutions for Nigerian business**. Link the call to action to `/nigeria/contact` or the relevant commerce/e-commerce route. A second placement on the Nigeria commerce or e-commerce service page can present the clean product views as a catalogue-ready gallery, but the products should only be listed for sale after staff enter approved names, prices, descriptions, and available quantities in the Staff Portal.
 
+The newly supplied `laptop-screen-extender.jpeg` and `laptop-screen-extender-3-in-1.jpeg` graphics are shown in a Nigeria-only catalogue spotlight. They contain Nigerian contact details and NGN promotional prices, so they are intentionally not shown on the Canada page. Their prices remain promotional content only until the products are approved and entered into the Staff Portal.
+
 Suggested image roles:
 
 - `factory-floor-wide.jpeg` — wide warehouse/factory feature image.

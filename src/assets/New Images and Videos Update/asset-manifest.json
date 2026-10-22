@@ -148,6 +148,24 @@
       "dimensions": "1600x1200"
     },
     {
+      "file": "laptop-screen-extender.jpeg",
+      "type": "image",
+      "role": "nigeria-product-promotion",
+      "markets": ["nigeria"],
+      "alt": "Xpola promotional graphic for a laptop screen extender with multiple monitor views",
+      "caption": "Laptop screen extender",
+      "dimensions": "1080x540"
+    },
+    {
+      "file": "laptop-screen-extender-3-in-1.jpeg",
+      "type": "image",
+      "role": "nigeria-product-promotion",
+      "markets": ["nigeria"],
+      "alt": "Xpola promotional graphic for a three-in-one laptop screen extender",
+      "caption": "3-in-1 laptop screen extender",
+      "dimensions": "1080x540"
+    },
+    {
       "file": "product-equipment-demo.mp4",
       "type": "video",
       "role": "product-demonstration",
