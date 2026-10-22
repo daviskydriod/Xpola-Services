@@ -8,6 +8,8 @@ The asset filenames are maintained in lowercase kebab-case so imports and genera
 
 All frontend image imports use generated WebP derivatives for faster delivery. The original JPEG/PNG files remain in the asset directory as source-quality masters, while the manifest records each optimized filename and its original source filename.
 
+The two website videos also use fast-start H.264/AAC delivery copies. The main equipment video is reduced from approximately 9.8 MB to 0.7 MB, and the short vertical video is reduced from approximately 2.4 MB to 0.85 MB. The original video files remain as source masters and are not imported by the frontend.
+
 ## Recommended approach for both market pages
 
 Use one reusable `MarketMediaSection` component driven by market data rather than duplicating image markup in the Canada and Nigeria pages. The component should support:
