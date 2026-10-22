@@ -1,10 +1,12 @@
 import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import heroBackground from "@/assets/stock-sources/service-consulting.webp";
+import nigeriaBackground from "@/assets/stock-sources/service-consulting.webp";
+import canadaBackground from "@/assets/stock-sources/canada-office-building.webp";
 
 const AboutSection = () => {
   const { currentData } = useCountry();
   const { theme } = useTheme();
+  const heroBackground = currentData.code === 'CA' ? canadaBackground : nigeriaBackground;
 
   return (
     <section id="about" className="relative py-16 md:py-20 overflow-hidden bg-background">

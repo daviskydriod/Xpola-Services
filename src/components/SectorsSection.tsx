@@ -9,6 +9,9 @@ import miningImg from "@/assets/stock-sources/service-mining.webp";
 import commerceImg from "@/assets/stock-sources/service-commerce.webp";
 import ecommerceImg from "@/assets/stock-sources/service-ecommerce.webp";
 import logisticsImg from "@/assets/stock-sources/service-logistics.webp";
+import canadaOfficeImg from "@/assets/stock-sources/canada-office-building.webp";
+import canadaPortImg from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
+import canadaWarehouseImg from "@/assets/stock-sources/canada-truro-warehouse-trucks.webp";
 
 const iconMap: Record<string, any> = {
   Briefcase,
@@ -36,11 +39,20 @@ const imageMap: Record<string, string> = {
   community: consultingImg,
 };
 
+const canadaImageMap: Record<string, string> = {
+  consulting: canadaOfficeImg,
+  operations: canadaOfficeImg,
+  logistics: canadaWarehouseImg,
+  trade: canadaPortImg,
+  community: canadaOfficeImg,
+};
+
 const SectorsSection = () => {
   const { currentData } = useCountry();
 
   const getImage = (link: string) => {
     const key = link.split('/').pop() || '';
+    if (currentData.code === 'CA') return canadaImageMap[key] || canadaOfficeImg;
     return imageMap[key] || consultingImg;
   };
 

@@ -4,6 +4,10 @@ import ecommerceImg from "@/assets/stock-sources/service-ecommerce.webp";
 import miningImg from "@/assets/stock-sources/service-mining.webp";
 import logisticsImg from "@/assets/stock-sources/service-logistics.webp";
 import consultingImg from "@/assets/stock-sources/service-consulting.webp";
+import canadaPortImg from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
+import canadaWarehouseImg from "@/assets/stock-sources/canada-truro-warehouse-trucks.webp";
+import canadaOfficeImg from "@/assets/stock-sources/canada-office-building.webp";
+import { useCountry } from "@/contexts/CountryContext";
 
 interface Project {
   category: string;
@@ -52,6 +56,14 @@ const projects: Project[] = [
 ];
 
 const PortfolioSection = () => {
+  const { currentData } = useCountry();
+  const marketProjects = currentData.code === "CA"
+    ? projects.map((project, index) => ({
+        ...project,
+        image: index % 3 === 0 ? canadaPortImg : index % 3 === 1 ? canadaWarehouseImg : canadaOfficeImg,
+      }))
+    : projects;
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -67,7 +79,7 @@ const PortfolioSection = () => {
 
         {/* Project Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
+          {marketProjects.map((project, index) => (
             <ProjectCard key={index} project={project} />
           ))}
         </div>
