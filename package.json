@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:prerender": "npm run build && node scripts/generate-seo-pages.mjs",
+    "build:seo": "npm run build:prerender"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.11",

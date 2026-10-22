@@ -9,6 +9,7 @@ import { useCountry } from "../contexts/CountryContext";
 import { contactApi } from "../lib/api";
 import { MapPin, Mail, Phone, Clock } from "lucide-react";
 import heroImage from "@/assets/logistics.jpg";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface ContactFormState {
   firstName: string;
@@ -30,6 +31,7 @@ const initialForm: ContactFormState = {
 
 const Contact = () => {
   const { currentData } = useCountry();
+  usePageMeta(`Contact Xpola Services ${currentData.name}`, `Contact Xpola Services in ${currentData.name} for consulting, logistics, commerce, and business support enquiries.`);
   const [form, setForm] = useState<ContactFormState>(initialForm);
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");

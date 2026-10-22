@@ -5,6 +5,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { usePageMeta, pageMeta } from '@/hooks/usePageMeta';
+import { API_BASE } from '@/api';
 
 type VerifyState = 'loading' | 'success' | 'failed';
 
@@ -32,7 +33,7 @@ export default function PaymentVerify() {
 
     const token = localStorage.getItem('xpola_token');
 
-    fetch(`https://xpolaservices.com/api/payments/paystack_verify.php?reference=${encodeURIComponent(ref)}`, {
+    fetch(`${API_BASE}/payments/paystack_verify.php?reference=${encodeURIComponent(ref)}`, {
       headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
     })
       .then(r => r.json() as Promise<VerifyResponse>)

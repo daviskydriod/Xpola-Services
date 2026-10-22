@@ -26,7 +26,7 @@ export default function OrderSuccess() {
   useEffect(() => {
     if (!ref) { setError('Missing order reference.'); setLoading(false); return; }
 
-    apiGet<{ success: boolean; data: OrderData }>(`/orders.php?ref=${encodeURIComponent(ref)}`, true)
+    apiGet<{ success: boolean; data: OrderData }>(`/orders.php?ref=${encodeURIComponent(ref)}&guest_token=${encodeURIComponent(localStorage.getItem('xpola_guest_checkout_token') || '')}`, true)
       .then(r => setOrder(r.data))
       .catch((err: unknown) => setError((err as Error).message || 'Could not load order details.'))
       .finally(() => setLoading(false));
@@ -106,6 +106,7 @@ export default function OrderSuccess() {
 
   // ── Confirmed success ────────────────────────────────────────────────────
   const shopPath = order.country === 'CA' ? '/canada/shop' : '/nigeria/shop';
+  const offerAccount = localStorage.getItem('xpola_offer_account_after_order') === '1';
 
   return (
     <div className="min-h-screen bg-white">
@@ -163,6 +164,7 @@ export default function OrderSuccess() {
             </div>
           </div>
 
+          {offerAccount && <div className="bg-blue-50 border border-blue-200 p-4 mb-5 text-sm text-blue-900">Want faster checkout next time? <Link to="/login?mode=register" className="font-semibold underline">Create an account</Link> — your cart and order details are already kept in this browser.</div>}
           <div className="flex flex-col sm:flex-row gap-3 mb-3">
             <Link to="/account" className="flex-1 bg-[#E02020] text-white font-montserrat font-bold py-4 text-sm uppercase tracking-widest hover:bg-[#c01a1a] transition-colors text-center">
               Go to Dashboard

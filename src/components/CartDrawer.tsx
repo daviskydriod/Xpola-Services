@@ -1,16 +1,35 @@
 // FILE PATH: src/components/CartDrawer.tsx
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/contexts/CartContext';
 import { formatPrice } from '@/data/shopData';
+import { getStockLimit } from '@/lib/inventory';
 
 const CartDrawer = () => {
   const navigate = useNavigate();
   const {
     cart, removeFromCart, updateQuantity, cartTotal, cartCount,
     isCartOpen, setIsCartOpen, clearCart,
-    blockedMessage, clearBlockedMessage,
+    blockedMessage, clearBlockedMessage, refreshCartStock,
   } = useCart();
+  const [checkingStock, setCheckingStock] = useState(false);
   const currency = cart[0]?.currency;
+  const storeConflict = /store/i.test(blockedMessage ?? '');
+
+  useEffect(() => {
+    if (!isCartOpen || cart.length === 0) return;
+    setCheckingStock(true);
+    refreshCartStock().finally(() => setCheckingStock(false));
+  }, [isCartOpen]);
+
+  const handleCheckout = async () => {
+    setCheckingStock(true);
+    const valid = await refreshCartStock();
+    setCheckingStock(false);
+    if (!valid) return;
+    setIsCartOpen(false);
+    navigate('/checkout');
+  };
 
   return (
     <>
@@ -48,14 +67,14 @@ const CartDrawer = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <div>
-                <p className="font-montserrat font-bold text-sm text-gray-900 mb-1">Can't mix stores</p>
+                <p className="font-montserrat font-bold text-sm text-gray-900 mb-1">{storeConflict ? "Can't mix stores" : 'Stock limit reached'}</p>
                 <p className="font-poppins text-xs text-gray-600 leading-relaxed">{blockedMessage}</p>
-                <button
+                {storeConflict && <button
                   onClick={() => { clearCart(); clearBlockedMessage(); }}
                   className="mt-3 bg-[#E02020] text-white font-montserrat font-bold text-xs px-4 py-2 uppercase tracking-wide hover:bg-[#c01a1a] transition-colors"
                 >
                   Clear Cart & Switch Store
-                </button>
+                </button>}
               </div>
             </div>
           </div>
@@ -98,6 +117,9 @@ const CartDrawer = () => {
                     <span className="inline-block text-[10px] font-poppins text-gray-400 mt-0.5">
                       {item.country === 'NG' ? '🇳🇬 Nigeria Store' : '🇨🇦 Canada Store'}
                     </span>
+                    <p className={`text-[10px] font-semibold mt-1 ${getStockLimit(item) === 0 ? 'text-red-600' : 'text-gray-500'}`}>
+                      {getStockLimit(item) === 0 ? 'Out of stock' : getStockLimit(item) === null ? 'Stock available' : `${getStockLimit(item)} available in stock`}
+                    </p>
                     <div className="flex items-center gap-1.5 mt-2">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -106,9 +128,12 @@ const CartDrawer = () => {
                       <span className="w-6 text-center text-sm font-bold text-gray-900">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="w-6 h-6 border border-gray-200 flex items-center justify-center text-gray-600 hover:border-[#E02020] hover:text-[#E02020] transition-colors font-bold rounded"
+                        disabled={getStockLimit(item) !== null && item.quantity >= getStockLimit(item)!}
+                        aria-label={`Increase ${item.name} quantity`}
+                        className="w-6 h-6 border border-gray-200 flex items-center justify-center text-gray-600 hover:border-[#E02020] hover:text-[#E02020] transition-colors font-bold rounded disabled:cursor-not-allowed disabled:opacity-40"
                       >+</button>
                     </div>
+                    {item.stock_qty != null && <p className="mt-1 text-[10px] text-gray-500">{item.stock_qty} available in stock</p>}
                   </div>
                   <div className="flex flex-col items-end justify-between">
                     <button
@@ -140,13 +165,14 @@ const CartDrawer = () => {
             </div>
             <p className="font-poppins text-xs text-gray-400 mb-4">Shipping calculated at checkout</p>
             <button
-              onClick={() => { setIsCartOpen(false); navigate('/checkout'); }}
-              className="w-full bg-[#E02020] text-white font-montserrat font-bold py-3.5 uppercase tracking-widest text-sm hover:bg-[#c01a1a] transition-colors flex items-center justify-center gap-2"
+              onClick={handleCheckout}
+              disabled={checkingStock}
+              className="w-full bg-[#E02020] text-white font-montserrat font-bold py-3.5 uppercase tracking-widest text-sm hover:bg-[#c01a1a] transition-colors flex items-center justify-center gap-2 disabled:bg-gray-300 disabled:cursor-wait"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
               </svg>
-              Proceed to Checkout
+              {checkingStock ? 'Checking stock…' : 'Proceed to Checkout'}
             </button>
             <button
               onClick={() => setIsCartOpen(false)}

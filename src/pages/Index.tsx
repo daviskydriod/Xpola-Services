@@ -9,8 +9,12 @@ import WhyChooseSection from "../components/WhyChooseSection";
 import CTASection from "../components/CTASection";
 import ContactSection from "../components/ContactSection";
 import Footer from "../components/Footer";
+import { useCountry } from "../contexts/CountryContext";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Index = () => {
+  const { currentData } = useCountry();
+  usePageMeta(`${currentData.name} Industrial & Commercial Solutions`, `Xpola Services provides consulting, logistics, commerce, and sector support solutions across ${currentData.name}.`);
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

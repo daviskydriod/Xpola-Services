@@ -8,9 +8,11 @@ import WhyChooseSection from "../components/WhyChooseSection";
 import CTASection from "../components/CTASection";
 import { useCountry } from "../contexts/CountryContext";
 import heroImage from "@/assets/consulting.jpg";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const About = () => {
   const { currentData } = useCountry();
+    usePageMeta(`About Xpola Services ${currentData.name}`, `Learn about Xpola Services and our professional services, commerce, and sector support across ${currentData.name}.`);
 
   return (
     <div className="min-h-screen bg-background">

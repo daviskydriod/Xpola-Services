@@ -36,6 +36,7 @@ $db->exec("INSERT IGNORE INTO `site_settings` (`key`, `value`) VALUES
     ('site_name',                  'Xpola Services'),
     ('support_email',              'support@xpolaservices.com'),
     ('support_phone',              ''),
+    ('catalogue_mode',             'sample'),
     ('nigeria_tax_rate',           '0'),
     ('canada_tax_rate',            '0')
 ");
@@ -49,6 +50,7 @@ if ($method === 'GET') {
         'siteName'        => 'Xpola Services',
         'supportEmail'    => 'support@xpolaservices.com',
         'supportPhone'    => '',
+        'catalogueMode'   => 'sample',
         'maintenanceMode' => false,
         'nigeriaTaxRate'  => 0,
         'canadaTaxRate'   => 0,
@@ -64,6 +66,8 @@ if ($method === 'GET') {
     $settings['siteName']        = $settings['site_name']        ?? $settings['siteName'];
     $settings['supportEmail']    = $settings['support_email']    ?? $settings['supportEmail'];
     $settings['supportPhone']    = $settings['support_phone']    ?? $settings['supportPhone'];
+    $candidateCatalogueMode     = $settings['catalogue_mode']   ?? $settings['catalogueMode'];
+    $settings['catalogueMode']   = in_array($candidateCatalogueMode, ['sample', 'live'], true) ? $candidateCatalogueMode : 'sample';
     $settings['nigeriaTaxRate']  = (float)($settings['nigeria_tax_rate'] ?? $settings['nigeriaTaxRate']);
     $settings['canadaTaxRate']   = (float)($settings['canada_tax_rate']  ?? $settings['canadaTaxRate']);
 
@@ -74,6 +78,7 @@ if ($method === 'PUT') {
     $body = getBody();
 
     foreach ($body as $key => $value) {
+        if ($key === 'catalogueMode') $key = 'catalogue_mode';
         $valStr = is_array($value) || is_bool($value) ? json_encode($value) : (string)$value;
         $db->prepare("INSERT INTO `site_settings` (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = ?")
            ->execute([$key, $valStr, $valStr]);

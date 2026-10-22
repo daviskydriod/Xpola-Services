@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth, SavedAddress } from '@/contexts/AuthContext';
 import { useCountry } from '@/contexts/CountryContext';
-import { ordersApi, supportApi, Order, SupportTicket, normalizeOrderStatus } from '@/lib/api';
+import { ordersApi, supportApi, Order, SupportTicket, normalizeOrderStatus, API_BASE } from '@/lib/api';
 import { toast } from '@/hooks/use-toast';
 
 // ── Tab type ──────────────────────────────────────────────────────────────────
@@ -978,7 +978,7 @@ const ProfileTab = ({ onLogout }: { onLogout: () => void }) => {
     setResendingVerify(true);
     try {
       const token = localStorage.getItem('xpola_token');
-      const res = await fetch('https://xpolaservices.com/api/auth.php?action=resend_verification', {
+      const res = await fetch(`${API_BASE}/auth.php?action=resend_verification`, {
         method: 'POST', headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) { toast({ title: 'Email sent!', description: 'Check your inbox for the verification link.' }); }

@@ -41,6 +41,13 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.product-card-summary {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
 /* ===== TYPOGRAPHY ===== */
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;

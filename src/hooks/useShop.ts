@@ -54,11 +54,11 @@ export const useShop = (country: 'NG' | 'CA'): UseShopReturn => {
     const params = new URLSearchParams({ country, page: String(page), per_page: '20', sort: sortBy });
     if (selectedCategory) params.set('category', selectedCategory);
     if (search.trim())    params.set('search', search.trim());
+    if (showInStock)     params.set('in_stock', '1');
 
     apiFetch<{ data: ApiProduct[]; pagination: Pagination }>(`/products.php?${params}`)
       .then(d => {
         let items = d.data;
-        if (showInStock) items = items.filter(p => p.stock_status === 'in_stock');
         setProducts(items);
         setPagination(d.pagination);
       })

@@ -75,8 +75,9 @@ const PublicRoutes = () => {
       <Route path="/login"    element={<Login />} />
       <Route path="/account"  element={<ProtectedRoute><Account /></ProtectedRoute>} />
       <Route path="/shop/product/:id" element={<ProductDetail />} />
+      <Route path="/nigeria/shop/:slug" element={<ProductDetail />} />
       <Route path="/payment/verify" element={<ProtectedRoute><PaymentVerify /></ProtectedRoute>} />
-      <Route path="/checkout"      element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+      <Route path="/checkout"      element={<Checkout />} />
       
       <Route path="/order-success" element={<OrderSuccess />} />
 
@@ -93,7 +94,7 @@ const PublicRoutes = () => {
       <Route path="/nigeria/contact"  element={<Contact />} />
       <Route path="/nigeria/shop"            element={<Shop />} />
       <Route path="/nigeria/shop/categories" element={<ShopCategory />} />
-      <Route path="/nigeria/checkout"        element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+      <Route path="/nigeria/checkout"        element={<Checkout />} />
       <Route path="/nigeria/services/consulting"   element={<ConsultingNigeria />} />
       <Route path="/nigeria/services/oil-gas"      element={<OilGasNigeria />} />
       <Route path="/nigeria/services/construction" element={<ConstructionNigeria />} />

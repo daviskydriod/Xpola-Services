@@ -1,14 +1,14 @@
 # Xpola Services — Feedback Resolution Report
 
 **Review date:** 7 October 2026  
-**Repository reviewed:** `daviskydriod/Xpola-Services` (`main`, commit `94f1d3d`)  
+**Project reviewed:** Xpola Services client handover
 **Inputs:** Client feedback, bracketed owner decisions, and the supplied *Xpola Services Brand & Website Guide*.
 
 ## Executive summary
 
 The requested website-facing changes have been applied and the frontend builds successfully. The Canada marketplace is now explicitly presented as **switched off** while Moneris setup is pending; Canadian visitors are directed to company information, services, and enquiries rather than checkout. The public site no longer presents unverified projects, client names, client counts, 24/7 support, testimonials, or “100% compliant” counters as established facts. The admin order screen now includes paid/failed status filters and date-range filtering. Password registration now requires at least eight characters, and the privacy page names Nigeria’s NDPA and Canada’s PIPEDA.
 
-The supplied `api.zip` has now been audited, sanitized, and integrated into the selected GitHub repository under `/api`. Real credentials were removed from code and replaced with environment-variable configuration. An API-backed Projects module is now available in the admin dashboard, with public publication disabled by default. A staff-managed restock-alert queue and Admin → Notifications stock dashboard are now available. Low-stock/out-of-stock items are dashboard alerts; staff-triggered restock emails reuse the existing PHPMailer SMTP service. Hosting is outside Nosyra Digital’s scope and remains controlled by the owner/hosting provider.
+The supplied `api.zip` has now been audited, sanitized, and integrated under `/api`. Real credentials were removed from code and replaced with environment-variable configuration. An API-backed Projects module is now available in the admin dashboard, with public publication disabled by default. A staff-managed restock-alert queue and Admin → Notifications stock dashboard are now available. Low-stock/out-of-stock items are dashboard alerts; staff-triggered restock emails reuse the existing PHPMailer SMTP service. Hosting is outside Nosyra Digital’s scope and remains controlled by the owner/hosting provider.
 
 ## Feedback-to-action matrix
 

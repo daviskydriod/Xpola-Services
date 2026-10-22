@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Linkedin, Twitter, Facebook, Instagram } from "lucide-react";
 import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { apiFetch } from "@/lib/api";
 import logoWhite from "@/assets/logo-white.png";
 import logoBlack from "@/assets/logo-black.png";
 
@@ -33,13 +34,19 @@ const Footer = () => {
   const { theme } = useTheme();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [subscribeError, setSubscribeError] = useState("");
+  const [subscribing, setSubscribing] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    setSubscribed(true);
-    setEmail("");
-    setTimeout(() => setSubscribed(false), 4000);
+    if (!email || subscribing) return;
+    setSubscribeError(""); setSubscribing(true);
+    try {
+      await apiFetch('/newsletter.php', { method: 'POST', body: JSON.stringify({ email, country: currentData.code }) });
+      setSubscribed(true); setEmail("");
+      setTimeout(() => setSubscribed(false), 5000);
+    } catch (err) { setSubscribeError((err as Error).message || 'Subscription failed. Please try again.'); }
+    finally { setSubscribing(false); }
   };
 
   const serviceLinks = currentData.sectors.map(sector => ({
@@ -105,8 +112,10 @@ const Footer = () => {
                 className="w-full h-11 px-4 bg-background-secondary border border-border rounded-lg font-poppins text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary focus:outline-none transition-colors" />
               <button type="submit"
                 className={`w-full h-11 font-poppins font-semibold text-sm rounded-lg transition-all hover:-translate-y-0.5 ${subscribed ? "bg-green-500 text-white" : "bg-primary text-white hover:bg-primary/90"}`}>
-                {subscribed ? "✓ Subscribed!" : "Subscribe"}
+                {subscribed ? "✓ Check your inbox" : subscribing ? "Subscribing…" : "Subscribe"}
               </button>
+              {subscribeError && <p className="text-xs text-red-500" role="alert">{subscribeError}</p>}
+              {subscribed && <p className="text-xs text-green-600" role="status">Thanks — your subscription was recorded.</p>}
             </form>
           </div>
         </div>

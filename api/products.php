@@ -22,6 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 $db = getDB();
+foreach (['summary VARCHAR(500) DEFAULT NULL','specifications TEXT DEFAULT NULL','brand VARCHAR(120) DEFAULT NULL','warranty VARCHAR(255) DEFAULT NULL','stock_qty INT NULL DEFAULT NULL'] as $column) { try { $db->exec("ALTER TABLE products ADD COLUMN $column"); } catch (Throwable $ignored) {} }
+// Legacy products with NULL quantity previously behaved as unlimited stock.
+// Require an explicit admin quantity before anything can be purchased.
+try { $db->exec('UPDATE products SET stock_qty=0 WHERE stock_qty IS NULL'); } catch (Throwable $ignored) {}
 
 // ── Single product by id ──────────────────────────────────────────────────────
 if (!empty($_GET['id'])) {
@@ -42,6 +46,7 @@ if (!empty($_GET['id'])) {
     if (($p['country'] ?? '') === 'CA' && !CANADA_MARKET_ENABLED) {
         jsonError('Canada marketplace is currently unavailable while Moneris setup is pending.', 503);
     }
+    if ($p['stock_status'] !== 'in_stock' || $p['stock_qty'] === null || (int)$p['stock_qty'] <= 0) $p['stock_status'] = 'out_of_stock';
     $p['images'] = json_decode($p['images_json'] ?? '[]', true);
     unset($p['images_json']);
     echo json_encode(['success' => true, 'data' => $p]);
@@ -52,6 +57,7 @@ if (!empty($_GET['id'])) {
 $country  = strtoupper(trim($_GET['country']  ?? ''));
 $category = trim($_GET['category'] ?? '');
 $search   = trim($_GET['search']   ?? '');
+$inStock  = !empty($_GET['in_stock']);
 $sort     = $_GET['sort']          ?? 'newest';
 $featured = isset($_GET['featured']);
 $page     = max(1, (int)($_GET['page']     ?? 1));
@@ -71,6 +77,7 @@ if ($category) {
 if ($featured) {
     $where[] = 'p.featured = 1';
 }
+if ($inStock) { $where[] = "p.stock_status = 'in_stock' AND (p.stock_qty IS NULL OR p.stock_qty > 0)"; }
 if ($search) {
     $where[]  = 'MATCH(p.name, p.description) AGAINST(? IN BOOLEAN MODE)';
     $params[] = $search . '*';
@@ -98,20 +105,21 @@ $total = (int)$countStmt->fetchColumn();
 $stmt = $db->prepare("
     SELECT
         p.id, p.name, p.description, p.price, p.currency, p.country,
-        p.image_path, p.stock_status, p.featured, p.rating, p.reviews,
-        p.created_at, p.tags,
+        p.image_path, CASE WHEN p.stock_status <> 'in_stock' OR p.stock_qty IS NULL OR p.stock_qty <= 0 THEN 'out_of_stock' ELSE 'in_stock' END AS stock_status, p.stock_qty, p.featured, p.rating, p.reviews,
+        p.created_at, p.tags, p.summary, p.specifications, p.brand, p.warranty,
         c.name AS category_name, c.slug AS category_slug, c.id AS category_id
     FROM products p
     LEFT JOIN categories c ON c.id = p.category_id
     $whereSQL
     ORDER BY $orderSQL
     LIMIT ? OFFSET ?
-");
+    ");
 $stmt->execute([...$params, $perPage, $offset]);
+$rows = $stmt->fetchAll();
 
 echo json_encode([
     'success'    => true,
-    'data'       => $stmt->fetchAll(),
+    'data'       => $rows,
     'pagination' => [
         'page'      => $page,
         'per_page'  => $perPage,

@@ -64,7 +64,7 @@ const AdminLogin = () => {
             </div>
             <span className="font-montserrat font-extrabold text-2xl text-white">Xpola</span>
           </div>
-          <h1 className="font-montserrat font-bold text-3xl text-white mb-2">Admin Portal</h1>
+          <h1 className="font-montserrat font-bold text-3xl text-white mb-2">Staff Portal</h1>
           <p className="text-gray-400 text-sm">
             {step === 'credentials' ? 'Sign in to manage your store' : 'Enter the OTP sent to your email'}
           </p>
@@ -76,7 +76,7 @@ const AdminLogin = () => {
               <div>
                 <label className="block text-sm font-semibold text-gray-300 mb-2">Username</label>
                 <input type="text" value={username} onChange={e => setUsername(e.target.value)}
-                  placeholder="admin" required autoComplete="username" className={inp} />
+                  placeholder="staff username" required autoComplete="username" className={inp} />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-300 mb-2">Password</label>
@@ -104,7 +104,7 @@ const AdminLogin = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                   </svg>
                 </div>
-                <p className="text-gray-300 text-sm">Check your admin email for the 6-digit OTP. It expires in 10 minutes.</p>
+                <p className="text-gray-300 text-sm">Check your staff email for the 6-digit OTP. It expires in 10 minutes.</p>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-gray-300 mb-2">One-Time Password</label>
@@ -128,7 +128,7 @@ const AdminLogin = () => {
             </form>
           )}
         </div>
-        <p className="text-center text-gray-600 text-xs mt-6">Xpola Services Admin · Secure Access</p>
+        <p className="text-center text-gray-600 text-xs mt-6">Xpola Services Staff · Secure Access</p>
       </div>
     </div>
   );
