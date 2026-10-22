@@ -132,10 +132,15 @@ const MarketMediaSection = () => {
         </div>
 
         {currentData.code === "NG" && (
-          <div className="mt-12 mb-5">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">New Nigeria catalogue items</p>
-            <h3 className="mt-2 font-montserrat text-2xl font-bold text-foreground">Laptop screen extender range</h3>
-            <p className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">New product graphics supplied for the Nigerian marketplace. Prices and product details remain subject to Staff Portal approval before live checkout.</p>
+          <div className="mt-16 border-t border-border/30 pt-12">
+            <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">Owner-approved Nigeria products</p>
+                <h3 className="mt-2 font-montserrat text-2xl font-bold text-foreground md:text-3xl">Featured laptop screen extenders</h3>
+              </div>
+              <span className="inline-flex w-fit items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-bold text-primary">Coming soon to the Nigeria shop</span>
+            </div>
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground">These products have been approved by the owner and are available for enquiries now. They will be uploaded to the Nigeria online shop in a later catalogue update.</p>
           </div>
         )}
 
