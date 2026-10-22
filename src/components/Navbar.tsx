@@ -7,6 +7,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import CartDrawer from "@/components/CartDrawer";
+import { MARKET_CONFIG } from "@/config/markets";
 import logoWhite from "@/assets/logo-white.webp";
 import logoBlack from "@/assets/logo-black.webp";
 
@@ -33,7 +34,9 @@ const Navbar = () => {
   const navLinks = [
     { label: "Home",     href: `/${selectedCountry}`          },
     { label: "Services", href: `/${selectedCountry}/services` },
-    { label: "Shop",     href: `/${selectedCountry}/shop`     },
+    ...(selectedCountry !== "canada" || MARKET_CONFIG.canadaEnabled
+      ? [{ label: "Shop", href: `/${selectedCountry}/shop` }]
+      : []),
     { label: "About",    href: `/${selectedCountry}/about`    },
     { label: "Contact",  href: `/${selectedCountry}/contact`  },
   ];

@@ -5,7 +5,8 @@ import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import heroBackground from "@/assets/stock-sources/service-commerce.webp";
+import nigeriaHeroBackground from "@/assets/stock-sources/service-commerce.webp";
+import canadaHeroBackground from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
 
 // Floating particles configuration
 const particles = [
@@ -32,6 +33,7 @@ const HeroSection = () => {
   const { currentData } = useCountry();
   const { theme } = useTheme();
   const navigate = useNavigate();
+  const heroBackground = currentData.code === "CA" ? canadaHeroBackground : nigeriaHeroBackground;
 
   const [isVisible, setIsVisible]         = useState(false);
 
@@ -71,7 +73,7 @@ const HeroSection = () => {
       >
         <img
           src={heroBackground}
-          alt="African commerce and operations scene"
+          alt={currentData.code === "CA" ? "Canadian industrial port and operations scene" : "African commerce and operations scene"}
           className="h-full w-full object-cover"
           width={1800}
           height={1200}

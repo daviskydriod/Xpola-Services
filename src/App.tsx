@@ -118,7 +118,10 @@ const PublicRoutes = () => {
       <Route path="/canada/services" element={<Services />} />
       {MARKET_CONFIG.projectsEnabled && <Route path="/canada/projects" element={<Projects />} />}
       <Route path="/canada/contact"  element={<Contact />} />
-      {!MARKET_CONFIG.canadaEnabled && <Route path="/canada/shop/*" element={<CanadaComingSoon />} />}
+      {!MARKET_CONFIG.canadaEnabled && <>
+        <Route path="/canada/shop" element={<CanadaComingSoon />} />
+        <Route path="/canada/shop/*" element={<CanadaComingSoon />} />
+      </>}
       {!MARKET_CONFIG.canadaEnabled && <Route path="/canada/checkout" element={<CanadaComingSoon />} />}
       {MARKET_CONFIG.canadaEnabled && <>
         <Route path="/canada/shop"            element={<Shop />} />
