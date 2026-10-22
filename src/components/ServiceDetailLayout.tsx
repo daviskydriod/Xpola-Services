@@ -64,8 +64,8 @@ const ServiceDetailLayout = ({
             </Link>
           </div>
           <div className="order-1 md:order-2">
-            <div className="relative overflow-hidden rounded-3xl border border-border bg-background shadow-xl">
-              <img src={image} alt={imageAlt} className="h-64 w-full object-cover md:h-[390px]" />
+            <div className="relative overflow-hidden rounded-3xl border border-border bg-background-secondary shadow-xl">
+              <img src={image} alt={imageAlt} width={1400} height={1000} loading="eager" decoding="async" className="h-64 w-full object-contain md:h-[390px]" />
               <div className="absolute inset-0 bg-gradient-to-tr from-black/45 via-transparent to-primary/10" />
               <div className="absolute bottom-5 left-5 rounded-xl border border-white/20 bg-black/55 px-4 py-3 backdrop-blur-md">
                 <p className="font-poppins text-xs font-semibold uppercase tracking-wider text-white/75">Service detail</p>
