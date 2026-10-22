@@ -106,7 +106,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`fixed ${showCanadaNotice ? "top-8" : "top-0"} left-0 right-0 z-50 transition-all duration-300 ${
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? "bg-background/95 backdrop-blur-md shadow-sm border-b border-border" : "bg-background"
       }`}>
         <div className="container mx-auto px-4">
@@ -114,7 +114,7 @@ const Navbar = () => {
 
             {/* Logo */}
             <Link to={`/${selectedCountry}`} className="flex-shrink-0">
-              <img src={theme === "dark" ? logoWhite : logoBlack} alt="Xpola Services" className="h-8 w-auto object-contain" />
+              <img src={theme === "dark" ? logoWhite : logoBlack} alt="Xpola Services" width={1920} height={625} decoding="async" className="h-8 w-auto object-contain" />
             </Link>
 
             {/* Desktop Nav Links */}
@@ -138,7 +138,7 @@ const Navbar = () => {
                   aria-label={`Switch market. Current market: ${selectedCountry === "nigeria" ? "Nigeria" : "Canada"}`}
                   aria-expanded={isCountryDropdownOpen}
                   className="flex items-center gap-1 rounded-lg border border-border bg-background-secondary p-2 text-sm text-foreground transition-all duration-200 hover:border-primary lg:gap-1.5 lg:px-3 lg:py-2 lg:font-poppins">
-                  {<img src={selectedCountry === "nigeria" ? "/flags/ng.svg" : "/flags/ca.svg"} alt="" className="w-5 h-3.5 object-cover" />}
+                  {<img src={selectedCountry === "nigeria" ? "/flags/ng.svg" : "/flags/ca.svg"} alt="" width={225} height={150} decoding="async" className="w-5 h-3.5 object-cover" />}
                   <ChevronDown className={`h-3 w-3 text-muted-foreground transition-transform lg:h-3.5 lg:w-3.5 ${isCountryDropdownOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isCountryDropdownOpen && (
@@ -148,7 +148,7 @@ const Navbar = () => {
                         className={`w-full flex items-center gap-2 px-4 py-2.5 font-poppins text-sm transition-colors ${
                           selectedCountry === c.code ? "text-primary bg-background-secondary font-semibold" : "text-foreground hover:bg-background-secondary"
                         }`}>
-                        {<img src={c.flag} alt="" className="w-5 h-3.5 object-cover" />} {c.name}
+                        {<img src={c.flag} alt="" width={225} height={150} decoding="async" className="w-5 h-3.5 object-cover" />} {c.name}
                       </button>
                     ))}
                   </div>
@@ -331,8 +331,8 @@ const Navbar = () => {
       </nav>
 
       {showCanadaNotice && (
-        <div className="fixed top-0 left-0 right-0 z-[60] h-8 bg-gray-950 text-white px-3 flex items-center justify-center gap-3 text-[11px] font-poppins">
-          <img src="/flags/ca.svg" alt="Canada flag" className="w-5 h-3.5 object-cover flex-shrink-0" />
+        <div className="fixed top-[72px] left-0 right-0 z-[60] h-8 bg-gray-950 text-white px-3 flex items-center justify-center gap-3 text-[11px] font-poppins">
+          <img src="/flags/ca.svg" alt="Canada flag" width={225} height={150} decoding="async" className="w-5 h-3.5 object-cover flex-shrink-0" />
           <span className="truncate">Visiting from Canada? Explore our local services.</span>
           <Link to={canadaPath} onClick={() => setShowCanadaNotice(false)} className="font-semibold underline whitespace-nowrap">Go to Canada</Link>
           <button type="button" onClick={dismissCanadaNotice} aria-label="Close" className="font-semibold text-gray-300 hover:text-white whitespace-nowrap">Close</button>

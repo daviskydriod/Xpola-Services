@@ -1,11 +1,11 @@
 // FILE PATH: src/components/HeroSection.tsx
 // Place this file at: src/components/HeroSection.tsx
-import { ArrowRight, ShoppingBag, FileCheck, Calendar, Network, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, ShoppingBag, FileCheck, Calendar, Network, Shield } from "lucide-react";
 import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import heroBackground from "@/assets/stock-sources/service-logistics.webp";
+import heroBackground from "@/assets/stock-sources/service-commerce.webp";
 
 // Floating particles configuration
 const particles = [
@@ -33,45 +33,7 @@ const HeroSection = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
 
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible]         = useState(false);
-  const [typedText, setTypedText]         = useState("");
-  const [showCursor, setShowCursor]       = useState(true);
-
-  // Parallax mouse effect
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth  - 0.5) * 20;
-      const y = (e.clientY / window.innerHeight - 0.5) * 20;
-      setMousePosition({ x, y });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
-  // Typing animation effect
-  useEffect(() => {
-    const text = currentData.hero.title;
-    let index = 0;
-
-    const typingInterval = setInterval(() => {
-      if (index <= text.length) {
-        setTypedText(text.slice(0, index));
-        index++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, 50);
-
-    const cursorInterval = setInterval(() => {
-      setShowCursor(prev => !prev);
-    }, 500);
-
-    return () => {
-      clearInterval(typingInterval);
-      clearInterval(cursorInterval);
-    };
-  }, [currentData.hero.title]);
 
   // Trigger animations on mount
   useEffect(() => {
@@ -104,13 +66,18 @@ const HeroSection = () => {
       <div
         className="absolute inset-0 z-0 transition-transform duration-700 ease-out"
         style={{
-          transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px) scale(1.1)`,
+          transform: "scale(1.05)",
         }}
       >
         <img
           src={heroBackground}
-          alt="Business cityscape"
+          alt="African commerce and operations scene"
           className="h-full w-full object-cover"
+          width={1800}
+          height={1200}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
           style={{
             opacity: theme === "light" ? 0.15 : 0.25,
             filter:
@@ -141,8 +108,6 @@ const HeroSection = () => {
           background: "radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%)",
           filter: "blur(80px)",
           pointerEvents: "none",
-          transform: `translate(${mousePosition.x * 0.3}px, ${mousePosition.y * 0.3}px)`,
-          transition: "transform 0.5s ease-out",
         }}
       />
 
@@ -156,13 +121,11 @@ const HeroSection = () => {
           filter: "blur(80px)",
           pointerEvents: "none",
           animationDelay: "1s",
-          transform: `translate(${-mousePosition.x * 0.3}px, ${-mousePosition.y * 0.3}px)`,
-          transition: "transform 0.5s ease-out",
         }}
       />
 
       {/* Floating Particles */}
-      {particles.map((particle, index) => (
+            {particles.slice(0, 4).map((particle, index) => (
         <div
           key={index}
           className="absolute z-[3] animate-float"
@@ -181,41 +144,18 @@ const HeroSection = () => {
         />
       ))}
 
-      {/* Sparkle Effects */}
-      <div className="absolute inset-0 z-[3] overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
-          <Sparkles
-            key={i}
-            className="absolute animate-sparkle"
-            style={{
-              left:            `${Math.random() * 100}%`,
-              top:             `${Math.random() * 100}%`,
-              width:           `${12 + Math.random() * 8}px`,
-              height:          `${12 + Math.random() * 8}px`,
-              color:           "hsl(var(--primary))",
-              opacity:         0.3,
-              animationDelay:  `${i * 0.5}s`,
-              animationDuration: `${3 + i}s`,
-            }}
-          />
-        ))}
-      </div>
-
       {/* ── Hero Content ── */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-32 md:pt-40 pb-32">
         <div className="max-w-5xl mx-auto text-center">
 
-          {/* Typing headline */}
+          {/* Immediate headline render keeps the LCP stable. */}
           <h1
             className={`font-montserrat font-extrabold text-4xl md:text-5xl lg:text-6xl leading-tight text-foreground mb-8 transition-all duration-1000 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
             }`}
             style={{ letterSpacing: "-0.5px", lineHeight: "1.3" }}
           >
-            {typedText}
-            {showCursor && typedText.length < currentData.hero.title.length && (
-              <span className="inline-block w-1 h-12 md:h-14 lg:h-16 bg-primary ml-1 animate-blink" />
-            )}
+            {currentData.hero.title}
           </h1>
 
           {/* Subtitle */}

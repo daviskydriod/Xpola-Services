@@ -107,6 +107,10 @@ const SectorCard = ({ sector, index, getImage }: SectorCardProps) => {
         <img
           src={getImage(sector.link)}
           alt={sector.title}
+          width={800}
+          height={600}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
           style={{ 
             filter: theme === 'light' 
