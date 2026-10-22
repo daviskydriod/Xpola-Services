@@ -144,6 +144,7 @@ const SectorCard = ({ sector, index, getImage }: SectorCardProps) => {
 
       <Link
         to={sector.link}
+        aria-label={`Learn more about ${sector.title}`}
         className="absolute bottom-6 left-6 font-poppins font-semibold text-sm text-primary flex items-center gap-2 transition-all duration-300 hover:gap-3"
       >
         Learn More

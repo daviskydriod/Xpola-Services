@@ -396,6 +396,20 @@ body {
   }
 }
 
+/* Keep the mobile first paint calm and inexpensive on slower devices. */
+@media (max-width: 639px) {
+  .animate-float,
+  .animate-pulse-slow,
+  .animate-bounce-slow,
+  .animate-scroll-down,
+  .animate-pulse,
+  .animate-bounce-in,
+  .animate-scale-in,
+  .animate-sparkle {
+    animation: none !important;
+  }
+}
+
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar {
   width: 10px;

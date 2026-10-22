@@ -253,6 +253,9 @@ const Navbar = () => {
 
               {/* Mobile toggle */}
               <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                type="button"
+                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={isMobileMenuOpen}
                 className="lg:hidden w-9 h-9 flex items-center justify-center text-foreground">
                 {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
