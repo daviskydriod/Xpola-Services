@@ -6,8 +6,9 @@ This is a one-time PHP page that imports approved products into the existing Xpo
 
 - Back up the production database.
 - Confirm the hosting account has PHP with PDO MySQL enabled and that the existing `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, and `DB_PORT` settings connect to the correct database.
-- Prepare a product JSON file using [`products.example.json`](../scripts/products.example.json) as a template. Replace the sample product names, prices, stock, category slugs, and image paths before importing real data.
-- Upload product images to the production image storage first. The JSON should use paths the storefront's `productImageUrl()` helper can resolve.
+- The provided [`products.example.json`](../scripts/products.example.json) now contains the two laptop-extender products and the prices/specifications printed on their banner images. Check all values before importing.
+- The two banner images are included under `public/uploads/products/` and are referenced by stable `/uploads/products/...` paths. Deploy these files with the site so the paths resolve on production. For other products, upload images to production storage and use paths the storefront's `productImageUrl()` helper can resolve.
+- The banners do not state inventory counts or warranty terms. The sample uses `stock_qty: 0` to avoid inventing stock; set each count to the actual available quantity before committing, or the products will be marked out of stock. Confirm warranty terms before publishing.
 
 ## Configure the private import token
 

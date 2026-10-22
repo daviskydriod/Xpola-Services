@@ -1,41 +1,38 @@
 {
   "products": [
     {
-      "name": "Laptop Screen Extender",
-      "summary": "Portable multi-screen productivity accessory for work, study, and presentations.",
-      "description": "Add a second or third screen to a compatible laptop for a more productive mobile workspace.",
-      "specifications": "USB-C compatible; compact travel design; confirm device compatibility before ordering.",
-      "brand": "Xpola Marketplace",
-      "warranty": "Confirm availability and warranty terms with Xpola Nigeria.",
-      "price": 250000,
+      "name": "X90A Laptop Screen Extender",
+      "summary": "14-inch IPS portable monitor with 16:9 Full View and 2560 × 1600 resolution for laptop and desktop multi-screen use.",
+      "description": "X90A portable laptop screen extender for compatible Windows and macOS computers. Supports one-cable multi-screen use and Type-C video and audio. The banner lists a price of ₦520,000. Confirm compatibility, stock, delivery, and warranty before purchase.",
+      "specifications": "Model: X90A; screen: 14-inch IPS Full View, 16:9; resolution shown on banner: 2560 × 1600; Windows and macOS compatible; one-cable multi-screen support; Type-C single-cable video and audio; Type-C-to-USB-A video/audio support; laptop and desktop multi-screen use; OSD languages: English, German, French, Italian, Spanish; ports: Type-C power and full-function Type-C; controls: Power and Menu +/-; listed accessories: Type-C cable, 5V/3A adapter, USB-A converter, USB disk, manual.",
+      "brand": "Xpola",
+      "warranty": "Not specified on the product banner; confirm with the supplier.",
+      "price": 520000,
       "currency": "NGN",
       "country": "NG",
       "category": "electronics",
       "category_name": "Electronics",
       "image_path": "/uploads/products/laptop-screen-extender.webp",
-      "images": [
-        "/uploads/products/laptop-screen-extender-3-in-1.webp"
-      ],
-      "stock_qty": 10,
+      "stock_qty": 0,
       "featured": true,
-      "tags": "laptop,display,productivity,electronics"
+      "tags": "X90A,laptop,screen extender,portable monitor,electronics"
     },
     {
-      "name": "Industrial Warehouse Equipment",
-      "summary": "Practical equipment supply for Canadian workshops and operational teams.",
-      "description": "Use this entry as a template for an approved Canadian product and replace the price, image, and specifications before importing.",
-      "specifications": "Replace with approved product specifications.",
-      "brand": "Approved supplier",
-      "warranty": "Replace with supplier warranty.",
-      "price": 1500,
-      "currency": "CAD",
-      "country": "CA",
-      "category": "industrial-equipment",
-      "category_name": "Industrial Equipment",
-      "image_path": "/uploads/products/industrial-equipment.webp",
+      "name": "X90A 3-in-1 Laptop Screen Extender",
+      "summary": "Three-screen X90A portable display setup with 14-inch Full HD 1080p screens for Windows and macOS.",
+      "description": "Three-in-one laptop screen extender for a larger mobile workstation. The banner lists one-cable connection support for up to four monitors and a price of ₦590,000. Confirm compatibility, stock, delivery, and warranty before purchase.",
+      "specifications": "Model: X90A; screen setup: 14-inch × 3, 1080p Full HD; compatible with Windows and macOS; one-cable connection supports up to four monitors; multi-screen laptop and desktop display; Type-C power and power transfer; Type-C video and audio transfer; ports: Type-C power and full-function Type-C; controls: Power and Menu +/- (Left/Right/Top); listed accessories: Type-C cable, 5V/3A adapter, USB-C/USB-A converter, USB disk, manual.",
+      "brand": "Xpola",
+      "warranty": "Not specified on the product banner; confirm with the supplier.",
+      "price": 590000,
+      "currency": "NGN",
+      "country": "NG",
+      "category": "electronics",
+      "category_name": "Electronics",
+      "image_path": "/uploads/products/laptop-screen-extender-3-in-1.webp",
       "stock_qty": 0,
-      "featured": false,
-      "tags": "industrial,workshop,equipment"
+      "featured": true,
+      "tags": "X90A,3-in-1,laptop,screen extender,portable monitor,electronics"
     }
   ]
 }
