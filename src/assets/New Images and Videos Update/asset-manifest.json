@@ -155,6 +155,17 @@
       "poster": "warehouse-floor-stock.jpeg",
       "alt": "Video demonstration of the power equipment product",
       "caption": "Equipment demonstration video"
+    },
+    {
+      "file": "product-equipment-demo-trim.mp4",
+      "type": "video",
+      "role": "product-demonstration-short",
+      "markets": ["nigeria", "canada"],
+      "poster": "product-front-display.jpeg",
+      "alt": "Short vertical video walkthrough of the power equipment product",
+      "caption": "Short equipment walkthrough",
+      "dimensions": "540x960",
+      "duration_seconds": 16.77
     }
   ]
 }

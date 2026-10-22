@@ -14,6 +14,7 @@ import rearView from "@/assets/New Images and Videos Update/product-rear-connect
 import sideView from "@/assets/New Images and Videos Update/product-front-three-quarter.jpeg";
 import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.jpeg";
 import productVideo from "@/assets/New Images and Videos Update/product-equipment-demo.mp4";
+import productTrimVideo from "@/assets/New Images and Videos Update/product-equipment-demo-trim.mp4";
 
 type MarketMedia = {
   title: string;
@@ -104,6 +105,15 @@ const MarketMediaSection = () => {
                 <source src={productVideo} type="video/mp4" />
                 Your browser does not support the equipment video. Please contact us for more information.
               </video>
+            </div>
+            <div className="border-t border-border/30 bg-background-secondary px-6 py-5 md:px-8">
+              <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-primary">Short equipment walkthrough</p>
+              <div className="aspect-[9/16] max-h-[360px] overflow-hidden rounded-2xl bg-black sm:max-w-[220px]">
+                <video className="h-full w-full object-cover" controls muted loop playsInline preload="metadata" poster={frontView}>
+                  <source src={productTrimVideo} type="video/mp4" />
+                  Your browser does not support the short equipment video. Please contact us for more information.
+                </video>
+              </div>
             </div>
             <div className="p-6 md:p-8">
               <div className="mb-4 flex items-center gap-2 text-primary"><Images className="h-5 w-5" /><span className="text-xs font-bold uppercase tracking-[0.18em]">Product and fulfilment gallery</span></div>
