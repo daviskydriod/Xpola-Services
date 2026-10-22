@@ -6,6 +6,8 @@ The `src/assets/New Images and Videos Update/` folder contains sixteen JPEG prod
 
 The asset filenames are maintained in lowercase kebab-case so imports and generated URLs remain readable and maintainable. The manifest should be updated whenever the client supplies additional views or a replacement video.
 
+All frontend image imports use generated WebP derivatives for faster delivery. The original JPEG/PNG files remain in the asset directory as source-quality masters, while the manifest records each optimized filename and its original source filename.
+
 ## Recommended approach for both market pages
 
 Use one reusable `MarketMediaSection` component driven by market data rather than duplicating image markup in the Canada and Nigeria pages. The component should support:
@@ -20,7 +22,7 @@ Use one reusable `MarketMediaSection` component driven by market data rather tha
 
 Add the feature banner below the Nigeria hero or above the sector cards with messaging such as **Power and equipment solutions for Nigerian business**. Link the call to action to `/nigeria/contact` or the relevant commerce/e-commerce route. A second placement on the Nigeria commerce or e-commerce service page can present the clean product views as a catalogue-ready gallery, but the products should only be listed for sale after staff enter approved names, prices, descriptions, and available quantities in the Staff Portal.
 
-The newly supplied `laptop-screen-extender.jpeg` and `laptop-screen-extender-3-in-1.jpeg` graphics are shown in a Nigeria-only catalogue spotlight. They contain Nigerian contact details and NGN promotional prices, so they are intentionally not shown on the Canada page. Their prices remain promotional content only until the products are approved and entered into the Staff Portal.
+The newly supplied `laptop-screen-extender.jpeg` and `laptop-screen-extender-3-in-1.jpeg` graphics are shown in a modern Nigeria shop promotion banner directly below the shop hero. They contain Nigerian contact details and NGN promotional prices, so they are intentionally not shown on the Canada page. The products are owner-approved and presented as **coming soon to the Nigeria shop**; they can be added to the Staff Portal and checkout later when the catalogue upload is scheduled.
 
 Suggested image roles:
 

@@ -5,7 +5,7 @@ import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import heroBackground from "@/assets/hero-bg.jpg";
+import heroBackground from "@/assets/hero-bg.webp";
 
 // Floating particles configuration
 const particles = [

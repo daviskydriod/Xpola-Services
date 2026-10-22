@@ -10,9 +10,10 @@ import { useCart } from '../contexts/CartContext';
 import { useShop } from '@/hooks/useShop';
 import { ApiProduct, catalogueApi } from '@/lib/api';
 import SharedProductCard from '@/components/shop/ProductCard';
-import heroContainers from '@/assets/shop-hero-containers.jpg';
-import heroWarehouse from '@/assets/shop-hero-warehouse.jpg';
-import heroPort from '@/assets/shop-hero-port.jpg';
+import NigeriaShopPromoBanner from '@/components/shop/NigeriaShopPromoBanner';
+import heroContainers from '@/assets/shop-hero-containers.webp';
+import heroWarehouse from '@/assets/shop-hero-warehouse.webp';
+import heroPort from '@/assets/shop-hero-port.webp';
 
 const NIGERIA_SLIDES = [
   { image: heroContainers, tag: 'Power & Commerce', headline: 'Products\nFor Nigerian Business', sub: 'Browse the products currently available in the Nigeria marketplace.', cta: 'Shop Now', category: '' },
@@ -108,7 +109,9 @@ export default function Shop() {
         />
       </div>
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-10">
+      {isNigeria && <NigeriaShopPromoBanner />}
+
+      <main id="shop-catalogue" className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
             <h2 className="font-montserrat font-black text-2xl md:text-3xl text-gray-900 uppercase tracking-widest">

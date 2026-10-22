@@ -8,7 +8,7 @@ import ContactSection from "../components/ContactSection";
 import { useCountry } from "../contexts/CountryContext";
 import { contactApi } from "../lib/api";
 import { MapPin, Mail, Phone, Clock } from "lucide-react";
-import heroImage from "@/assets/logistics.jpg";
+import heroImage from "@/assets/logistics.webp";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface ContactFormState {

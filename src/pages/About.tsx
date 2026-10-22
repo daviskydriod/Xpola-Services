@@ -6,8 +6,9 @@ import Footer from "../components/Footer";
 import AboutSection from "../components/AboutSection";
 import WhyChooseSection from "../components/WhyChooseSection";
 import CTASection from "../components/CTASection";
+import MarketMediaSection from "../components/MarketMediaSection";
 import { useCountry } from "../contexts/CountryContext";
-import heroImage from "@/assets/consulting.jpg";
+import heroImage from "@/assets/consulting.webp";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const About = () => {
@@ -34,6 +35,7 @@ const About = () => {
       </section>
 
       <AboutSection />
+      <MarketMediaSection />
       <WhyChooseSection />
       <CTASection />
       <Footer />

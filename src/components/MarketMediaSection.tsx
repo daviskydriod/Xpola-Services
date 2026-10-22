@@ -3,20 +3,18 @@ import { ArrowUpRight, ChevronLeft, ChevronRight, Images, X } from "lucide-react
 import { Link } from "react-router-dom";
 import { useCountry } from "@/contexts/CountryContext";
 
-import factoryWide from "@/assets/New Images and Videos Update/factory-floor-wide.jpeg";
-import warehouseWide from "@/assets/New Images and Videos Update/warehouse-floor-stock.jpeg";
-import inventoryView from "@/assets/New Images and Videos Update/warehouse-crates.jpeg";
-import frontView from "@/assets/New Images and Videos Update/product-front-display.jpeg";
-import frontAngle from "@/assets/New Images and Videos Update/product-side-angle.jpeg";
-import topView from "@/assets/New Images and Videos Update/product-top-accessories.jpeg";
-import accessoryView from "@/assets/New Images and Videos Update/product-top-cables.jpeg";
-import rearView from "@/assets/New Images and Videos Update/product-rear-connections.jpeg";
-import sideView from "@/assets/New Images and Videos Update/product-front-three-quarter.jpeg";
-import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.jpeg";
+import factoryWide from "@/assets/New Images and Videos Update/factory-floor-wide.webp";
+import warehouseWide from "@/assets/New Images and Videos Update/warehouse-floor-stock.webp";
+import inventoryView from "@/assets/New Images and Videos Update/warehouse-crates.webp";
+import frontView from "@/assets/New Images and Videos Update/product-front-display.webp";
+import frontAngle from "@/assets/New Images and Videos Update/product-side-angle.webp";
+import topView from "@/assets/New Images and Videos Update/product-top-accessories.webp";
+import accessoryView from "@/assets/New Images and Videos Update/product-top-cables.webp";
+import rearView from "@/assets/New Images and Videos Update/product-rear-connections.webp";
+import sideView from "@/assets/New Images and Videos Update/product-front-three-quarter.webp";
+import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.webp";
 import productVideo from "@/assets/New Images and Videos Update/product-equipment-demo.mp4";
 import productTrimVideo from "@/assets/New Images and Videos Update/product-equipment-demo-trim.mp4";
-import laptopExtender from "@/assets/New Images and Videos Update/laptop-screen-extender.jpeg";
-import laptopExtenderThreeInOne from "@/assets/New Images and Videos Update/laptop-screen-extender-3-in-1.jpeg";
 
 type MarketMedia = {
   title: string;
@@ -54,16 +52,11 @@ const baseGallery = [
   { src: inventoryView, label: "Warehouse inventory view" },
 ];
 
-const nigeriaProductGallery = [
-  { src: laptopExtender, label: "Laptop screen extender" },
-  { src: laptopExtenderThreeInOne, label: "3-in-1 laptop screen extender" },
-];
-
 const MarketMediaSection = () => {
   const { currentData } = useCountry();
   const market = copy[currentData.code === "CA" ? "CA" : "NG"];
   const contactPath = currentData.code === "CA" ? "/canada/contact" : "/nigeria/contact";
-  const gallery = currentData.code === "NG" ? [...baseGallery, ...nigeriaProductGallery] : baseGallery;
+  const gallery = baseGallery;
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   const closeLightbox = () => setSelectedIndex(null);
@@ -131,14 +124,6 @@ const MarketMediaSection = () => {
           </div>
         </div>
 
-        {currentData.code === "NG" && (
-          <div className="mt-12 mb-5">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">New Nigeria catalogue items</p>
-            <h3 className="mt-2 font-montserrat text-2xl font-bold text-foreground">Laptop screen extender range</h3>
-            <p className="mt-2 max-w-2xl text-sm leading-7 text-muted-foreground">New product graphics supplied for the Nigerian marketplace. Prices and product details remain subject to Staff Portal approval before live checkout.</p>
-          </div>
-        )}
-
         <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-5">
           {baseGallery.map((item, index) => (
             <button key={item.label} type="button" onClick={() => setSelectedIndex(index)} className="group overflow-hidden rounded-2xl border border-border/30 bg-card text-left shadow-sm transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-secondary">
@@ -150,21 +135,6 @@ const MarketMediaSection = () => {
           ))}
         </div>
 
-        {currentData.code === "NG" && (
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-5">
-            {nigeriaProductGallery.map((item, index) => {
-              const selectedGalleryIndex = baseGallery.length + index;
-              return (
-                <button key={item.label} type="button" onClick={() => setSelectedIndex(selectedGalleryIndex)} className="group overflow-hidden rounded-2xl border border-border/30 bg-card text-left shadow-sm transition hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background-secondary">
-                  <div className="aspect-[2/1] overflow-hidden bg-white">
-                    <img src={item.src} alt={`Nigeria catalogue product graphic, ${item.label.toLowerCase()}`} className="h-full w-full object-contain transition duration-500 group-hover:scale-105" loading="lazy" />
-                  </div>
-                  <span className="block px-3 py-3 text-xs font-semibold text-foreground md:px-4">{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
       </div>
 
       {selectedIndex !== null && (

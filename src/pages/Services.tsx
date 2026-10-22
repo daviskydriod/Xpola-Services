@@ -6,8 +6,9 @@ import Footer from "../components/Footer";
 import SectorsSection from "../components/SectorsSection";
 import WhyChooseSection from "../components/WhyChooseSection";
 import CTASection from "../components/CTASection";
+import MarketMediaSection from "../components/MarketMediaSection";
 import { useCountry } from "../contexts/CountryContext";
-import heroImage from "@/assets/hero-bg.jpg";
+import heroImage from "@/assets/hero-bg.webp";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Services = () => {
@@ -34,6 +35,7 @@ const Services = () => {
       </section>
 
       <SectorsSection />
+      <MarketMediaSection />
       <WhyChooseSection />
       <CTASection />
       <Footer />

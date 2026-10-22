@@ -4,173 +4,246 @@
   "directory": "src/assets/New Images and Videos Update",
   "assets": [
     {
-      "file": "factory-floor-wide.jpeg",
+      "file": "factory-floor-wide.webp",
       "type": "image",
       "role": "market-feature-banner",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Rows of packaged power equipment in a factory and warehouse facility",
       "caption": "Factory and fulfilment capability",
-      "dimensions": "1600x900"
+      "dimensions": "1600x900",
+      "original_file": "factory-floor-wide.jpeg"
     },
     {
-      "file": "warehouse-crates.jpeg",
+      "file": "warehouse-crates.webp",
       "type": "image",
       "role": "fulfilment-context",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Packaged power equipment prepared for warehouse fulfilment",
       "caption": "Packaged equipment ready for fulfilment",
-      "dimensions": "1600x1200"
+      "dimensions": "1600x1200",
+      "original_file": "warehouse-crates.jpeg"
     },
     {
-      "file": "warehouse-floor-stock.jpeg",
+      "file": "warehouse-floor-stock.webp",
       "type": "image",
       "role": "fulfilment-context",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Power equipment arranged across a warehouse floor",
       "caption": "Warehouse stock and handling context",
-      "dimensions": "1600x899"
+      "dimensions": "1600x899",
+      "original_file": "warehouse-floor-stock.jpeg"
     },
     {
-      "file": "product-front-display.jpeg",
+      "file": "product-front-display.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Power equipment unit viewed from the front with its display visible",
       "caption": "Front display view",
-      "dimensions": "1200x1600"
+      "dimensions": "1200x1600",
+      "original_file": "product-front-display.jpeg"
     },
     {
-      "file": "product-front-isolated.jpeg",
+      "file": "product-front-isolated.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "White power equipment unit shown upright from the front",
       "caption": "Isolated front view",
-      "dimensions": "1200x1600"
+      "dimensions": "1200x1600",
+      "original_file": "product-front-isolated.jpeg"
     },
     {
-      "file": "product-front-three-quarter.jpeg",
+      "file": "product-front-three-quarter.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "White power equipment unit shown from a front three-quarter angle",
       "caption": "Front three-quarter view",
-      "dimensions": "1600x1600"
+      "dimensions": "1600x1600",
+      "original_file": "product-front-three-quarter.jpeg"
     },
     {
-      "file": "product-front-clean.jpeg",
+      "file": "product-front-clean.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Clean front view of the white power equipment unit",
       "caption": "Clean front view",
-      "dimensions": "1600x1600"
+      "dimensions": "1600x1600",
+      "original_file": "product-front-clean.jpeg"
     },
     {
-      "file": "product-side-angle.jpeg",
+      "file": "product-side-angle.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Power equipment unit viewed from the side at an angle",
       "caption": "Side angle view",
-      "dimensions": "1200x1600"
+      "dimensions": "1200x1600",
+      "original_file": "product-side-angle.jpeg"
     },
     {
-      "file": "product-side-clean.jpeg",
+      "file": "product-side-clean.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Clean side view of the power equipment unit",
       "caption": "Side view",
-      "dimensions": "1200x1600"
+      "dimensions": "1200x1600",
+      "original_file": "product-side-clean.jpeg"
     },
     {
-      "file": "product-side-profile.jpeg",
+      "file": "product-side-profile.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Narrow side profile of the power equipment unit",
       "caption": "Side profile",
-      "dimensions": "1600x1600"
+      "dimensions": "1600x1600",
+      "original_file": "product-side-profile.jpeg"
     },
     {
-      "file": "product-back-angle.jpeg",
+      "file": "product-back-angle.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Power equipment unit shown from a back angle",
       "caption": "Back angle view",
-      "dimensions": "1600x1600"
+      "dimensions": "1600x1600",
+      "original_file": "product-back-angle.jpeg"
     },
     {
-      "file": "product-rear-profile.jpeg",
+      "file": "product-rear-profile.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Rear profile of the power equipment unit",
       "caption": "Rear profile",
-      "dimensions": "1600x1600"
+      "dimensions": "1600x1600",
+      "original_file": "product-rear-profile.jpeg"
     },
     {
-      "file": "product-rear-connections.jpeg",
+      "file": "product-rear-connections.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Rear connection panel and ports on the power equipment unit",
       "caption": "Rear connection view",
-      "dimensions": "1600x1600"
+      "dimensions": "1600x1600",
+      "original_file": "product-rear-connections.jpeg"
     },
     {
-      "file": "product-control-panel.jpeg",
+      "file": "product-control-panel.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Control panel and connection details on the power equipment unit",
       "caption": "Control panel detail",
-      "dimensions": "1200x1600"
+      "dimensions": "1200x1600",
+      "original_file": "product-control-panel.jpeg"
     },
     {
-      "file": "product-top-accessories.jpeg",
+      "file": "product-top-accessories.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Power equipment unit viewed from above with included accessories",
       "caption": "Top and accessory view",
-      "dimensions": "1600x1200"
+      "dimensions": "1600x1200",
+      "original_file": "product-top-accessories.jpeg"
     },
     {
-      "file": "product-top-cables.jpeg",
+      "file": "product-top-cables.webp",
       "type": "image",
       "role": "product-gallery",
-      "markets": ["nigeria", "canada"],
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
       "alt": "Top view of the power equipment unit with cables and accessories",
       "caption": "Top and cable detail",
-      "dimensions": "1600x1200"
+      "dimensions": "1600x1200",
+      "original_file": "product-top-cables.jpeg"
     },
     {
-      "file": "laptop-screen-extender.jpeg",
+      "file": "laptop-screen-extender.webp",
       "type": "image",
       "role": "nigeria-product-promotion",
-      "markets": ["nigeria"],
+      "markets": [
+        "nigeria"
+      ],
       "alt": "Xpola promotional graphic for a laptop screen extender with multiple monitor views",
       "caption": "Laptop screen extender",
-      "dimensions": "1080x540"
+      "dimensions": "1080x540",
+      "original_file": "laptop-screen-extender.jpeg"
     },
     {
-      "file": "laptop-screen-extender-3-in-1.jpeg",
+      "file": "laptop-screen-extender-3-in-1.webp",
       "type": "image",
       "role": "nigeria-product-promotion",
-      "markets": ["nigeria"],
+      "markets": [
+        "nigeria"
+      ],
       "alt": "Xpola promotional graphic for a three-in-one laptop screen extender",
       "caption": "3-in-1 laptop screen extender",
-      "dimensions": "1080x540"
+      "dimensions": "1080x540",
+      "original_file": "laptop-screen-extender-3-in-1.jpeg"
     },
     {
       "file": "product-equipment-demo.mp4",
       "type": "video",
       "role": "product-demonstration",
-      "markets": ["nigeria", "canada"],
-      "poster": "warehouse-floor-stock.jpeg",
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
+      "poster": "warehouse-floor-stock.webp",
       "alt": "Video demonstration of the power equipment product",
       "caption": "Equipment demonstration video"
     },
@@ -178,8 +251,11 @@
       "file": "product-equipment-demo-trim.mp4",
       "type": "video",
       "role": "product-demonstration-short",
-      "markets": ["nigeria", "canada"],
-      "poster": "product-front-display.jpeg",
+      "markets": [
+        "nigeria",
+        "canada"
+      ],
+      "poster": "product-front-display.webp",
       "alt": "Short vertical video walkthrough of the power equipment product",
       "caption": "Short equipment walkthrough",
       "dimensions": "540x960",

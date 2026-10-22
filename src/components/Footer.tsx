@@ -5,8 +5,8 @@ import { Linkedin, Twitter, Facebook, Instagram } from "lucide-react";
 import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { apiFetch } from "@/lib/api";
-import logoWhite from "@/assets/logo-white.png";
-import logoBlack from "@/assets/logo-black.png";
+import logoWhite from "@/assets/logo-white.webp";
+import logoBlack from "@/assets/logo-black.webp";
 
 const quickLinks = [
   { label: "About Us",    href: "/about" },
