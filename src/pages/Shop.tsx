@@ -47,7 +47,7 @@ const HeroSlider = ({
 
   return (
     <div className="relative h-[250px] sm:h-[320px] md:h-[560px] overflow-hidden bg-gray-900">
-      <img src={s.image} alt={s.tag} width={1400} height={933} loading={current === 0 ? "eager" : "lazy"} fetchPriority={current === 0 ? "high" : "auto"} decoding="async" className="absolute inset-0 w-full h-full object-contain opacity-60 transition-opacity duration-700"/>
+      <img src={s.image} alt={s.tag} width={1400} height={933} loading={current === 0 ? "eager" : "lazy"} fetchPriority={current === 0 ? "high" : "auto"} decoding="async" className="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-700"/>
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"/>
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
