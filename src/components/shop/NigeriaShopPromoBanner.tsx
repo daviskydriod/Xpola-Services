@@ -1,7 +1,7 @@
 import { ArrowRight, MessageCircle, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
-import laptopExtender from "@/assets/New Images and Videos Update/laptop-screen-extender.jpeg";
-import laptopExtenderThreeInOne from "@/assets/New Images and Videos Update/laptop-screen-extender-3-in-1.jpeg";
+import laptopExtender from "@/assets/New Images and Videos Update/laptop-screen-extender.webp";
+import laptopExtenderThreeInOne from "@/assets/New Images and Videos Update/laptop-screen-extender-3-in-1.webp";
 
 const NigeriaShopPromoBanner = () => (
   <section className="border-y border-gray-200 bg-white py-8 md:py-10" aria-labelledby="approved-products-title">

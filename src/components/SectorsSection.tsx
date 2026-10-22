@@ -2,13 +2,13 @@ import { ArrowRight, Briefcase, Fuel, Building, Mountain, Globe, ShoppingCart, T
 import { Link } from "react-router-dom";
 import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import consultingImg from "@/assets/consulting.jpg";
-import oilGasImg from "@/assets/oil-gas.jpg";
-import constructionImg from "@/assets/construction.jpg";
-import miningImg from "@/assets/mining.jpg";
-import commerceImg from "@/assets/commerce.jpg";
-import ecommerceImg from "@/assets/ecommerce.jpg";
-import logisticsImg from "@/assets/logistics.jpg";
+import consultingImg from "@/assets/consulting.webp";
+import oilGasImg from "@/assets/oil-gas.webp";
+import constructionImg from "@/assets/construction.webp";
+import miningImg from "@/assets/mining.webp";
+import commerceImg from "@/assets/commerce.webp";
+import ecommerceImg from "@/assets/ecommerce.webp";
+import logisticsImg from "@/assets/logistics.webp";
 
 const iconMap: Record<string, any> = {
   Briefcase,

@@ -11,9 +11,9 @@ import { useShop } from '@/hooks/useShop';
 import { ApiProduct, catalogueApi } from '@/lib/api';
 import SharedProductCard from '@/components/shop/ProductCard';
 import NigeriaShopPromoBanner from '@/components/shop/NigeriaShopPromoBanner';
-import heroContainers from '@/assets/shop-hero-containers.jpg';
-import heroWarehouse from '@/assets/shop-hero-warehouse.jpg';
-import heroPort from '@/assets/shop-hero-port.jpg';
+import heroContainers from '@/assets/shop-hero-containers.webp';
+import heroWarehouse from '@/assets/shop-hero-warehouse.webp';
+import heroPort from '@/assets/shop-hero-port.webp';
 
 const NIGERIA_SLIDES = [
   { image: heroContainers, tag: 'Power & Commerce', headline: 'Products\nFor Nigerian Business', sub: 'Browse the products currently available in the Nigeria marketplace.', cta: 'Shop Now', category: '' },

@@ -3,16 +3,16 @@ import { ArrowUpRight, ChevronLeft, ChevronRight, Images, X } from "lucide-react
 import { Link } from "react-router-dom";
 import { useCountry } from "@/contexts/CountryContext";
 
-import factoryWide from "@/assets/New Images and Videos Update/factory-floor-wide.jpeg";
-import warehouseWide from "@/assets/New Images and Videos Update/warehouse-floor-stock.jpeg";
-import inventoryView from "@/assets/New Images and Videos Update/warehouse-crates.jpeg";
-import frontView from "@/assets/New Images and Videos Update/product-front-display.jpeg";
-import frontAngle from "@/assets/New Images and Videos Update/product-side-angle.jpeg";
-import topView from "@/assets/New Images and Videos Update/product-top-accessories.jpeg";
-import accessoryView from "@/assets/New Images and Videos Update/product-top-cables.jpeg";
-import rearView from "@/assets/New Images and Videos Update/product-rear-connections.jpeg";
-import sideView from "@/assets/New Images and Videos Update/product-front-three-quarter.jpeg";
-import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.jpeg";
+import factoryWide from "@/assets/New Images and Videos Update/factory-floor-wide.webp";
+import warehouseWide from "@/assets/New Images and Videos Update/warehouse-floor-stock.webp";
+import inventoryView from "@/assets/New Images and Videos Update/warehouse-crates.webp";
+import frontView from "@/assets/New Images and Videos Update/product-front-display.webp";
+import frontAngle from "@/assets/New Images and Videos Update/product-side-angle.webp";
+import topView from "@/assets/New Images and Videos Update/product-top-accessories.webp";
+import accessoryView from "@/assets/New Images and Videos Update/product-top-cables.webp";
+import rearView from "@/assets/New Images and Videos Update/product-rear-connections.webp";
+import sideView from "@/assets/New Images and Videos Update/product-front-three-quarter.webp";
+import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.webp";
 import productVideo from "@/assets/New Images and Videos Update/product-equipment-demo.mp4";
 import productTrimVideo from "@/assets/New Images and Videos Update/product-equipment-demo-trim.mp4";
 

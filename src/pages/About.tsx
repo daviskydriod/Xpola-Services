@@ -8,7 +8,7 @@ import WhyChooseSection from "../components/WhyChooseSection";
 import CTASection from "../components/CTASection";
 import MarketMediaSection from "../components/MarketMediaSection";
 import { useCountry } from "../contexts/CountryContext";
-import heroImage from "@/assets/consulting.jpg";
+import heroImage from "@/assets/consulting.webp";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const About = () => {

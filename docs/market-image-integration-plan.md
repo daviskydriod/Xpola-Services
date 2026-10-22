@@ -6,6 +6,8 @@ The `src/assets/New Images and Videos Update/` folder contains sixteen JPEG prod
 
 The asset filenames are maintained in lowercase kebab-case so imports and generated URLs remain readable and maintainable. The manifest should be updated whenever the client supplies additional views or a replacement video.
 
+All frontend image imports use generated WebP derivatives for faster delivery. The original JPEG/PNG files remain in the asset directory as source-quality masters, while the manifest records each optimized filename and its original source filename.
+
 ## Recommended approach for both market pages
 
 Use one reusable `MarketMediaSection` component driven by market data rather than duplicating image markup in the Canada and Nigeria pages. The component should support:
