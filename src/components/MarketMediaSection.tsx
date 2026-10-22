@@ -3,17 +3,17 @@ import { ArrowUpRight, ChevronLeft, ChevronRight, Images, X } from "lucide-react
 import { Link } from "react-router-dom";
 import { useCountry } from "@/contexts/CountryContext";
 
-import factoryWide from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.50.jpeg";
-import warehouseWide from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.51 (2).jpeg";
-import inventoryView from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.50 (1).jpeg";
-import frontView from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.51.jpeg";
-import frontAngle from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.52.jpeg";
-import topView from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.51 (3).jpeg";
-import accessoryView from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.52 (1).jpeg";
-import rearView from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.53 (2).jpeg";
-import sideView from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.54.jpeg";
-import sideViewTwo from "@/assets/New Images and Videos Update/WhatsApp Image 2026-10-22 at 07.04.54 (1).jpeg";
-import productVideo from "@/assets/New Images and Videos Update/WhatsApp Video 2026-10-22 at 07.05.11.mp4";
+import factoryWide from "@/assets/New Images and Videos Update/factory-floor-wide.jpeg";
+import warehouseWide from "@/assets/New Images and Videos Update/warehouse-floor-stock.jpeg";
+import inventoryView from "@/assets/New Images and Videos Update/warehouse-crates.jpeg";
+import frontView from "@/assets/New Images and Videos Update/product-front-display.jpeg";
+import frontAngle from "@/assets/New Images and Videos Update/product-side-angle.jpeg";
+import topView from "@/assets/New Images and Videos Update/product-top-accessories.jpeg";
+import accessoryView from "@/assets/New Images and Videos Update/product-top-cables.jpeg";
+import rearView from "@/assets/New Images and Videos Update/product-rear-connections.jpeg";
+import sideView from "@/assets/New Images and Videos Update/product-front-three-quarter.jpeg";
+import sideViewTwo from "@/assets/New Images and Videos Update/product-side-profile.jpeg";
+import productVideo from "@/assets/New Images and Videos Update/product-equipment-demo.mp4";
 
 type MarketMedia = {
   title: string;

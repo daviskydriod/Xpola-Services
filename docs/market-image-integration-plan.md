@@ -2,9 +2,9 @@
 
 ## Supplied image set
 
-The `src/assets/New Images and Videos Update/` folder contains sixteen JPEG product photos and one MP4 video. The photos show a single power/inverter product line in factory, warehouse, front, rear, side, top, and accessory views.
+The `src/assets/New Images and Videos Update/` folder contains sixteen JPEG product photos and one MP4 video. The photos show a single power/inverter product line in factory, warehouse, front, rear, side, top, and accessory views. The files now use descriptive, URL-safe names, and `asset-manifest.json` records every file's role, dimensions, market usage, caption, and recommended accessibility text.
 
-The files are retained with their original names in this pull request. Before production use, the team should create descriptive filenames and an asset manifest so that image URLs remain readable and maintainable.
+The asset filenames are maintained in lowercase kebab-case so imports and generated URLs remain readable and maintainable. The manifest should be updated whenever the client supplies additional views or a replacement video.
 
 ## Recommended approach for both market pages
 
@@ -22,8 +22,8 @@ Add the feature banner below the Nigeria hero or above the sector cards with mes
 
 Suggested image roles:
 
-- `WhatsApp Image 2026-10-22 at 07.04.50.jpeg` — wide warehouse/factory feature image.
-- `WhatsApp Image 2026-10-22 at 07.04.50 (1).jpeg` and `07.04.51 (2).jpeg` — inventory and fulfilment context.
+- `factory-floor-wide.jpeg` — wide warehouse/factory feature image.
+- `warehouse-crates.jpeg` and `07.04.51 (2).jpeg` — inventory and fulfilment context.
 - `07.04.51.jpeg`, `07.04.52.jpeg`, and `07.04.53.jpeg` — primary product angles.
 - `07.04.51 (3).jpeg`, `07.04.52 (1).jpeg`, and `07.04.53 (2).jpeg` — top/accessory and rear-detail views.
 
