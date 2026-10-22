@@ -19,7 +19,8 @@ export const MaintenanceProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<MaintenanceState>({
     maintenance: false,
     message: "We're performing scheduled maintenance. We'll be back shortly!",
-    estimatedBack: null, loading: true,
+    // Render the public site immediately; maintenance status refreshes in the background.
+    estimatedBack: null, loading: false,
   });
   const refresh = async () => {
     try {
