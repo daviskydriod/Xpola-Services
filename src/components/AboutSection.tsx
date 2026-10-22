@@ -1,7 +1,7 @@
 import { useCountry } from "@/contexts/CountryContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import nigeriaBackground from "@/assets/stock-sources/service-consulting.webp";
-import canadaBackground from "@/assets/stock-sources/canada-office-building.webp";
+import canadaBackground from "@/assets/stock-sources/canada-corporate-tower.webp";
 
 const AboutSection = () => {
   const { currentData } = useCountry();

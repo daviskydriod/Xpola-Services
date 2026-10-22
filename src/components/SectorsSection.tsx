@@ -12,6 +12,9 @@ import logisticsImg from "@/assets/stock-sources/service-logistics.webp";
 import canadaOfficeImg from "@/assets/stock-sources/canada-office-building.webp";
 import canadaPortImg from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
 import canadaWarehouseImg from "@/assets/stock-sources/canada-truro-warehouse-trucks.webp";
+import canadaOperationsImg from "@/assets/stock-sources/canada-distribution-warehouse.webp";
+import canadaTradeImg from "@/assets/stock-sources/canada-port-operations.webp";
+import canadaCommunityImg from "@/assets/stock-sources/canada-community-volunteers.webp";
 
 const iconMap: Record<string, any> = {
   Briefcase,
@@ -41,10 +44,10 @@ const imageMap: Record<string, string> = {
 
 const canadaImageMap: Record<string, string> = {
   consulting: canadaOfficeImg,
-  operations: canadaOfficeImg,
+  operations: canadaOperationsImg,
   logistics: canadaWarehouseImg,
-  trade: canadaPortImg,
-  community: canadaOfficeImg,
+  trade: canadaTradeImg,
+  community: canadaCommunityImg,
 };
 
 const SectorsSection = () => {

@@ -7,6 +7,9 @@ import consultingImg from "@/assets/stock-sources/service-consulting.webp";
 import canadaPortImg from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
 import canadaWarehouseImg from "@/assets/stock-sources/canada-truro-warehouse-trucks.webp";
 import canadaOfficeImg from "@/assets/stock-sources/canada-office-building.webp";
+import canadaOperationsImg from "@/assets/stock-sources/canada-distribution-warehouse.webp";
+import canadaTradeImg from "@/assets/stock-sources/canada-port-operations.webp";
+import canadaCommunityImg from "@/assets/stock-sources/canada-community-volunteers.webp";
 import { useCountry } from "@/contexts/CountryContext";
 
 interface Project {
@@ -60,7 +63,7 @@ const PortfolioSection = () => {
   const marketProjects = currentData.code === "CA"
     ? projects.map((project, index) => ({
         ...project,
-        image: index % 3 === 0 ? canadaPortImg : index % 3 === 1 ? canadaWarehouseImg : canadaOfficeImg,
+        image: [canadaTradeImg, canadaOperationsImg, canadaOfficeImg, canadaWarehouseImg, canadaCommunityImg, canadaPortImg][index],
       }))
     : projects;
 
