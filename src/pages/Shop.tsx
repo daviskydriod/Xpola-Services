@@ -11,6 +11,7 @@ import { useShop } from '@/hooks/useShop';
 import { ApiProduct, catalogueApi } from '@/lib/api';
 import SharedProductCard from '@/components/shop/ProductCard';
 import NigeriaShopPromoBanner from '@/components/shop/NigeriaShopPromoBanner';
+import ShopElectronicsShowcase from '@/components/shop/ShopElectronicsShowcase';
 import heroContainers from '@/assets/stock-sources/service-commerce.webp';
 import heroWarehouse from '@/assets/stock-sources/service-logistics.webp';
 import heroPort from '@/assets/stock-sources/service-oil-gas.webp';
@@ -110,6 +111,7 @@ export default function Shop() {
       </div>
 
       {isNigeria && <NigeriaShopPromoBanner />}
+      <ShopElectronicsShowcase />
 
       <main id="shop-catalogue" className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
