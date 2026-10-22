@@ -69,7 +69,7 @@ const Contact = () => {
             <p className="mt-6 max-w-2xl font-poppins text-lg leading-relaxed text-muted-foreground md:text-xl">Have a question or ready to start a project? Tell us what you need and our team will help you define the next step.</p>
           </div>
           <div className="relative overflow-hidden rounded-3xl border border-border shadow-xl">
-            <img src={heroImage} alt="Xpola Services logistics and delivery support" className="h-64 w-full object-cover md:h-80" />
+            <img src={heroImage} alt="Xpola Services logistics and delivery support" className="h-80 w-full object-cover object-top md:h-[500px]" />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/45 via-transparent to-primary/20" />
             <p className="absolute bottom-5 left-5 rounded-xl bg-black/55 px-4 py-3 font-poppins text-sm font-semibold text-white backdrop-blur-md">Let’s discuss your requirement</p>
           </div>
