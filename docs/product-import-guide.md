@@ -28,7 +28,7 @@ Do not commit this token, add it to a public URL, or share it in chat. The brows
 ## Upload and run
 
 1. Upload `api/migrations/run_product_import.php` to the same relative path on the server. Create the `api/migrations/` directory if needed.
-2. Open the script over HTTPS in your browser: `https://YOUR-DOMAIN.com/api/migrations/run_product_import.php`.
+2. Open the production script over HTTPS in your browser: [`https://xpolaservices.com/api/migrations/run_product_import.php`](https://xpolaservices.com/api/migrations/run_product_import.php). This URL works after the file has been deployed to production at `public_html/api/migrations/run_product_import.php`.
 3. Choose the prepared `.json` file. Enter the private token and the confirmation phrase shown on the page.
 4. Leave **Preview only** checked for the first run. The script opens a database transaction, shows which products would be created or updated, then rolls it back without committing changes.
 5. Review the preview. To import, reload the page, choose the same approved JSON, enter the token and phrase again, uncheck **Preview only**, and submit.
