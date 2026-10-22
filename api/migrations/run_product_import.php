@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         . '<p class="small">Type this exact phrase: <code>' . $phrase . '</code></p>'
         . '<label class="check"><input type="checkbox" name="dry_run" value="1" checked><span>Preview only (recommended first). The database transaction will be rolled back.</span></label>'
         . '<label class="check"><input type="checkbox" name="create_categories" value="1"><span>Create categories that do not exist yet. Leave unchecked to require existing categories.</span></label>'
-        . '<div class="notice warn"><strong>Production caution:</strong> back up the database first. The import matches products by name and country; matching products will be updated. Do not submit sample/template products unless you intend to add them.</div>'
+        . '<div class="notice warn"><strong>Production caution:</strong> back up the database first. The import matches products by name and country; matching products will be updated. Upload only the intended product records.</div>'
         . '<button type="submit">Validate and run import</button></form>';
     renderPage('Xpola product import', '<div class="notice">Upload an approved catalogue file. Run a preview first, inspect the results, then run again with preview unchecked to commit.</div>', $form);
 }
