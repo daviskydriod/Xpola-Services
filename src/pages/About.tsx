@@ -26,8 +26,8 @@ const About = () => {
             <h1 className="font-montserrat text-4xl font-extrabold leading-tight text-foreground md:text-5xl lg:text-6xl">About Xpola Services</h1>
             <p className="mt-6 max-w-2xl font-poppins text-lg leading-relaxed text-muted-foreground md:text-xl">Building sustainable solutions and empowering communities across {currentData.name}.</p>
           </div>
-          <div className="relative order-1 overflow-hidden rounded-3xl border border-border bg-background shadow-xl md:order-2">
-            <img src={heroImage} alt="Xpola Services advisory team" width={1400} height={1000} loading="eager" fetchPriority="high" decoding="async" className="h-64 w-full object-contain md:h-80" />
+          <div className="relative order-1 overflow-hidden rounded-3xl border border-border shadow-xl md:order-2">
+            <img src={heroImage} alt="Xpola Services advisory team" className="h-64 w-full object-cover md:h-80" />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/45 via-transparent to-primary/20" />
             <p className="absolute bottom-5 left-5 rounded-xl bg-black/55 px-4 py-3 font-poppins text-sm font-semibold text-white backdrop-blur-md">Local understanding · Professional standards</p>
           </div>

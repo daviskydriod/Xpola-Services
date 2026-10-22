@@ -26,8 +26,8 @@ const Services = () => {
             <h1 className="font-montserrat text-4xl font-extrabold leading-tight text-foreground md:text-5xl lg:text-6xl">Our Services</h1>
             <p className="mt-6 max-w-2xl font-poppins text-lg leading-relaxed text-muted-foreground md:text-xl">Comprehensive solutions tailored to meet your business needs across multiple sectors.</p>
           </div>
-          <div className="relative overflow-hidden rounded-3xl border border-border bg-background shadow-xl">
-            <img src={heroImage} alt="Xpola Services working across sectors" width={752} height={1000} loading="eager" fetchPriority="high" decoding="async" className="h-64 w-full object-contain md:h-80" />
+          <div className="relative overflow-hidden rounded-3xl border border-border shadow-xl">
+            <img src={heroImage} alt="Xpola Services working across sectors" width={752} height={1000} loading="eager" fetchPriority="high" decoding="async" className="h-64 w-full object-cover md:h-80" />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/45 via-transparent to-primary/20" />
             <p className="absolute bottom-5 left-5 rounded-xl bg-black/55 px-4 py-3 font-poppins text-sm font-semibold text-white backdrop-blur-md">Practical support for your next step</p>
           </div>

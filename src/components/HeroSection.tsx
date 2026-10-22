@@ -72,7 +72,7 @@ const HeroSection = () => {
         <img
           src={heroBackground}
           alt="African commerce and operations scene"
-          className="h-full w-full bg-gray-900 object-contain"
+          className="h-full w-full object-cover"
           width={1800}
           height={1200}
           loading="eager"
