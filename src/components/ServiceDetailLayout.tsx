@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, CheckCircle, LucideIcon } from "lucide-react";
+import { ArrowRight, CheckCircle, LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -31,8 +31,6 @@ interface ServiceDetailLayoutProps {
 }
 
 const ServiceDetailLayout = ({
-  backHref,
-  backLabel = "Back to Services",
   countryLabel,
   title,
   description,
@@ -58,9 +56,6 @@ const ServiceDetailLayout = ({
       <section className="relative overflow-hidden border-b border-border bg-background-secondary pt-28 md:pt-32">
         <div className="container mx-auto grid items-center gap-10 px-4 pb-16 md:grid-cols-[1.05fr_.95fr] md:pb-20 lg:gap-16">
           <div className="order-2 md:order-1">
-            <Link to={backHref} className="mb-7 inline-flex items-center gap-2 font-poppins text-sm font-semibold text-primary hover:underline">
-              <ArrowLeft className="h-4 w-4" /> {backLabel}
-            </Link>
             <p className="mb-4 font-poppins text-xs font-bold uppercase tracking-[0.24em] text-primary">{countryLabel} · Xpola Services</p>
             <h1 className="max-w-3xl font-montserrat text-4xl font-extrabold leading-tight text-foreground md:text-5xl lg:text-6xl">{title}</h1>
             <p className="mt-6 max-w-2xl font-poppins text-lg leading-relaxed text-muted-foreground md:text-xl">{description}</p>
