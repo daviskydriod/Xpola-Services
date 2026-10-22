@@ -10,7 +10,7 @@ const NigeriaShopPromoBanner = () => (
         <div>
           <p className="font-montserrat text-[11px] font-bold uppercase tracking-[0.2em] text-[#E02020]">Featured Nigeria products</p>
           <h2 id="approved-products-title" className="mt-2 font-montserrat text-2xl font-black tracking-tight text-gray-900 md:text-3xl">Upgrade your workspace</h2>
-          <p className="mt-2 max-w-2xl font-poppins text-sm leading-6 text-gray-500">Owner-approved laptop screen extenders selected for the Nigeria marketplace. Enquire now; online shop listing is coming soon.</p>
+          <p className="mt-2 max-w-2xl font-poppins text-sm leading-6 text-gray-500">Laptop screen extenders selected for the Nigeria marketplace. Enquire now; online shop listing is coming soon.</p>
         </div>
         <span className="inline-flex w-fit items-center rounded-full bg-red-50 px-3 py-1.5 font-poppins text-xs font-bold text-[#E02020]">Coming soon to the shop</span>
       </div>
