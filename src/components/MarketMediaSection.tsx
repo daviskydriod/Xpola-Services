@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Images, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useCountry } from "@/contexts/CountryContext";
 
 import factoryWide from "@/assets/New Images and Videos Update/factory-floor-wide.webp";
@@ -17,6 +17,7 @@ import productVideo from "@/assets/New Images and Videos Update/product-equipmen
 import productTrimVideo from "@/assets/New Images and Videos Update/product-equipment-demo-trim-optimized.mp4";
 import canadaIndustrialPort from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
 import canadaWarehouseTrucks from "@/assets/stock-sources/canada-truro-warehouse-trucks.webp";
+import canadaHarbor from "@/assets/stock-sources/canada-harbor.webp";
 
 type MarketMedia = {
   title: string;
@@ -56,10 +57,13 @@ const baseGallery = [
 
 const MarketMediaSection = () => {
   const { currentData } = useCountry();
+  const location = useLocation();
   const market = copy[currentData.code === "CA" ? "CA" : "NG"];
   const contactPath = currentData.code === "CA" ? "/canada/contact" : "/nigeria/contact";
   const isCanada = currentData.code === "CA";
-  const marketFactoryImage = isCanada ? canadaIndustrialPort : factoryWide;
+  const marketFactoryImage = isCanada
+    ? (location.pathname.includes('/about') ? canadaHarbor : canadaIndustrialPort)
+    : (location.pathname.includes('/about') ? warehouseWide : factoryWide);
   const marketWarehouseImage = isCanada ? canadaWarehouseTrucks : warehouseWide;
   const gallery = baseGallery;
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);

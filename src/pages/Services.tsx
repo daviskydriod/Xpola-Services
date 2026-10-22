@@ -9,7 +9,7 @@ import CTASection from "../components/CTASection";
 import MarketMediaSection from "../components/MarketMediaSection";
 import { useCountry } from "../contexts/CountryContext";
 import nigeriaHeroImage from "@/assets/stock-sources/service-construction.webp";
-import canadaHeroImage from "@/assets/stock-sources/canada-goderich-industrial-port.webp";
+import canadaHeroImage from "@/assets/stock-sources/canada-coal-processing.webp";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Services = () => {
